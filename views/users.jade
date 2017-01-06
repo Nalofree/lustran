@@ -1,0 +1,80 @@
+extends layout
+
+block content
+  h1= title
+  //- p Welcome to #{title}
+  .container.canter-content
+    .adduser.btn.btn-default Добавить нового
+    
+    from.banuserpin(method='post', name='requirepin', enctype="multipart/form-data")
+      h3= "Подтвердите действие"
+      .form-group
+        label(for='yourpin')
+        input(type='password',name='yourpin',placeholder='ПИН', required='required').form-control
+      .form-group
+        button.btn.btn-success.banuserpin-submit(type='submit') Подтвердить
+        
+    form.adduserform(method='post', name='addusrform', enctype="multipart/form-data")
+      h3= "Добавить пользователя"
+      .form-group
+        label(for='fio') ФИО
+        input(type='text',name='fio',placeholder='ФИО',required).form-control
+      .form-group
+        label(for='status') Статус
+        select(name='status', required).form-control
+          option(name='status', value='') Выберите статус
+          option(name='status', value='saler') Продавец
+          option(name='status', value='supplier') Снабженец
+          option(name='status', value='manager') Руководитель
+      .form-group
+        label(for='yourpin') Ваш пин
+        input(type='password',name='yourpin',placeholder='Ваш пин',required).form-control
+      button.btn.btn-success.adduser-submit(type='submit') Добавить
+      | &nbsp;
+      button.btn.btn-danger.adduser-cancel Отмена
+      
+    form.edituserform(method='post', name='addusrform', enctype="multipart/form-data")
+      h3= "Изменить данные пользователя"
+      .form-group
+        label(for='fio') ФИО
+        input(type='text',name='fio',placeholder='ФИО',required).form-control
+      .form-group
+        label(for='status') Статус
+        select(name='status', required).form-control
+          option(name='status', value='') Выберите статус
+          option(name='status', value='saler') Продавец
+          option(name='status', value='supplier') Снабженец
+          option(name='status', value='manager') Руководитель
+      .form-group
+        label(for='yourpin') Ваш пин
+        input(type='password',name='yourpin',placeholder='Ваш пин',required).form-control
+      button.btn.btn-success.edituser-submit(type='submit') Сохранить
+      | &nbsp;
+      button.btn.btn-danger.edituser-cancel Отмена
+      
+    - if (users.length > 0)
+      .users-table-features
+        .checkbox
+          label(for='onlyactive')
+            input(type='checkbox', name='onlyactive', id='onlyactive')
+            | Только активные
+      table.table.table-striped.users-table
+        tr
+          th Имя
+          th Статус
+          th
+          th
+        - for (var i = 0; i < users.length; i++)
+          tr(id=users[i].id)
+            td= users[i].name
+            td= users[i].status
+            td
+              - if (users[i].active == 1)
+                .btn.btn-danger.ban-user.useractive(data-title=users[i].id)= "Запретить"
+              - else
+                .btn.btn-success.ban-user.usernotactive(data-title=users[i].id)= "Разрешить"
+            td
+              .btn.btn-default.edit-user(data-title=users[i].id)= "Изменить"
+        //- p= users[i].name + " " + users[i].status
+    - else
+      p= "Пользователей пока нет, руководитель имеет право добавить пользователя"

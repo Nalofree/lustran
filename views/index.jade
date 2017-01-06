@@ -1,0 +1,114 @@
+extends layout
+
+block content
+  //- h1= title
+  //- p Welcome to #{title}
+  .lustran-page
+    nav.lustran-nav
+      a.lustran-nav-item(href='addnew.html')
+        i.fa.fa-plus-circle(aria-hidden='true')
+        | Добавить заказ
+      a.lustran-nav-item(href='index.html')
+        i.fa.fa-list-alt(aria-hidden='true')
+        | Заказы и товары
+      a.lustran-nav-item(href='checkin.html')
+        i.fa.fa-user-plus(aria-hidden='true')
+        | Отметиться
+    main.lustran-main
+      .lustran-container
+        .check-in-wrapper
+          .check-in-inner
+            // Ввести пин
+            .pin-wrapper
+              h2 Отметка
+              .pin.check-pin
+                label(for='') Введите свой пин-код
+                .input-group
+                  input.form-control(type='password', name='yourpin')
+                  span.input-group-btn
+                    button.btn.btn-pin(type='button') ОК
+                // /input-group
+            // Приветствие
+            .wellcome-wrapper
+              .wellcome
+                i.fa.fa-smile-o(aria-hidden='true')
+                .wellcome-top
+                  | Доброе&nbsp
+                  span.day-time утро
+                  | ,
+                  br
+                  span.name Иванов Иван Иванович
+                .wellcome-bottom Вы успешно отметились и можете приступать пользоваться системой.
+            // Отметившиеся
+            .checking-in-wrapper
+              h2 Отметившиеся
+              .checking-in
+                .checking-in-body
+                  - if (checks.length > 0)
+                    .checking-in-period
+                      .period-top 11 ноября, пятница
+                      ul.checking-in-list
+                        - for (var i = 0; i < checks.length; i++)
+                          li.checking-in-list-item
+                            span.checking-in-date= checks[i].checkTime
+                            // 11.12.16
+                            //- | &nbsp
+                            //- span.checking-in-time.sep-dot 11:20
+                            span.checking-in-location.sep-dot= checks[i].location.name
+                            //- Юбилейный
+                            span.checking-in-person= checks[i].user.name
+                            //-  Иванов Иван Иванович
+                        //- li.checking-in-list-item
+                        //-   span.checking-in-date 11.12.16
+                        //-   | &nbsp
+                        //-   span.checking-in-time.sep-dot 11:20
+                        //-   span.checking-in-location.sep-dot Юбилейный
+                        //-   span.checking-in-person Иванов Иван Иванович
+                        //- // Опоздавший класс lateness
+                        //- li.checking-in-list-item.lateness
+                        //-   span.checking-in-date 11.12.16
+                        //-   | &nbsp
+                        //-   span.checking-in-time.sep-dot 11:20
+                        //-   span.checking-in-location.sep-dot Юбилейный
+                        //-   span.checking-in-person Иванов Иван Иванович
+                        //-   span.badge.lateness опоздание
+                  - else
+                    p Отметок за вчера и сегодня пока нет
+                  //- .checking-in-period
+                  //-   .period-top 16 ноября, четверг
+                  //-   ul.checking-in-list
+                  //-     li.checking-in-list-item
+                  //-       span.checking-in-date 11.12.16
+                  //-       | &nbsp
+                  //-       span.checking-in-time.sep-dot 11:20
+                  //-       span.checking-in-location.sep-dot Юбилейный
+                  //-       span.checking-in-person Иванов Иван Иванович
+                  //-     li.checking-in-list-item
+                  //-       span.checking-in-date 11.12.16
+                  //-       | &nbsp
+                  //-       span.checking-in-time.sep-dot 11:20
+                  //-       span.checking-in-location.sep-dot Юбилейный
+                  //-       span.checking-in-person Иванов Иван Иванович
+                  //-     // Опоздавший класс lateness
+                  //-     li.checking-in-list-item.lateness
+                  //-       span.checking-in-date 11.12.16
+                  //-       | &nbsp
+                  //-       span.checking-in-time.sep-dot 11:20
+                  //-       span.checking-in-location.sep-dot Юбилейный
+                  //-       span.checking-in-person Иванов Иван Иванович
+                  //-       span.badge.lateness опоздание
+                .checking-in-footer
+                  form.form-horizontal
+                    .form-group
+                      label.control-label(for='') с
+                      .col-sm-2
+                        input.form-control(type='date', data-input='date', name='startdate')
+                      label.control-label(for='') по
+                      .col-sm-2
+                        input.form-control(type='date', data-input='date', name='enddate')
+                      .col-sm-2
+                        button.btn.btn-success(type='submit') Показать
+                      .col-sm-3
+                        label.control-label.check(for='')
+                          input(type='checkbox')
+                          | &nbspТолько опоздания

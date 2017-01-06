@@ -1,0 +1,51 @@
+extends layout
+
+block content
+  h1= title
+  .container.canter-content
+    .addloc.btn.btn-default Добавить новоe
+    
+    form.addlocform(method='post', name='addlocform', enctype="multipart/form-data")
+      h3= "Добавить место"
+      .form-group
+        label(for='name') Название
+        input(type='text',name='name',placeholder='Название места',required).form-control
+      .form-group
+        label(for='yourpin') Ваш пин
+        input(type='password',name='yourpin',placeholder='Ваш пин',required).form-control
+      button.btn.btn-success.addloc-submit(type='submit') Добавить
+      | &nbsp;
+      button.btn.btn-danger.addloc-cancel Отмена
+    
+    from.setlocpin(method='post', name='requirepin', enctype="multipart/form-data")
+      h3= "Подтвердите действие"
+      .form-group
+        label(for='yourpin')
+        input(type='password',name='yourpin',placeholder='ПИН', required='required').form-control
+      .form-group
+        button.btn.btn-success.setlocpin-submit(type='submit') Подтвердить
+    
+    from.dellocpin(method='post', name='requirepin', enctype="multipart/form-data")
+      h3= "Подтвердите действие"
+      .form-group
+        label(for='yourpin')
+        input(type='password',name='yourpin',placeholder='ПИН', required='required').form-control
+      .form-group
+        button.btn.btn-success.dellocpin-submit(type='submit') Подтвердить
+    
+    br
+    - if (locations.length > 0)
+      table.table.locations-table
+        tr
+          th Название
+          th
+          th
+        - for (var i = 0; i < locations.length; i++)
+          tr(id= locations[i].id)
+            td= locations[i].name
+            td 
+              .btn.btn-success.choose-location(data-title=  locations[i].id) Выбрать
+            td 
+              .btn.btn-danger.delete-location(data-title=  locations[i].id) Удалить
+    - else
+      p Мест пока нет, но вы можете их добавить

@@ -1,0 +1,701 @@
+extends layout
+
+block content
+  .lustran-page
+      nav.lustran-nav
+        a.lustran-nav-item(href='addnew.html')
+          i.fa.fa-plus-circle(aria-hidden='true')
+          | Добавить заказ
+        a.lustran-nav-item(href='index.html')
+          i.fa.fa-list-alt(aria-hidden='true')
+          | Заказы и товары
+        a.lustran-nav-item(href='checkin.html')
+          i.fa.fa-user-plus(aria-hidden='true')
+          | Отметиться
+      main.lustran-main
+        nav.navbar.lustran-navbar.navbar-static-top
+          .lustran-container-nav
+            .collapse.navbar-collapse
+              ul.nav.navbar-nav
+                li.filter-menu
+                  a.dropdown-toggle.lustran-dropdown(href='#', role='button', aria-haspopup='true', aria-expanded='false')
+                    | Фильтр&nbsp
+                    span.caret
+                  ul.dropdown-menu.lustran-dropdown-menu.filter-menu-dropdown
+                    li
+                      a(href='#') ID заказа
+                    li
+                      a(href='#') Наименование
+                    li
+                      a(href='#') Артикул
+                    li
+                      a(href='#') Ориентировочная дата
+                li.status-menu
+                  a.lustran-dropdown(href='#', role='button')
+                    | Выберите статус&nbsp
+                    span.caret
+                  .status-menu-dropdown
+                    .dropdown
+                      button#dropdownMenu1.btn.btn-default.dropdown-toggle.lustran-drop(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true') Обработан
+                      ul.dropdown-menu(aria-labelledby='dropdownMenu1')
+                        li
+                          a(href='#') Обработан
+                        li
+                          a(href='#') Не обработан
+                    .dropdown
+                      button#dropdownMenu2.btn.btn-default.dropdown-toggle.lustran-drop(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true') Заказан
+                      ul.dropdown-menu(aria-labelledby='dropdownMenu2')
+                        li
+                          a(href='#') Заказан
+                        li
+                          a(href='#') Не заказан
+                    .dropdown
+                      button#dropdownMenu3.btn.btn-default.dropdown-toggle.lustran-drop(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true') Проверен и отложен
+                      ul.dropdown-menu(aria-labelledby='dropdownMenu3')
+                        li
+                          a(href='#') Проверен и отложен
+                        li
+                          a(href='#') Отсутствует
+                    .dropdown
+                      button#dropdownMenu4.btn.btn-default.dropdown-toggle.lustran-drop(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true') Звонили
+                      ul.dropdown-menu(aria-labelledby='dropdownMenu4')
+                        li
+                          a(href='#') Звонили
+                        li
+                          a(href='#') Не звонили
+                    .dropdown
+                      button#dropdownMenu5.btn.btn-default.dropdown-toggle.lustran-drop(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true') Выдан
+                      ul.dropdown-menu(aria-labelledby='dropdownMenu5')
+                        li
+                          a(href='#') Выдан
+                        li
+                          a(href='#') Не выдан
+                    .status-menu-check
+                      input(type='checkbox')
+                      label Уточнить дату
+                      input(type='checkbox')
+                      label Ориентировочная
+                      input(type='checkbox')
+                      label Уточненная
+              form.navbar-form.navbar-left.lustran-search-form
+                .form-group
+                  input.form-control(type='text', placeholder='Поиск...')
+              ul.nav.navbar-nav.navbar-right
+                li.navbar-text
+                  | Заказов всего 
+                  span.badge.badge-pur-light 1
+                li.navbar-text
+                  | В обработке 
+                  span.badge.badge-pur-light 2
+                li.navbar-text
+                  | Выдано 
+                  span.badge.badge-pur-light 6
+                li.navbar-text
+                  | Дефект 
+                  span.badge.badge-pur-light 0
+        .lustran-container
+          // Заказ
+          article.order
+            header.order-header
+              .order-id
+                | заказ
+                span 0001
+              .order-basket 13
+              a.btn.btn-sm.order-add(href='#order-add')
+                i.fa.fa-plus-circle(aria-hidden='true')
+            section.order-body
+              ul.order-list
+                li.order-list-item.status-removed
+                  // удаленный заказ staus-removed
+                  header.order-list-item-header
+                    span.badge.badge-pur 1
+                    span.order-date.sep-dot 11.12.16
+                    span.order-name.sep-dot Название товара
+                    span.order-count.sep-dot
+                      i 1
+                      |  шт
+                    span.order-float-date 16.12.16
+                    a.btn.btn-success.btn-xs(href='#', data-toggle='open-log') История действий
+                    a.remove-order-status(href='#', data-toggle='remove-order')
+                  .container-fluid
+                    ul.order-status-list.row
+                      li.col-sm-2
+                        .order-status
+                          .order-status-body
+                            .status-top
+                              span.status Обработан
+                              span.status-date 12.12.16
+                            .status-bottom
+                              span Фамилия Имя Отчество
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status
+                          .order-status-body
+                            .status-top
+                              span.status 12.12.16
+                              span.status-date 12.12.16
+                            .status-bottom
+                              span Фамилия Имя Отчество
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status
+                          .order-status-body
+                            .status-top
+                              span.status Заказан
+                              span.status-date 12.12.16
+                            .status-bottom
+                              span Фамилия Имя Отчество
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status
+                          .order-status-body
+                            .status-top
+                              span.status Отложен
+                              span.status-date 12.12.16
+                            .status-bottom
+                              span Фамилия Имя Отчество
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status
+                          .order-status-body
+                            .status-top
+                              span.status Дозвон
+                              span.status-date 12.12.16
+                            .status-bottom
+                              span Фамилия Имя Отчество
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status
+                          .order-status-body
+                            .status-top
+                              span.status Выдан
+                              span.status-date 12.12.16
+                            .status-bottom
+                              span Фамилия Имя Отчество
+                          a.order-status-edit(href='#')
+                li.order-list-item
+                  header.order-list-item-header
+                    span.badge.badge-pur 2
+                    span.order-date.sep-dot 11.12.16
+                    span.order-name.sep-dot Название товара
+                    span.order-count.sep-dot
+                      i 1
+                      |  шт
+                    span.order-float-date 16.12.16
+                    a.btn.btn-success.btn-xs(href='#', data-toggle='open-log') История действий
+                    a.remove-order-status(href='#', data-toggle='remove-order')
+                  .container-fluid
+                    ul.order-status-list.row
+                      li.col-sm-2
+                        .order-status.status-danger
+                          // status-danger
+                          .order-status-body
+                            .status-top
+                              span.status Не обработан
+                              span.status-date 12.12.16
+                            .status-bottom
+                              span Фамилия Имя Отчество
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status.status-null
+                          // ждет обработки status-null
+                          .order-status-body
+                            .status-top
+                              span.status --.--.--
+                              span.status-date
+                            .status-bottom
+                              span.edit Уточнить дату
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status.status-null
+                          .order-status-body
+                            .status-top
+                              span.status Не Заказан
+                              span.status-date
+                            .status-bottom
+                              span.edit Изменить статус
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status.status-null
+                          .order-status-body.status-null
+                            .status-top
+                              span.status Отсутствует
+                              span.status-date
+                            .status-bottom
+                              span.edit Изменить статус
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status.status-null
+                          .order-status-body
+                            .status-top
+                              span.status Не звонили
+                              span.status-date
+                            .status-bottom
+                              span.edit Изменить статус
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status.status-null
+                          .order-status-body
+                            .status-top
+                              span.status Не Выдан
+                              span.status-date
+                            .status-bottom
+                              span.edit Изменить статус
+                          a.order-status-edit(href='#')
+                li.order-list-item
+                  header.order-list-item-header
+                    span.badge.badge-pur 3
+                    span.order-date.sep-dot 11.12.16
+                    span.order-name.sep-dot Название товара
+                    span.order-count.sep-dot
+                      i 1
+                      |  шт
+                    span.order-float-date 16.12.16
+                    a.btn.btn-success.btn-xs(href='#', data-toggle='open-log') История действий
+                    a.remove-order-status(href='#', data-toggle='remove-order')
+                  .container-fluid
+                    ul.order-status-list.row
+                      li.col-sm-2
+                        .order-status
+                          // status-danger
+                          .order-status-body
+                            .status-top
+                              span.status  обработан
+                              span.status-date 12.12.16
+                            .status-bottom
+                              span Фамилия Имя Отчество
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status.status-danger
+                          .order-status-body
+                            .status-top
+                              span.status --.--.--
+                              span.status-date
+                            .status-bottom
+                              span.edit Изменить статус
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status.status-null
+                          .order-status-body
+                            .status-top
+                              span.status Не Заказан
+                              span.status-date
+                            .status-bottom
+                              span.edit Изменить статус
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status.status-null
+                          .order-status-body.status-null
+                            .status-top
+                              span.status Отсутствует
+                              span.status-date
+                            .status-bottom
+                              span.edit Изменить статус
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status.status-null
+                          .order-status-body
+                            .status-top
+                              span.status Не звонили
+                              span.status-date
+                            .status-bottom
+                              span.edit Изменить статус
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status.status-null
+                          .order-status-body
+                            .status-top
+                              span.status Не Выдан
+                              span.status-date
+                            .status-bottom
+                              span.edit Изменить статус
+                          a.order-status-edit(href='#')
+          // end Заказ
+          // Заказ
+          article.order
+            header.order-header
+              .order-id
+                | заказ
+                span 0002
+              .order-basket 13
+              a.btn.btn-sm.order-add(href='#order-add')
+                i.fa.fa-plus-circle(aria-hidden='true')
+            section.order-body
+              ul.order-list
+                li.order-list-item
+                  header.order-list-item-header
+                    span.badge.badge-pur 1
+                    span.order-date.sep-dot 11.12.16
+                    span.order-name.sep-dot Название товара
+                    span.order-count.sep-dot
+                      i 1
+                      |  шт
+                    span.order-float-date 16.12.16
+                    a.btn.btn-success.btn-xs(href='#', data-toggle='open-log') История действий
+                    a.remove-order-status(href='#', data-toggle='remove-order')
+                  .container-fluid
+                    ul.order-status-list.row
+                      li.col-sm-2
+                        .order-status
+                          .order-status-body
+                            .status-top
+                              span.status Обработан
+                              span.status-date 12.12.16
+                            .status-bottom
+                              span Фамилия Имя Отчество
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status
+                          .order-status-body
+                            .status-top
+                              span.status 12.12.16
+                              span.status-date 12.12.16
+                            .status-bottom
+                              span Фамилия Имя Отчество
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status
+                          .order-status-body
+                            .status-top
+                              span.status Заказан
+                              span.status-date 12.12.16
+                            .status-bottom
+                              span Фамилия Имя Отчество
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status
+                          .order-status-body
+                            .status-top
+                              span.status Отложен
+                              span.status-date 12.12.16
+                            .status-bottom
+                              span Фамилия Имя Отчество
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status
+                          .order-status-body
+                            .status-top
+                              span.status Дозвон
+                              span.status-date 12.12.16
+                            .status-bottom
+                              span Фамилия Имя Отчество
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status
+                          .order-status-body
+                            .status-top
+                              span.status Выдан
+                              span.status-date 12.12.16
+                            .status-bottom
+                              span Фамилия Имя Отчество
+                          a.order-status-edit(href='#')
+                li.order-list-item
+                  header.order-list-item-header
+                    span.badge.badge-pur 2
+                    span.order-date.sep-dot 11.12.16
+                    span.order-name.sep-dot Название товара
+                    span.order-count.sep-dot
+                      i 1
+                      |  шт
+                    span.order-float-date 16.12.16
+                    a.btn.btn-success.btn-xs(href='#', data-toggle='open-log') История действий
+                    a.remove-order-status(href='#', data-toggle='remove-order')
+                  .container-fluid
+                    ul.order-status-list.row
+                      li.col-sm-2
+                        .order-status.status-danger
+                          // status-danger
+                          .order-status-body
+                            .status-top
+                              span.status Не обработан
+                              span.status-date 12.12.16
+                            .status-bottom
+                              span Фамилия Имя Отчество
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status.status-null
+                          // ждет обработки status-null
+                          .order-status-body
+                            .status-top
+                              span.status --.--.--
+                              span.status-date
+                            .status-bottom
+                              span.edit Уточнить дату
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status.status-null
+                          .order-status-body
+                            .status-top
+                              span.status Не Заказан
+                              span.status-date
+                            .status-bottom
+                              span.edit Изменить статус
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status.status-null
+                          .order-status-body.status-null
+                            .status-top
+                              span.status Отсутствует
+                              span.status-date
+                            .status-bottom
+                              span.edit Изменить статус
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status.status-null
+                          .order-status-body
+                            .status-top
+                              span.status Не звонили
+                              span.status-date
+                            .status-bottom
+                              span.edit Изменить статус
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status.status-null
+                          .order-status-body
+                            .status-top
+                              span.status Не Выдан
+                              span.status-date
+                            .status-bottom
+                              span.edit Изменить статус
+                          a.order-status-edit(href='#')
+                li.order-list-item
+                  header.order-list-item-header
+                    span.badge.badge-pur 3
+                    span.order-date.sep-dot 11.12.16
+                    span.order-name.sep-dot Название товара
+                    span.order-count.sep-dot
+                      i 1
+                      |  шт
+                    span.order-float-date 16.12.16
+                    a.btn.btn-success.btn-xs(href='#', data-toggle='open-log') История действий
+                    a.remove-order-status(href='#', data-toggle='remove-order')
+                  .container-fluid
+                    ul.order-status-list.row
+                      li.col-sm-2
+                        .order-status
+                          // status-danger
+                          .order-status-body
+                            .status-top
+                              span.status  обработан
+                              span.status-date 12.12.16
+                            .status-bottom
+                              span Фамилия Имя Отчество
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status.status-danger
+                          .order-status-body
+                            .status-top
+                              span.status --.--.--
+                              span.status-date
+                            .status-bottom
+                              span.edit Изменить статус
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status.status-null
+                          .order-status-body
+                            .status-top
+                              span.status Не Заказан
+                              span.status-date
+                            .status-bottom
+                              span.edit Изменить статус
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status.status-null
+                          .order-status-body.status-null
+                            .status-top
+                              span.status Отсутствует
+                              span.status-date
+                            .status-bottom
+                              span.edit Изменить статус
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status.status-null
+                          .order-status-body
+                            .status-top
+                              span.status Не звонили
+                              span.status-date
+                            .status-bottom
+                              span.edit Изменить статус
+                          a.order-status-edit(href='#')
+                      li.col-sm-2
+                        .order-status.status-null
+                          .order-status-body
+                            .status-top
+                              span.status Не Выдан
+                              span.status-date
+                            .status-bottom
+                              span.edit Изменить статус
+                          a.order-status-edit(href='#')
+          // end Заказ
+      .ayout-dark
+      .action
+        .action-header
+          .action-info
+            .new-order-info-row
+              span.action-date 12.12.16
+              | &nbsp
+              span.action-time 12.12.16
+            .new-order-info-row
+              | Изменения в заказе:&nbsp
+              span.action-order 0001
+            .new-order-info-row
+              | Товар:&nbsp
+              span.action-shop Название товара
+            i.fa.fa-times-circle.close-action(aria-hidden='true', data-toggle='close-action')
+        .action-body
+          .form-group
+            .row.action-row
+              label.col-sm-12(for='') Введите ваш пин-код
+              .col-sm-6
+                .input-group
+                  input.form-control(type='password')
+                  span.input-group-btn
+                    button.btn.btn-pin(type='button')
+                      i.fa.fa-check-circle(aria-hidden='true')
+              .col-sm-6.auth
+                | Авторизирован как
+                .auth-like Руководитель
+            .row.action-row
+              .col-sm-12
+                .dropdown
+                  button#actionDropdown.btn.btn-default.btn-block.dropdown-toggle.lustran-drop(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true') Заказан
+                  ul.dropdown-menu(aria-labelledby='actionDropdown')
+                    li
+                      a(href='#') Заказан
+                    li
+                      a(href='#') Не заказан
+            .row.action-row
+              .col-sm-6
+                button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-action') Отмена
+              .col-sm-6
+                button.btn.btn-done.btn-block(type='button', data-toggle='save-action') Сохранить
+      .odal-layout
+      //- .modal-log
+      //-   .modal-log-header
+      //-     .log-info
+      //-       .new-order-info-row
+      //-         | Заказ:&nbsp
+      //-         span.log-order 0001
+      //-       .new-order-info-row
+      //-         | История действий товара:&nbsp
+      //-         span.log-product Название товара
+      //-       i.fa.fa-times-circle.close-action(aria-hidden='true', data-toggle='close-action')
+        //- .modal-log-body
+        //-   ul.logs
+        //-     li.log
+        //-       .log-header
+        //-         .log-info
+        //-           .new-order-info-row
+        //-             span.log-date 12.12.16
+        //-             | &nbsp
+        //-             span.log-time 12:00
+        //-           .new-order-info-row
+        //-             span.log-editor Иванов Иван Иванович
+        //-           i.fa.fa-times-circle.close-action(aria-hidden='true', data-toggle='close-action')
+        //-         .log-status
+        //-           span.log-status-start Обработан
+        //-           | &nbsp
+        //-           i.fa.fa-long-arrow-right(aria-hidden='true')
+        //-           | &nbsp
+        //-           span.log-status-end Отменен
+        //-       .log-body
+        //-         p.log-text
+        //-           | Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odit delectus nisi quasi inventore harum quam asperiores tempora molestiae temporibus. Molestias?
+        //-     li.log
+        //-       .log-header
+        //-         .log-info
+        //-           .new-order-info-row
+        //-             span.log-date 12.12.16
+        //-             | &nbsp
+        //-             span.log-time 12:00
+        //-           .new-order-info-row
+        //-             span.log-editor Иванов Иван Иванович
+        //-           i.fa.fa-times-circle.close-action(aria-hidden='true', data-toggle='close-action')
+        //-         .log-status
+        //-           span.log-status-start Обработан
+        //-           | &nbsp
+        //-           i.fa.fa-long-arrow-right(aria-hidden='true')
+        //-           | &nbsp
+        //-           span.log-status-end Отменен
+        //-       .log-body
+        //-         p.log-text
+        //-           | Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odit delectus nisi quasi inventore harum quam asperiores tempora molestiae temporibus. Molestias?
+        //-     li.log
+        //-       .log-header
+        //-         .log-info
+        //-           .new-order-info-row
+        //-             span.log-date 12.12.16
+        //-             | &nbsp
+        //-             span.log-time 12:00
+        //-           .new-order-info-row
+        //-             span.log-editor Иванов Иван Иванович
+        //-           i.fa.fa-times-circle.close-action(aria-hidden='true', data-toggle='close-action')
+        //-         .log-status
+        //-           span.log-status-start Обработан
+        //-           | &nbsp
+        //-           i.fa.fa-long-arrow-right(aria-hidden='true')
+        //-           | &nbsp
+        //-           span.log-status-end Отменен
+        //-       .log-body
+        //-         p.log-text
+        //-           | Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odit delectus nisi quasi inventore harum quam asperiores tempora molestiae temporibus. Molestias?
+        //-     li.log
+        //-       .log-header
+        //-         .log-info
+        //-           .new-order-info-row
+        //-             span.log-date 12.12.16
+        //-             | &nbsp
+        //-             span.log-time 12:00
+        //-           .new-order-info-row
+        //-             span.log-editor Иванов Иван Иванович
+        //-           i.fa.fa-times-circle.close-action(aria-hidden='true', data-toggle='close-action')
+        //-         .log-status
+        //-           span.log-status-start Обработан
+        //-           | &nbsp
+        //-           i.fa.fa-long-arrow-right(aria-hidden='true')
+        //-           | &nbsp
+        //-           span.log-status-end Отменен
+        //-       .log-body
+        //-         p.log-text
+        //-           | Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odit delectus nisi quasi inventore harum quam asperiores tempora molestiae temporibus. Molestias?
+        //-     li.log
+        //-       .log-header
+        //-         .log-info
+        //-           .new-order-info-row
+        //-             span.log-date 12.12.16
+        //-             | &nbsp
+        //-             span.log-time 12:00
+        //-           .new-order-info-row
+        //-             span.log-editor Иванов Иван Иванович
+        //-           i.fa.fa-times-circle.close-action(aria-hidden='true', data-toggle='close-action')
+        //-         .log-status
+        //-           span.log-status-start Обработан
+        //-           | &nbsp
+        //-           i.fa.fa-long-arrow-right(aria-hidden='true')
+        //-           | &nbsp
+        //-           span.log-status-end Отменен
+        //-       .log-body
+        //-         p.log-text
+        //-           | Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odit delectus nisi quasi inventore harum quam asperiores tempora molestiae temporibus. Molestias?
+        //- .modal-log-footer
+        //-   .form-group
+        //-     .row.action-row(style='width:300px')
+        //-       label.col-sm-12(for='') Введите ваш пин-код
+        //-       .col-sm-6
+        //-         .input-group
+        //-           input.form-control(type='password')
+        //-           span.input-group-btn
+        //-             button.btn.btn-pin(type='button')
+        //-               i.fa.fa-check-circle(aria-hidden='true')
+        //-       .col-sm-6.auth
+        //-         | Авторизирован как
+        //-         .auth-like Руководитель
+        //-     .row.action-row
+        //-       .col-sm-12
+        //-         label(for='') Комментарий
+        //-         textarea.form-control(name='', id='', cols='30', rows='6')
+        //-     .row.action-row
+        //-       .col-sm-2.col-sm-offset-4
+        //-         button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-log') Отмена
+        //-       .col-sm-2
+        //-         button.btn.btn-done.btn-block(type='button', data-toggle='save-log') Сохранит

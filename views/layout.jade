@@ -1,0 +1,28 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    .close-layout
+    ul.nav.nav-pills.main-nav
+      li(role="presentation")
+        a(href="/") Домашняя/Отметиться
+      li(role="presentation")
+        a(href="/locations") Места
+      li(role="presentation")
+        a(href="/orders") Заказы
+      li(role="presentation")
+        a(href="/users") Пользователи
+      //- li
+      //-   a.location-name(href="/locations") location-name
+    .container.location-name
+      | Место: 
+      a.location-name(href="/locations")
+    block content
+    script(type='text/javascript', src='javascripts/jquery-3.1.1.min.js')
+    script(type='text/javascript', src='javascripts/inputmask.js')
+    script(type='text/javascript', src='javascripts/main.js')
+    script(type='text/javascript', src='javascripts/users.js')
+    script(type='text/javascript', src='javascripts/locations.js')
+    script(type='text/javascript', src='javascripts/home.js')
