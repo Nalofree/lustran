@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-var sequelize = new Sequelize('lustran_db', 'lustran_user', 'lustranpass', {
+var sequelize = new Sequelize('heroku_a5572bedbd1fbe3', 'b816998663244e', 'b23209db', {
   host: 'localhost',
   dialect: 'mysql',
   logging: true
