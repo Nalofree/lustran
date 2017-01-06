@@ -3,7 +3,7 @@ var router = express.Router();
 var Sequelize = require('sequelize');
 
 var sequelize = new Sequelize('heroku_a5572bedbd1fbe3', 'b816998663244e', 'b23209db', {
-  host: 'localhost',
+  host: 'eu-cdbr-west-01.cleardb.com',
   dialect: 'mysql',
   logging: true
   // storage: 'path/to/database.sqlite'
