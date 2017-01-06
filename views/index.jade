@@ -49,15 +49,26 @@ block content
                       .period-top 11 ноября, пятница
                       ul.checking-in-list
                         - for (var i = 0; i < checks.length; i++)
-                          li.checking-in-list-item
-                            span.checking-in-date= checks[i].checkTime
-                            // 11.12.16
-                            //- | &nbsp
-                            //- span.checking-in-time.sep-dot 11:20
-                            span.checking-in-location.sep-dot= checks[i].location.name
-                            //- Юбилейный
-                            span.checking-in-person= checks[i].user.name
-                            //-  Иванов Иван Иванович
+                          - if (checks[i].late == 0)
+                            li.checking-in-list-item
+                              span.checking-in-date= checks[i].checkTime
+                              // 11.12.16
+                              //- | &nbsp
+                              //- span.checking-in-time.sep-dot 11:20
+                              span.checking-in-location.sep-dot= checks[i].location.name
+                              //- Юбилейный
+                              span.checking-in-person= checks[i].user.name
+                              //-  Иванов Иван Иванович
+                          - else
+                            li.checking-in-list-item.lateness
+                              span.checking-in-date= checks[i].checkTime
+                              // 11.12.16
+                              //- | &nbsp
+                              //- span.checking-in-time.sep-dot 11:20
+                              span.checking-in-location.sep-dot= checks[i].location.name
+                              //- Юбилейный
+                              span.checking-in-person= checks[i].user.name
+                              //-  Иванов Иван Иванович
                         //- li.checking-in-list-item
                         //-   span.checking-in-date 11.12.16
                         //-   | &nbsp

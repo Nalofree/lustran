@@ -12,6 +12,14 @@ var sequelize = new Sequelize('heroku_a5572bedbd1fbe3', 'b816998663244e', 'b2320
 /* GET home page. */
 router.get('/', function(req, res, next) {
   // res.render('index', { title: 'Главная' });
+  // var now = new Date();
+  // var late;
+  // if ((now.getHours() == 9 && now.getMinutes() >= 15) || (now.getHours() > 9)) {
+  //   late = 1;
+  // }else{
+  //   late = 0;
+  // }
+  // console.log("late: " + late);
   sequelize.authenticate().then(function() {
     console.log('Connect to DB created!');
     var checks = sequelize.define('checks', {
@@ -94,7 +102,7 @@ router.get('/', function(req, res, next) {
         // var now = Date();
         // console.log(now.toString());
 
-        console.log(checks);
+        // console.log(checks);
         for (var i = 0; i < checks.length; i++) {
           console.log(getTimeReadeble(checks[i].createdAt));
           checks[i].checkTime = getTimeReadeble(checks[i].createdAt);
@@ -169,7 +177,7 @@ router.post('/', function(req, res, next) {
             console.log('Success!');
             var now = new Date();
             var late;
-            if ((now.getHours == 9 && now.getMinutes >= 15) || (now.getHours > 9) || (now.getHours < 7)) {
+            if ((now.getHours() == 9 && now.getMinutes() >= 15) || (now.getHours() > 9)) {
               late = 1;
             }else{
               late = 0;
