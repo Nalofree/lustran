@@ -101,6 +101,16 @@ function getTimeReadeble(date){
 			// console.log(now);
 			return readebleTime;
 };
+function getDateReadeble(date){
+	var readebleTime;//1998-02-03 22:23:00
+	var year = date.getFullYear();
+			readebleTime = year + '-' +
+				('00' + (date.getMonth()+1)).slice(-2) + '-' +
+				('00' + date.getDate()).slice(-2);
+				// ('00' + date.getSeconds()).slice(-2);
+			// console.log(now);
+			return readebleTime;
+};
 function getTimeReadebleYesterday(date){
 	var readebleTime;//1998-02-03 22:23:00
 			date.setDate(date.getDate()-1);

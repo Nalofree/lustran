@@ -43,7 +43,7 @@ function getTimeReadebleYesterday(date){
       // console.log(now);
       return readebleTime;
 };
-
+var days = ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
 /* GET home page. */
 router.get('/', function(req, res, next) {
   // res.render('index', { title: 'Главная' });
@@ -119,8 +119,12 @@ router.get('/', function(req, res, next) {
         for (var i = 0; i < checks.length; i++) {
           // console.log(getTimeReadeble(checks[i].createdAt));
           checks[i].checkTime = getTimeReadeble(checks[i].createdAt);
-        }
-        res.render('index', { title: 'Главная', checks: checks });
+        };
+        var now = new Date();
+        var nowdate = getDateReadeble(now);
+        nowdate = nowdate + ", " + days[now.getDay()];
+        console.log(nowdate);
+        res.render('index', { title: 'Главная', checks: checks, nowdate: nowdate });
       }).catch(function (err) {
         res.send({err: err, text: 'what'});
         console.log('checks error: ' + err);

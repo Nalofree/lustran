@@ -48,7 +48,9 @@ block content
                 .checking-in-body
                   - if (checks.length > 0)
                     .checking-in-period
-                      .period-top 11 ноября, пятница
+                      //- - var nowDate = new Date()
+                      //- - nowDate = getDateReadeble(nowDate);
+                      .period-top= nowdate
                       ul.checking-in-list
                         - for (var i = 0; i < checks.length; i++)
                           - if (checks[i].late == 0)
