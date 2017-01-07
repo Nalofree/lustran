@@ -263,4 +263,81 @@ router.post('/', function(req, res, next) {
   });
 });
 
+router.post('/getcheckorder', function(req, res, next) {
+  sequelize.authenticate().then(function() {
+    console.log('Connect to DB created!');
+    var checks = sequelize.define('checks', {
+      id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+      },
+      locationId: Sequelize.INTEGER,
+      userId: Sequelize.INTEGER,
+      late: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0
+      }
+    });
+    var users = sequelize.define('users', {
+      id: {
+          type: Sequelize.INTEGER,
+          primaryKey: true,
+          autoIncrement: true
+      },
+      name: Sequelize.TEXT,
+      pin: Sequelize.TEXT,
+      status: Sequelize.TEXT,
+      active: {
+          type: Sequelize.INTEGER,
+          defaultValue: 1
+      }
+    });
+    var locations = sequelize.define('locations', {
+      id: {
+          type: Sequelize.INTEGER,
+          primaryKey: true,
+          autoIncrement: true
+      },
+      name: Sequelize.TEXT
+    });
+    checks.belongsTo(users);
+    checks.belongsTo(locations);
+    sequelize.sync().then(function() {
+      console.log('Success!');
+      var whereObject = {
+        include: [ users, locations ],
+        where: {
+          createdAt: {
+            $lt: new Date(req.body.enddate),
+            $gt: new Date(req.body.startdate)
+          }
+        }
+      };
+      if (req.body.latesonly == 1) {
+        whereObject.where.late = 1;
+      }
+      checks.findAll(whereObject).then(function (checks) {
+        for (var i = 0; i < checks.length; i++) {
+          checks[i].checkTime = getTimeReadeble(checks[i].createdAt);
+        };
+        var now = new Date();
+        var nowdate = getDateReadeble(now);
+        nowdate = nowdate + ", " + days[now.getDay()];
+        console.log(nowdate);
+        res.send({checks: checks, nowdate: nowdate });
+      }).catch(function (err) {
+        res.send({err: err, text: 'what'});
+        console.log('checks error: ' + err);
+      });
+    }).catch(function(err) {
+      res.send({err: err, text: 'what'});
+      console.log('Database error: ' + err);
+    });
+  }).catch(function(err) {
+    res.send({err: err, text: 'what'});
+    console.log('Connection error: ' + err);
+  });
+});
+
 module.exports = router;

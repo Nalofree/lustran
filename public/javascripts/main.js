@@ -92,9 +92,9 @@ function getLoc(locid) {
 function getTimeReadeble(date){
 	var readebleTime;//1998-02-03 22:23:00
 	var year = date.getFullYear();
-			readebleTime = year + '-' +
-				('00' + (date.getMonth()+1)).slice(-2) + '-' +
-				('00' + date.getDate()).slice(-2) + ' ' +
+			readebleTime = ('00' + date.getDate()).slice(-2) + '.' +
+				('00' + (date.getMonth()+1)).slice(-2) + '.' +
+				year + ' ' +
 				('00' + date.getHours()).slice(-2) + ':' +
 				('00' + date.getMinutes()).slice(-2);
 				// ('00' + date.getSeconds()).slice(-2);

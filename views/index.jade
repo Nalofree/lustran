@@ -117,14 +117,14 @@ block content
                   form.form-horizontal
                     .form-group
                       label.control-label(for='') с
-                      .col-sm-2
+                      .col-sm-3
                         input.form-control(type='date', data-input='date', name='startdate')
                       label.control-label(for='') по
-                      .col-sm-2
+                      .col-sm-3
                         input.form-control(type='date', data-input='date', name='enddate')
-                      .col-sm-2
-                        button.btn.btn-success(type='submit') Показать
+                      .col-sm-3
+                        button.btn.btn-success.showcheckorder(type='submit') Показать
                       .col-sm-3
                         label.control-label.check(for='')
-                          input(type='checkbox')
+                          input(type='checkbox', name='latesonly')
                           | &nbspТолько опоздания
