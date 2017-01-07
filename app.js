@@ -8,6 +8,7 @@ var Sequelize = require('sequelize');
 
 var index = require('./routes/index');
 var orders = require('./routes/orders');
+var addorder = require('./routes/addorder');
 var locations = require('./routes/locations');
 var accesserror = require('./routes/accesserror');
 var users = require('./routes/users');
@@ -43,6 +44,7 @@ sequelize.authenticate().then(function() {
 
 app.use('/', index);
 app.use('/orders', orders);
+app.use('/addorder', addorder);
 app.use('/locations', locations);
 app.use('/accesserror', accesserror);
 app.use('/users', users);

@@ -1,0 +1,160 @@
+extends layout
+
+block content
+    main.lustran-main
+      nav.navbar.lustran-navbar.navbar-static-top
+        .lustran-container-nav
+          .collapse.navbar-collapse
+            ul.nav.navbar-nav
+              li.filter-menu
+                a.dropdown-toggle.lustran-dropdown(href='#', role='button', aria-haspopup='true', aria-expanded='false')
+                  | Фильтр&nbsp
+                  span.caret
+                ul.dropdown-menu.lustran-dropdown-menu.filter-menu-dropdown
+                  li
+                    a(href='#') ID заказа
+                  li
+                    a(href='#') Наименование
+                  li
+                    a(href='#') Артикул
+                  li
+                    a(href='#') Ориентировочная дата
+              li.status-menu
+                a.lustran-dropdown(href='#', role='button')
+                  | Выберите статус&nbsp
+                  span.caret
+                .status-menu-dropdown
+                  .dropdown
+                    button#dropdownMenu1.btn.btn-default.dropdown-toggle.lustran-drop(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true') Обработан
+                    ul.dropdown-menu(aria-labelledby='dropdownMenu1')
+                      li
+                        a(href='#') Обработан
+                      li
+                        a(href='#') Не обработан
+                  .dropdown
+                    button#dropdownMenu2.btn.btn-default.dropdown-toggle.lustran-drop(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true') Заказан
+                    ul.dropdown-menu(aria-labelledby='dropdownMenu2')
+                      li
+                        a(href='#') Заказан
+                      li
+                        a(href='#') Не заказан
+                  .dropdown
+                    button#dropdownMenu3.btn.btn-default.dropdown-toggle.lustran-drop(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true') Проверен и отложен
+                    ul.dropdown-menu(aria-labelledby='dropdownMenu3')
+                      li
+                        a(href='#') Проверен и отложен
+                      li
+                        a(href='#') Отсутствует
+                  .dropdown
+                    button#dropdownMenu4.btn.btn-default.dropdown-toggle.lustran-drop(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true') Звонили
+                    ul.dropdown-menu(aria-labelledby='dropdownMenu4')
+                      li
+                        a(href='#') Звонили
+                      li
+                        a(href='#') Не звонили
+                  .dropdown
+                    button#dropdownMenu5.btn.btn-default.dropdown-toggle.lustran-drop(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true') Выдан
+                    ul.dropdown-menu(aria-labelledby='dropdownMenu5')
+                      li
+                        a(href='#') Выдан
+                      li
+                        a(href='#') Не выдан
+                  .status-menu-check
+                    input(type='checkbox')
+                    label Уточнить дату
+                    input(type='checkbox')
+                    label Ориентировочная
+                    input(type='checkbox')
+                    label Уточненная
+            form.navbar-form.navbar-left.lustran-search-form
+              .form-group
+                input.form-control(type='text', placeholder='Поиск...')
+            ul.nav.navbar-nav.navbar-right
+              li.navbar-text
+                | Заказов всего 
+                span.badge.badge-pur-light 1
+              li.navbar-text
+                | В обработке 
+                span.badge.badge-pur-light 2
+              li.navbar-text
+                | Выдано 
+                span.badge.badge-pur-light 6
+              li.navbar-text
+                | Дефект 
+                span.badge.badge-pur-light 0
+      .lustran-container
+        .new-order-wrapper
+          h2 Добавление нового заказа
+          .new-order
+            .new-order-header
+              .new-order-info
+                .new-order-info-row
+                  | ID заказа&nbsp
+                  span.new-order-id 0001
+                  | &nbspот&nbsp
+                  span.new-order-date 12.12.16
+                .new-order-info-row
+                  span.new-order-shop Название магазина
+                .new-order-info-row
+                  span.new-order-person ФИО сотрудника
+                .new-order-info-row
+                  | Порядковай номер&nbsp
+                  span.new-order-iter 1
+              .new-order-barcode(style='background-image: url(img/shtrihcod.png);')
+            .new-order-body
+              form.new-order-form(action='')
+                .new-order-form-row.row
+                  fieldset.col-sm-2
+                    label(for='') Артикул
+                    input.form-control(type='text', value='123')
+                  fieldset.col-sm-3
+                    label(for='') Наименование товара
+                    input.form-control(type='text', value='Товар')
+                  fieldset.col-sm-2
+                    label(for='') Количество товара
+                    input.form-control(type='text', value='1', data-input='number')
+                  fieldset.col-sm-2
+                    label(for='') Ориентировочная дата поставки
+                    input.form-control(type='text', value='12/12/16', data-input='date')
+                  fieldset.col-sm-1
+                    label(for='') Предоплата
+                    input.form-control(type='text', value='2000', data-input='number')
+                  .new-row.remove(data-toggle='remove-row')
+                    i.fa.fa-times-circle(aria-hidden='true')
+                    | &nbspУдалить товар
+                .new-order-form-row.row
+                  fieldset.col-sm-2
+                    label(for='') Артикул
+                    input.form-control(type='text')
+                  fieldset.col-sm-3
+                    label(for='') Наименование товара
+                    input.form-control(type='text')
+                  fieldset.col-sm-2
+                    label(for='') Количество товара
+                    input.form-control(type='text', value='1', data-input='number')
+                  fieldset.col-sm-2
+                    label(for='') Ориентировочная дата поставки
+                    input.form-control(type='text', data-input='date')
+                  fieldset.col-sm-1
+                    label(for='') Предоплата
+                    input.form-control(type='text', data-input='number')
+                  .new-row.add(data-toggle='add-row')
+                    i.fa.fa-plus-circle(aria-hidden='true')
+                    | &nbspДобавить товар
+                .new-order-form-row.bottom.row
+                  .col-sm-4
+                    fieldset
+                      label(for='')
+                        | ФИО заказчика
+                        span *
+                      input.form-control(type='text', required='')
+                    fieldset
+                      label(for='')
+                        | Телефон заказчика
+                        span *
+                      input.form-control(type='text', data-input='phone', required='')
+                  fieldset.col-sm-6.col-sm-offset-1
+                    label(for='') Комментарий
+                    textarea.form-control(name='', id='', cols='30', rows='5')
+                .btn-wrapper
+                  input.btn.btn-success.btn-lg(type='submit', value='Сохранить и распечатать')

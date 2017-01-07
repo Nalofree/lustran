@@ -19,7 +19,18 @@ html
     .container.location-name
       | Место: 
       a.location-name(href="/locations")
-    block content
+    .lustran-page
+      nav.lustran-nav
+        a.lustran-nav-item(href='/addorder')
+          i.fa.fa-plus-circle(aria-hidden='true')
+          | Добавить заказ
+        a.lustran-nav-item(href='/orders')
+          i.fa.fa-list-alt(aria-hidden='true')
+          | Заказы и товары
+        a.lustran-nav-item(href='/')
+          i.fa.fa-user-plus(aria-hidden='true')
+          | Отметиться
+      block content
     script(type='text/javascript', src='javascripts/jquery-3.1.1.min.js')
     script(type='text/javascript', src='javascripts/inputmask.js')
     script(type='text/javascript', src='javascripts/main.js')
