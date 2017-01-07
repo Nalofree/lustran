@@ -39,6 +39,8 @@ block content
                   br
                   span.name Иванов Иван Иванович
                 .wellcome-bottom Вы успешно отметились и можете приступать пользоваться системой.
+                br
+                .btn.btn-success.wellcome-ok Ок
             // Отметившиеся
             .checking-in-wrapper
               h2 Отметившиеся
@@ -84,7 +86,8 @@ block content
                         //-   span.checking-in-person Иванов Иван Иванович
                         //-   span.badge.lateness опоздание
                   - else
-                    p Отметок за вчера и сегодня пока нет
+                    ul.checking-in-list
+                      p Отметок за вчера и сегодня пока нет
                   //- .checking-in-period
                   //-   .period-top 16 ноября, четверг
                   //-   ul.checking-in-list

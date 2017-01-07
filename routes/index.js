@@ -9,6 +9,41 @@ var sequelize = new Sequelize('heroku_a5572bedbd1fbe3', 'b816998663244e', 'b2320
   // storage: 'path/to/database.sqlite'
 });
 
+function getTimeReadeble(date){
+  var readebleTime;//1998-02-03 22:23:00
+      readebleTime = ('00' + date.getDate()).slice(-2) + '.' +
+        ('00' + (date.getMonth()+1)).slice(-2) + '.' +
+        date.getFullYear() + ' ' +
+        ('00' + date.getHours()).slice(-2) + ':' +
+        ('00' + date.getMinutes()).slice(-2);
+        // ('00' + date.getSeconds()).slice(-2);
+      // console.log(now);
+      return readebleTime;
+};
+
+function getDateReadeble(date){
+  var readebleTime;//1998-02-03 22:23:00
+      readebleTime = ('00' + date.getDate()).slice(-2) + '.' +
+        ('00' + (date.getMonth()+1)).slice(-2) + '.' +
+        date.getFullYear();
+        // ('00' + date.getSeconds()).slice(-2);
+      // console.log(now);
+      return readebleTime;
+};
+
+function getTimeReadebleYesterday(date){
+  var readebleTime;//1998-02-03 22:23:00
+      date.setDate(date.getDate()-1);
+      readebleTime = ('00' + date.getDate()).slice(-2) + '.' +
+        ('00' + (date.getMonth()+1)).slice(-2) + '.' +
+        date.getFullYear() + ' ' +
+        ('00' + date.getHours()).slice(-2) + ':' +
+        ('00' + date.getMinutes()).slice(-2);
+        // ('00' + date.getSeconds()).slice(-2);
+      // console.log(now);
+      return readebleTime;
+};
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   // res.render('index', { title: 'Главная' });
@@ -63,34 +98,12 @@ router.get('/', function(req, res, next) {
     // checks.hasOne(locations, { as: 'location' });
     sequelize.sync().then(function() {
       console.log('Success!');
-      function getTimeReadeble(date){
-        var readebleTime;//1998-02-03 22:23:00
-            readebleTime = date.getFullYear() + '-' +
-              ('00' + (date.getMonth()+1)).slice(-2) + '-' +
-              ('00' + date.getDate()).slice(-2) + ' ' +
-              ('00' + date.getHours()).slice(-2) + ':' +
-              ('00' + date.getMinutes()).slice(-2);
-              // ('00' + date.getSeconds()).slice(-2);
-            // console.log(now);
-            return readebleTime;
-      };
-      function getTimeReadebleYesterday(date){
-        var readebleTime;//1998-02-03 22:23:00
-            date.setDate(date.getDate()-1);
-            readebleTime = now.getFullYear() + '-' +
-              ('00' + (date.getMonth()+1)).slice(-2) + '-' +
-              ('00' + date.getDate()).slice(-2) + ' ' +
-              ('00' + date.getHours()).slice(-2) + ':' +
-              ('00' + date.getMinutes()).slice(-2);
-              // ('00' + date.getSeconds()).slice(-2);
-            // console.log(now);
-            return readebleTime;
-      };
       // var today = getTimeNow());
       // var yesterday = getTimeYesterday();
       checks.findAll({
         include: [ users, locations ],
         // include: [ locations ],
+        // group: 'createdAt',
         where: {
           createdAt: {
             $lt: new Date(),
@@ -104,7 +117,7 @@ router.get('/', function(req, res, next) {
 
         // console.log(checks);
         for (var i = 0; i < checks.length; i++) {
-          console.log(getTimeReadeble(checks[i].createdAt));
+          // console.log(getTimeReadeble(checks[i].createdAt));
           checks[i].checkTime = getTimeReadeble(checks[i].createdAt);
         }
         res.render('index', { title: 'Главная', checks: checks });
@@ -173,32 +186,60 @@ router.post('/', function(req, res, next) {
         // res.send(users);
         //res.render('users', {users: users, title: "Пользователи"});
         if (user) {
-          checks.sync().then(function() {
-            console.log('Success!');
-            var now = new Date();
-            var late;
-            if ((now.getHours() == 9 && now.getMinutes() >= 15) || (now.getHours() > 9)) {
-              late = 1;
-            }else{
-              late = 0;
+          checks.findOne({
+            include: [ users, locations ],
+            where: {
+              createdAt: {
+                $lt: new Date(),
+                $gt: new Date(new Date() - 24 * 60 * 60 * 1000)
+              },
+              userId: user.id
             }
-            checks.create({
-              locationId: req.body.locid,
-              userId: user.id,
-              late: late,
-              include: [ users, locations ]
-            }).then(function (check) {
-              // res.send(checks);
+          }).then(function (checkuser) {
+            var now = new Date();
+            console.log(getDateReadeble(now));
+            if (checkuser && getDateReadeble(checkuser.createdAt) == getDateReadeble(now)) {
+              console.log(getDateReadeble(checkuser.createdAt) + "=" + getDateReadeble(now));
               res.send({
-                check: check,
-                user: user
+                err: 'Вы уже отмечались сегодня'
               });
-            }).catch(function (err) {
-              res.send(err);
-              console.log('checks error: ' + err);
-            });
-          }).catch(function(err) {
-            console.log('Database error: ' + err);
+            }else{
+              checks.sync().then(function() {
+                console.log('Success!');
+                var now = new Date();
+                var late;
+                if ((now.getHours() == 9 && now.getMinutes() >= 15) || (now.getHours() > 9)) {
+                  late = 1;
+                }else{
+                  late = 0;
+                }
+                checks.create({
+                  locationId: req.body.locid,
+                  userId: user.id,
+                  late: late,
+                  include: [ users, locations ]
+                }).then(function (check) {
+                  // res.send(checks);
+                  // check.checkTime = getTimeReadeble(check.createdAt);
+                  check.checkTime = getTimeReadeble(check.createdAt);
+                  console.log(check.checkTime);
+                  res.send({
+                    err: false,
+                    check: check,
+                    user: user
+                  });
+                }).catch(function (err) {
+                  res.send(err);
+                  console.log('checks error: ' + err);
+                });
+              }).catch(function(err) {
+                res.send(err);
+                console.log('Database error: ' + err);
+              });
+            }
+          }).catch(function (err) {
+            res.send(err);
+            console.log('checks error: ' + err);
           });
         }else{
           res.send({

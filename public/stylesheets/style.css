@@ -13249,10 +13249,13 @@ h2 {
 
 /* line 417, ../sass/_components.sass */
 .wellcome {
+  position: relative;
   width: 410px;
   text-align: center;
   color: #fff;
   line-height: 1.2;
+  left: 50%;
+  margin-left: -205px;
 }
 /* line 422, ../sass/_components.sass */
 .wellcome i {
