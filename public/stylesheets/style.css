@@ -13549,7 +13549,7 @@ label.check {
   margin: 20px;
 }
 
-.adduserform, .edituserform, .banuserpin, .addlocform, .setlocpin, .dellocpin {
+.adduserform, .edituserform, .banuserpin, .addlocform, .setlocpin, .dellocpin, .addorder {
   display: none;
   position: fixed;
   color: #000;

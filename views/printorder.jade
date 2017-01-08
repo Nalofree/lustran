@@ -1,0 +1,31 @@
+link(rel='stylesheet', href='/stylesheets/style.css')
+link(rel='stylesheet', href='/stylesheets/printorder.css')
+.printorder-wrap
+  p.small= "При отсутсвии предоплаты поступления заказанного товара не гарантируется"
+  h3= "Заказ № " + order.number
+  hr
+  p.small.left= "Исполнитель: ИП Бобров Александр Алексеевич, ИНН 030903342269, тел. 8(3952)94-08-40"
+  p.small.left= "Продавец, оформивший заказ: "+order.user.name
+  p.small.left= "Адрес магазина: "+order.location.name
+  p.small.left= "Заказчик: " + order.customername + " " + order.customerphone
+  table.table.table-bordered
+    tr
+      th №
+      th Товары
+      th Количество
+      th Ед.
+      th Предоплата
+    tr
+      - for (var i=0;i<order.goods.length;i++)
+        td= i+1
+        td= order.goods[i].name
+        td= order.goods[i].number
+        td= "шт"
+        td= order.goods[i].prepayment
+  p.small.left= "Всего наименований "+order.goods.length+","
+  br
+  hr
+  .col-md-6
+    p= "Исполнитель  _____________________"
+  .col-md-6
+    p= "Заказчик  _____________________"

@@ -43,6 +43,7 @@ $(document).ready(function () {
     $(".edituserform").fadeOut();
     $('.setlocpin').fadeOut();
     $(".dellocpin").fadeOut();
+    $('from.addorder').fadeOut();
   });
   $(".adduser-cancel").click(function (e) {
     e.preventDefault();

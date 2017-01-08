@@ -72,6 +72,7 @@ function getLoc(locid) {
 					alert(data.err);
 				}else{
 					$('a.location-name').text(data.locations.name);
+					$('.new-order-shop').text(data.locations.name);
 				}
 			},
 			error: function (data, status, error) {
@@ -140,9 +141,9 @@ $(document).ready(function(){
 		$(this).addClass('remove');
 		$(this).attr('data-toggle','remove-row');
 		$(this).html('<i class="fa fa-times-circle" aria-hidden="true"></i>&nbspУдалить товар');
-		$(this).parents('.new-order-form-row').after('<div class="new-order-form-row row">'+row+'</div>');
-		$('[data-input=number]').inputmask({mask:'9{*}',greedy: false});
-		$('[data-input=date]').inputmask('dd/mm/yyyy',{ "placeholder": "дд/мм/гггг" });
+		$(this).parents('.new-order-form-row').after('<div class="new-order-form-row good-item row">'+row+'</div>');
+		// $('[data-input=number]').inputmask({mask:'9{*}',greedy: false});
+		// $('[data-input=date]').inputmask('dd/mm/yyyy',{ "placeholder": "дд/мм/гггг" });
 	})
 
 	// Валидация инпутов
