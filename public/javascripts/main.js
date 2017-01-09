@@ -167,7 +167,7 @@ $(document).ready(function(){
 
 
 	//Изменить статус заказа
-	var statusarea, statustype;
+	var statusarea, statustype, goodid;
 	$('body').delegate('.order-list-item:not(.status-removed) .order-status:not(.status-null) .order-status-edit','click',function(){
 		var offsetTop = $(this).offset().top + $(this).height();
 		var offsetLeft = $(this).offset().left - 150 + $(this).width()/2;
@@ -179,8 +179,9 @@ $(document).ready(function(){
 		var gooddata = {
 			ordernumber: $(this).closest('.order').find('.order-id span').text(),
 			goodname: $(this).closest('.order-list-item').find('.order-name').text(),
-			googid: datatitle.split(',')[1]
+			goodid: datatitle.split(',')[1]
 		}
+		goodid = gooddata.goodid;
 		console.log(gooddata);
 		$('.action .action-order').text(gooddata.ordernumber);
 		$('.action .action-shop').text(gooddata.goodname);

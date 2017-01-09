@@ -296,6 +296,21 @@ router.post('/', function(req, res, next) {
         defaultValue: 0
       },
     });
+    var actions = sequelize.define('actions', {
+      id: {
+          type: Sequelize.INTEGER,
+          primaryKey: true,
+          autoIncrement: true
+      },
+      userId: Sequelize.INTEGER,
+      locationId: Sequelize.INTEGER,
+      goodId: Sequelize.INTEGER,
+      startstatus: Sequelize.TEXT,
+      endstatus: Sequelize.TEXT
+    });
+    actions.belongsTo(users);
+    actions.belongsTo(locations);
+    actions.belongsTo(goods);
     orders.belongsTo(users);
     orders.belongsTo(locations);
     goods.belongsTo(orders);
