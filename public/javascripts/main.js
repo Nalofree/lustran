@@ -112,6 +112,14 @@ function getDateReadeble(date){
 			// console.log(now);
 			return readebleTime;
 };
+function getDateSuperReadeble(date){
+	var readebleTime;//1998-02-03 22:23:00
+	var year = date.getFullYear();
+			readebleTime = ('00' + date.getDate()).slice(-2) + '.' +
+			('00' + (date.getMonth()+1)).slice(-2) + '.' +
+			year;
+			return readebleTime;
+};
 function getTimeReadebleYesterday(date){
 	var readebleTime;//1998-02-03 22:23:00
 			date.setDate(date.getDate()-1);
@@ -159,9 +167,12 @@ $(document).ready(function(){
 
 
 	//Изменить статус заказа
+	var statusarea, statustype;
 	$('body').delegate('.order-list-item:not(.status-removed) .order-status:not(.status-null) .order-status-edit','click',function(){
 		var offsetTop = $(this).offset().top + $(this).height();
 		var offsetLeft = $(this).offset().left - 150 + $(this).width()/2;
+		statusarea = $(this).closest('.order-status');
+		// console.log(statusarea);
 		$('.layout-dark').height($('body').height());
 		$('.layout-dark').show();
 		var datatitle = $(this).attr('data-title');
@@ -232,6 +243,109 @@ $(document).ready(function(){
 	$('body').on('click','[data-toggle=save-action]',function(){
 		$('.layout-dark').hide();
 		$('.action').removeClass('show');
+		switch(statustype) {
+			case 'processed':
+			console.log(statusarea);
+			statusarea.removeClass('status-danger');
+			if ($('select[name="status"] option:selected').val() == 0) {
+				statusarea.addClass('status-danger');
+				statusarea.find('.status').text('не обработан');
+				var now = new Date();
+				statusarea.find('.status-date').text(getDateSuperReadeble(now));
+			}else if($('select[name="status"] option:selected').val() == 1) {
+				statusarea.removeClass('status-danger');
+				statusarea.find('.status').text('В обработке');
+				var now = new Date();
+				statusarea.find('.status-date').text(getDateSuperReadeble(now));
+			}else{
+				statusarea.removeClass('status-danger');
+				statusarea.find('.status').text('Обработан');
+				var now = new Date();
+				statusarea.find('.status-date').text(getDateSuperReadeble(now));
+			}
+			break;
+			case 'ordered':
+			statusarea.removeClass('status-danger');
+			if ($('select[name="status"] option:selected').val() == 0) {
+				statusarea.addClass('status-danger');
+				statusarea.find('.status').text('не Заказан');
+				var now = new Date();
+				statusarea.find('.status-date').text(getDateSuperReadeble(now));
+			}else{
+				statusarea.removeClass('status-danger');
+				statusarea.find('.status').text('Заказан');
+				var now = new Date();
+				statusarea.find('.status-date').text(getDateSuperReadeble(now));
+			}
+			break;
+			case 'spicifieddate':
+			statusarea.removeClass('status-danger');
+			if ($('input[name="status"]').val()) {
+				var date = new Date($('input[name="status"]').val());
+				statusarea.removeClass('status-danger');
+				statusarea.find('.status').text(getDateReadeble(date));
+				var now = new Date();
+				statusarea.find('.status-date').text(getDateSuperReadeble(now));
+			}else{
+				statusarea.addClass('status-danger');
+				statusarea.find('.status').text('--.--.--');
+				var now = new Date();
+				statusarea.find('.status-date').text(getDateSuperReadeble(now));
+			}
+			break;
+			case 'postponed':
+			statusarea.removeClass('status-danger');
+			if ($('select[name="status"] option:selected').val() == 0) {
+				statusarea.addClass('status-danger');
+				statusarea.find('.status').text('Не отложен');
+				var now = new Date();
+				statusarea.find('.status-date').text(getDateSuperReadeble(now));
+			}else if($('select[name="status"] option:selected').val() == 1) {
+				statusarea.removeClass('status-danger');
+				statusarea.find('.status').text('Проверен и отложен');
+				var now = new Date();
+				statusarea.find('.status-date').text(getDateSuperReadeble(now));
+			}else{
+				statusarea.addClass('status-danger');
+				statusarea.find('.status').text('Есть деффект');
+				var now = new Date();
+				statusarea.find('.status-date').text(getDateSuperReadeble(now));
+			}
+			break;
+			case 'callstatus':
+			statusarea.removeClass('status-danger');
+			if ($('select[name="status"] option:selected').val() == 0) {
+				statusarea.addClass('status-danger');
+				statusarea.find('.status').text('Не звонили');
+				var now = new Date();
+				statusarea.find('.status-date').text(getDateSuperReadeble(now));
+			}else if($('select[name="status"] option:selected').val() == 1) {
+				statusarea.addClass('status-danger');
+				statusarea.find('.status').text('Не дозвон');
+				var now = new Date();
+				statusarea.find('.status-date').text(getDateSuperReadeble(now));
+			}else{
+				statusarea.removeClass('status-danger');
+				statusarea.find('.status').text('Дозвон');
+				var now = new Date();
+				statusarea.find('.status-date').text(getDateSuperReadeble(now));
+			}
+			break;
+			case 'issued':
+			statusarea.removeClass('status-danger');
+			if ($('select[name="status"] option:selected').val() == 0) {
+				statusarea.addClass('status-danger');
+				statusarea.find('.status').text('не выдан');
+				var now = new Date();
+				statusarea.find('.status-date').text(getDateSuperReadeble(now));
+			}else{
+				statusarea.removeClass('status-danger');
+				statusarea.find('.status').text('выдан');
+				var now = new Date();
+				statusarea.find('.status-date').text(getDateSuperReadeble(now));
+			}
+			break;
+		}
 	})
 
 	//Удалить заказ из списка
