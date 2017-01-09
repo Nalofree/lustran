@@ -174,11 +174,32 @@ $(document).ready(function(){
 		$('.action .action-order').text(gooddata.ordernumber);
 		$('.action .action-shop').text(gooddata.goodname);
 		statustype = datatitle.split(',')[0];
+		$('.action-row.choose-satus').empty();
 		switch(statustype) {
 			case 'processed':
-			$('.action-row').empty();
-			$('.action-row').append('<select name=status>');
-
+			$('.action-row.choose-satus').empty();
+			$('.action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не обработан</option><option value=1>В обработке</option><option value=2>Обработан</option></select></div>');
+			break;
+			case 'ordered':
+			$('.action-row.choose-satus').empty();
+			$('.action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не заказан</option><option value=1>Заказан</option></select></div>');
+			break;
+			case 'spicifieddate':
+			$('.action-row.choose-satus').empty();
+			$('.action-row.choose-satus').append('<div class="form-group"><input name="status" type="date" class="form-control"></div>');
+			break;
+			case 'postponed':
+			$('.action-row.choose-satus').empty();
+			$('.action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не отложен</option><option value=1>Проверен и отложен</option><option value=2>Есть деффект</option></select></div>');
+			break;
+			case 'callstatus':
+			$('.action-row.choose-satus').empty();
+			$('.action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не звонили</option><option value=1>Не дозвон</option><option value=2>Дозвон</option></select></div>');
+			break;
+			case 'issued':
+			$('.action-row.choose-satus').empty();
+			$('.action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не выдан</option><option value=1>Выдан</option></select></div>');
+			break;
 		}
 		$('.action').addClass('show');
 		$('.action').css({'top':offsetTop, 'left':offsetLeft});
