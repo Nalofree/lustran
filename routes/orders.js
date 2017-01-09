@@ -11,6 +11,9 @@ var sequelize = new Sequelize('heroku_a5572bedbd1fbe3', 'b816998663244e', 'b2320
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
+  if (!req.cookies.location) {
+    res.redirect('/locations');
+  }
   var now = new Date();
   sequelize.authenticate().then(function() {
     console.log('Connect to DB created!');
@@ -95,10 +98,10 @@ router.get('/', function(req, res, next) {
       // res.send("123");
       orders.findAll({
         include: [users, locations, goods]
-      }).then(function (orders) {
-        console.log({orders: orders});
-        // res.render('orders', {order: order});
-        res.send({order: order});
+      }).then(function (forders) {
+        console.log({orders: forders});
+        res.render('orders', {orders: forders});
+        // res.send({order: order});
       }).catch(function (err) {
         res.send(err);
         console.log('order error: ' + err);

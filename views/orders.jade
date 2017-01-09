@@ -2,6 +2,14 @@ extends layout
 
 block content
       main.lustran-main
+        //- script(type='text/javascript').
+        - function getDateReadeble(date){
+          - var thisdate = new Date(date)
+          - var readebleTime;//1998-02-03 22:23:00
+          - var year = thisdate.getFullYear()
+          - readebleTime = ('00' + thisdate.getDate()).slice(-2) +'.'+ ('00' + (thisdate.getMonth()+1)).slice(-2) +'.'+ year
+          - return readebleTime;
+          - }
         nav.navbar.lustran-navbar.navbar-static-top
           .lustran-container-nav
             .collapse.navbar-collapse
@@ -84,437 +92,508 @@ block content
                   span.badge.badge-pur-light 0
         .lustran-container
           // Заказ
-          article.order
-            header.order-header
-              .order-id
-                | заказ
-                span 0001
-              .order-basket 13
-              a.btn.btn-sm.order-add(href='#order-add')
-                i.fa.fa-plus-circle(aria-hidden='true')
-            section.order-body
-              ul.order-list
-                li.order-list-item.status-removed
-                  // удаленный заказ staus-removed
-                  header.order-list-item-header
-                    span.badge.badge-pur 1
-                    span.order-date.sep-dot 11.12.16
-                    span.order-name.sep-dot Название товара
-                    span.order-count.sep-dot
-                      i 1
-                      |  шт
-                    span.order-float-date 16.12.16
-                    a.btn.btn-success.btn-xs(href='#', data-toggle='open-log') История действий
-                    a.remove-order-status(href='#', data-toggle='remove-order')
-                  .container-fluid
-                    ul.order-status-list.row
-                      li.col-sm-2
-                        .order-status
-                          .order-status-body
-                            .status-top
-                              span.status Обработан
-                              span.status-date 12.12.16
-                            .status-bottom
-                              span Фамилия Имя Отчество
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status
-                          .order-status-body
-                            .status-top
-                              span.status 12.12.16
-                              span.status-date 12.12.16
-                            .status-bottom
-                              span Фамилия Имя Отчество
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status
-                          .order-status-body
-                            .status-top
-                              span.status Заказан
-                              span.status-date 12.12.16
-                            .status-bottom
-                              span Фамилия Имя Отчество
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status
-                          .order-status-body
-                            .status-top
-                              span.status Отложен
-                              span.status-date 12.12.16
-                            .status-bottom
-                              span Фамилия Имя Отчество
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status
-                          .order-status-body
-                            .status-top
-                              span.status Дозвон
-                              span.status-date 12.12.16
-                            .status-bottom
-                              span Фамилия Имя Отчество
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status
-                          .order-status-body
-                            .status-top
-                              span.status Выдан
-                              span.status-date 12.12.16
-                            .status-bottom
-                              span Фамилия Имя Отчество
-                          a.order-status-edit(href='#')
-                li.order-list-item
-                  header.order-list-item-header
-                    span.badge.badge-pur 2
-                    span.order-date.sep-dot 11.12.16
-                    span.order-name.sep-dot Название товара
-                    span.order-count.sep-dot
-                      i 1
-                      |  шт
-                    span.order-float-date 16.12.16
-                    a.btn.btn-success.btn-xs(href='#', data-toggle='open-log') История действий
-                    a.remove-order-status(href='#', data-toggle='remove-order')
-                  .container-fluid
-                    ul.order-status-list.row
-                      li.col-sm-2
-                        .order-status.status-danger
-                          // status-danger
-                          .order-status-body
-                            .status-top
-                              span.status Не обработан
-                              span.status-date 12.12.16
-                            .status-bottom
-                              span Фамилия Имя Отчество
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status.status-null
-                          // ждет обработки status-null
-                          .order-status-body
-                            .status-top
-                              span.status --.--.--
-                              span.status-date
-                            .status-bottom
-                              span.edit Уточнить дату
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status.status-null
-                          .order-status-body
-                            .status-top
-                              span.status Не Заказан
-                              span.status-date
-                            .status-bottom
-                              span.edit Изменить статус
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status.status-null
-                          .order-status-body.status-null
-                            .status-top
-                              span.status Отсутствует
-                              span.status-date
-                            .status-bottom
-                              span.edit Изменить статус
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status.status-null
-                          .order-status-body
-                            .status-top
-                              span.status Не звонили
-                              span.status-date
-                            .status-bottom
-                              span.edit Изменить статус
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status.status-null
-                          .order-status-body
-                            .status-top
-                              span.status Не Выдан
-                              span.status-date
-                            .status-bottom
-                              span.edit Изменить статус
-                          a.order-status-edit(href='#')
-                li.order-list-item
-                  header.order-list-item-header
-                    span.badge.badge-pur 3
-                    span.order-date.sep-dot 11.12.16
-                    span.order-name.sep-dot Название товара
-                    span.order-count.sep-dot
-                      i 1
-                      |  шт
-                    span.order-float-date 16.12.16
-                    a.btn.btn-success.btn-xs(href='#', data-toggle='open-log') История действий
-                    a.remove-order-status(href='#', data-toggle='remove-order')
-                  .container-fluid
-                    ul.order-status-list.row
-                      li.col-sm-2
-                        .order-status
-                          // status-danger
-                          .order-status-body
-                            .status-top
-                              span.status  обработан
-                              span.status-date 12.12.16
-                            .status-bottom
-                              span Фамилия Имя Отчество
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status.status-danger
-                          .order-status-body
-                            .status-top
-                              span.status --.--.--
-                              span.status-date
-                            .status-bottom
-                              span.edit Изменить статус
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status.status-null
-                          .order-status-body
-                            .status-top
-                              span.status Не Заказан
-                              span.status-date
-                            .status-bottom
-                              span.edit Изменить статус
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status.status-null
-                          .order-status-body.status-null
-                            .status-top
-                              span.status Отсутствует
-                              span.status-date
-                            .status-bottom
-                              span.edit Изменить статус
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status.status-null
-                          .order-status-body
-                            .status-top
-                              span.status Не звонили
-                              span.status-date
-                            .status-bottom
-                              span.edit Изменить статус
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status.status-null
-                          .order-status-body
-                            .status-top
-                              span.status Не Выдан
-                              span.status-date
-                            .status-bottom
-                              span.edit Изменить статус
-                          a.order-status-edit(href='#')
+          -for (var i=0;i<orders.length;i++)
+            article.order
+              header.order-header
+                .order-id
+                  | заказ
+                  span= orders[i].number
+                .order-basket 13
+                a.btn.btn-sm.order-add(href='/addorder')
+                  i.fa.fa-plus-circle(aria-hidden='true')
+              section.order-body
+                ul.order-list
+                  - for (var j=0;j<orders[i].goods.length;j++)
+                    li.order-list-item
+                      // удаленный заказ staus-removed orders[i].goods[j].
+                      header.order-list-item-header
+                        span.badge.badge-pur 1
+                        span.order-date.sep-dot= getDateReadeble(orders[i].goods[j].createdAt)
+                        span.order-name.sep-dot= orders[i].goods[j].name
+                        span.order-count.sep-dot
+                          i= orders[i].goods[j].number
+                          |  шт
+                        span.order-float-date= getDateReadeble(orders[i].goods[j].indicativedate)
+                        a.btn.btn-success.btn-xs(href='#', data-toggle='open-log') История действий
+                        a.remove-order-status(href='#', data-toggle='remove-order')
+                      .container-fluid
+                        ul.order-status-list.row
+                          li.col-sm-2
+                            - if (orders[i].goods[j].processed == 0)
+                              .order-status.status-danger
+                                .order-status-body
+                                  .status-top
+                                    span.status Не обработан
+                                    span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
+                                  .status-bottom
+                                    span= orders[i].user.name
+                                a.order-status-edit(href='#')
+                            - else
+                              .order-status
+                                .order-status-body
+                                  .status-top
+                                    span.status Обработан
+                                    span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
+                                  .status-bottom
+                                    span= orders[i].user.name
+                                a.order-status-edit(href='#')
+                          li.col-sm-2
+                            - if (orders[i].goods[j].spicifieddate == null)
+                              .order-status.status-danger
+                                .order-status-body
+                                  .status-top
+                                    span.status --.--.--
+                                    span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
+                                  .status-bottom
+                                    span= orders[i].user.name
+                                a.order-status-edit(href='#')
+                            - else
+                              .order-status
+                                .order-status-body
+                                  .status-top
+                                    span.status= getDateReadeble(orders[i].goods[j].spicifieddate)
+                                    //- span.status-date 12.12.16
+                                  .status-bottom
+                                    //- span Фамилия Имя Отчество
+                                a.order-status-edit(href='#')
+                          li.col-sm-2
+                            - if (orders[i].goods[j].ordered == 0)
+                              .order-status.status-danger
+                                .order-status-body
+                                  .status-top
+                                    span.status Не заказан
+                                    span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
+                                  .status-bottom
+                                    span= orders[i].user.name
+                                a.order-status-edit(href='#')
+                            - else
+                              .order-status
+                                .order-status-body
+                                  .status-top
+                                    span.status Заказан
+                                    span.status-date 12.12.16
+                                  .status-bottom
+                                    span Фамилия Имя Отчество
+                                a.order-status-edit(href='#')
+                          li.col-sm-2
+                            - if (orders[i].goods[j].ordered == 0)
+                              .order-status.status-danger
+                                .order-status-body
+                                  .status-top
+                                    span.status Не отложен
+                                    span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
+                                  .status-bottom
+                                    span= orders[i].user.name
+                                a.order-status-edit(href='#')
+                            - else
+                              .order-status
+                                .order-status-body
+                                  .status-top
+                                    span.status Отложен
+                                    span.status-date 12.12.16
+                                  .status-bottom
+                                    span Фамилия Имя Отчество
+                                a.order-status-edit(href='#')
+                          li.col-sm-2
+                            - if (orders[i].goods[j].callstatus == 0)
+                              .order-status.status-danger
+                                .order-status-body
+                                  .status-top
+                                    span.status Не звонили
+                                    span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
+                                  .status-bottom
+                                    span= orders[i].user.name
+                                a.order-status-edit(href='#')
+                            - else if (orders[i].goods[j].callstatus == 1)
+                              .order-status
+                                .order-status-body
+                                  .status-top
+                                    span.status Дозвон
+                                    span.status-date 12.12.16
+                                  .status-bottom
+                                    span Фамилия Имя Отчество
+                                a.order-status-edit(href='#')
+                            - else
+                              .order-status
+                                .order-status-body
+                                  .status-top
+                                    span.status Не дозвон
+                                    span.status-date 12.12.16
+                                  .status-bottom
+                                    span Фамилия Имя Отчество
+                                a.order-status-edit(href='#')
+                          li.col-sm-2
+                            - if (orders[i].goods[j].callstatus == 0)
+                              .order-status.status-danger
+                                .order-status-body
+                                  .status-top
+                                    span.status Не выдан
+                                    span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
+                                  .status-bottom
+                                    span= orders[i].user.name
+                                a.order-status-edit(href='#')
+                            - else
+                              .order-status
+                                .order-status-body
+                                  .status-top
+                                    span.status Выдан
+                                    span.status-date 12.12.16
+                                  .status-bottom
+                                    span Фамилия Имя Отчество
+                                a.order-status-edit(href='#')
+                //- li.order-list-item
+                //-   header.order-list-item-header
+                //-     span.badge.badge-pur 2
+                //-     span.order-date.sep-dot 11.12.16
+                //-     span.order-name.sep-dot Название товара
+                //-     span.order-count.sep-dot
+                //-       i 1
+                //-       |  шт
+                //-     span.order-float-date 16.12.16
+                //-     a.btn.btn-success.btn-xs(href='#', data-toggle='open-log') История действий
+                //-     a.remove-order-status(href='#', data-toggle='remove-order')
+                //-   .container-fluid
+                //-     ul.order-status-list.row
+                //-       li.col-sm-2
+                //-         .order-status.status-danger
+                //-           // status-danger
+                //-           .order-status-body
+                //-             .status-top
+                //-               span.status Не обработан
+                //-               span.status-date 12.12.16
+                //-             .status-bottom
+                //-               span Фамилия Имя Отчество
+                //-           a.order-status-edit(href='#')
+                //-       li.col-sm-2
+                //-         .order-status.status-null
+                //-           // ждет обработки status-null
+                //-           .order-status-body
+                //-             .status-top
+                //-               span.status --.--.--
+                //-               span.status-date
+                //-             .status-bottom
+                //-               span.edit Уточнить дату
+                //-           a.order-status-edit(href='#')
+                //-       li.col-sm-2
+                //-         .order-status.status-null
+                //-           .order-status-body
+                //-             .status-top
+                //-               span.status Не Заказан
+                //-               span.status-date
+                //-             .status-bottom
+                //-               span.edit Изменить статус
+                //-           a.order-status-edit(href='#')
+                //-       li.col-sm-2
+                //-         .order-status.status-null
+                //-           .order-status-body.status-null
+                //-             .status-top
+                //-               span.status Отсутствует
+                //-               span.status-date
+                //-             .status-bottom
+                //-               span.edit Изменить статус
+                //-           a.order-status-edit(href='#')
+                //-       li.col-sm-2
+                //-         .order-status.status-null
+                //-           .order-status-body
+                //-             .status-top
+                //-               span.status Не звонили
+                //-               span.status-date
+                //-             .status-bottom
+                //-               span.edit Изменить статус
+                //-           a.order-status-edit(href='#')
+                //-       li.col-sm-2
+                //-         .order-status.status-null
+                //-           .order-status-body
+                //-             .status-top
+                //-               span.status Не Выдан
+                //-               span.status-date
+                //-             .status-bottom
+                //-               span.edit Изменить статус
+                //-           a.order-status-edit(href='#')
+                //- li.order-list-item
+                //-   header.order-list-item-header
+                //-     span.badge.badge-pur 3
+                //-     span.order-date.sep-dot 11.12.16
+                //-     span.order-name.sep-dot Название товара
+                //-     span.order-count.sep-dot
+                //-       i 1
+                //-       |  шт
+                //-     span.order-float-date 16.12.16
+                //-     a.btn.btn-success.btn-xs(href='#', data-toggle='open-log') История действий
+                //-     a.remove-order-status(href='#', data-toggle='remove-order')
+                //-   .container-fluid
+                //-     ul.order-status-list.row
+                //-       li.col-sm-2
+                //-         .order-status
+                //-           // status-danger
+                //-           .order-status-body
+                //-             .status-top
+                //-               span.status  обработан
+                //-               span.status-date 12.12.16
+                //-             .status-bottom
+                //-               span Фамилия Имя Отчество
+                //-           a.order-status-edit(href='#')
+                //-       li.col-sm-2
+                //-         .order-status.status-danger
+                //-           .order-status-body
+                //-             .status-top
+                //-               span.status --.--.--
+                //-               span.status-date
+                //-             .status-bottom
+                //-               span.edit Изменить статус
+                //-           a.order-status-edit(href='#')
+                //-       li.col-sm-2
+                //-         .order-status.status-null
+                //-           .order-status-body
+                //-             .status-top
+                //-               span.status Не Заказан
+                //-               span.status-date
+                //-             .status-bottom
+                //-               span.edit Изменить статус
+                //-           a.order-status-edit(href='#')
+                //-       li.col-sm-2
+                //-         .order-status.status-null
+                //-           .order-status-body.status-null
+                //-             .status-top
+                //-               span.status Отсутствует
+                //-               span.status-date
+                //-             .status-bottom
+                //-               span.edit Изменить статус
+                //-           a.order-status-edit(href='#')
+                //-       li.col-sm-2
+                //-         .order-status.status-null
+                //-           .order-status-body
+                //-             .status-top
+                //-               span.status Не звонили
+                //-               span.status-date
+                //-             .status-bottom
+                //-               span.edit Изменить статус
+                //-           a.order-status-edit(href='#')
+                //-       li.col-sm-2
+                //-         .order-status.status-null
+                //-           .order-status-body
+                //-             .status-top
+                //-               span.status Не Выдан
+                //-               span.status-date
+                //-             .status-bottom
+                //-               span.edit Изменить статус
+                //-           a.order-status-edit(href='#')
           // end Заказ
-          // Заказ
-          article.order
-            header.order-header
-              .order-id
-                | заказ
-                span 0002
-              .order-basket 13
-              a.btn.btn-sm.order-add(href='#order-add')
-                i.fa.fa-plus-circle(aria-hidden='true')
-            section.order-body
-              ul.order-list
-                li.order-list-item
-                  header.order-list-item-header
-                    span.badge.badge-pur 1
-                    span.order-date.sep-dot 11.12.16
-                    span.order-name.sep-dot Название товара
-                    span.order-count.sep-dot
-                      i 1
-                      |  шт
-                    span.order-float-date 16.12.16
-                    a.btn.btn-success.btn-xs(href='#', data-toggle='open-log') История действий
-                    a.remove-order-status(href='#', data-toggle='remove-order')
-                  .container-fluid
-                    ul.order-status-list.row
-                      li.col-sm-2
-                        .order-status
-                          .order-status-body
-                            .status-top
-                              span.status Обработан
-                              span.status-date 12.12.16
-                            .status-bottom
-                              span Фамилия Имя Отчество
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status
-                          .order-status-body
-                            .status-top
-                              span.status 12.12.16
-                              span.status-date 12.12.16
-                            .status-bottom
-                              span Фамилия Имя Отчество
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status
-                          .order-status-body
-                            .status-top
-                              span.status Заказан
-                              span.status-date 12.12.16
-                            .status-bottom
-                              span Фамилия Имя Отчество
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status
-                          .order-status-body
-                            .status-top
-                              span.status Отложен
-                              span.status-date 12.12.16
-                            .status-bottom
-                              span Фамилия Имя Отчество
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status
-                          .order-status-body
-                            .status-top
-                              span.status Дозвон
-                              span.status-date 12.12.16
-                            .status-bottom
-                              span Фамилия Имя Отчество
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status
-                          .order-status-body
-                            .status-top
-                              span.status Выдан
-                              span.status-date 12.12.16
-                            .status-bottom
-                              span Фамилия Имя Отчество
-                          a.order-status-edit(href='#')
-                li.order-list-item
-                  header.order-list-item-header
-                    span.badge.badge-pur 2
-                    span.order-date.sep-dot 11.12.16
-                    span.order-name.sep-dot Название товара
-                    span.order-count.sep-dot
-                      i 1
-                      |  шт
-                    span.order-float-date 16.12.16
-                    a.btn.btn-success.btn-xs(href='#', data-toggle='open-log') История действий
-                    a.remove-order-status(href='#', data-toggle='remove-order')
-                  .container-fluid
-                    ul.order-status-list.row
-                      li.col-sm-2
-                        .order-status.status-danger
-                          // status-danger
-                          .order-status-body
-                            .status-top
-                              span.status Не обработан
-                              span.status-date 12.12.16
-                            .status-bottom
-                              span Фамилия Имя Отчество
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status.status-null
-                          // ждет обработки status-null
-                          .order-status-body
-                            .status-top
-                              span.status --.--.--
-                              span.status-date
-                            .status-bottom
-                              span.edit Уточнить дату
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status.status-null
-                          .order-status-body
-                            .status-top
-                              span.status Не Заказан
-                              span.status-date
-                            .status-bottom
-                              span.edit Изменить статус
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status.status-null
-                          .order-status-body.status-null
-                            .status-top
-                              span.status Отсутствует
-                              span.status-date
-                            .status-bottom
-                              span.edit Изменить статус
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status.status-null
-                          .order-status-body
-                            .status-top
-                              span.status Не звонили
-                              span.status-date
-                            .status-bottom
-                              span.edit Изменить статус
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status.status-null
-                          .order-status-body
-                            .status-top
-                              span.status Не Выдан
-                              span.status-date
-                            .status-bottom
-                              span.edit Изменить статус
-                          a.order-status-edit(href='#')
-                li.order-list-item
-                  header.order-list-item-header
-                    span.badge.badge-pur 3
-                    span.order-date.sep-dot 11.12.16
-                    span.order-name.sep-dot Название товара
-                    span.order-count.sep-dot
-                      i 1
-                      |  шт
-                    span.order-float-date 16.12.16
-                    a.btn.btn-success.btn-xs(href='#', data-toggle='open-log') История действий
-                    a.remove-order-status(href='#', data-toggle='remove-order')
-                  .container-fluid
-                    ul.order-status-list.row
-                      li.col-sm-2
-                        .order-status
-                          // status-danger
-                          .order-status-body
-                            .status-top
-                              span.status  обработан
-                              span.status-date 12.12.16
-                            .status-bottom
-                              span Фамилия Имя Отчество
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status.status-danger
-                          .order-status-body
-                            .status-top
-                              span.status --.--.--
-                              span.status-date
-                            .status-bottom
-                              span.edit Изменить статус
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status.status-null
-                          .order-status-body
-                            .status-top
-                              span.status Не Заказан
-                              span.status-date
-                            .status-bottom
-                              span.edit Изменить статус
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status.status-null
-                          .order-status-body.status-null
-                            .status-top
-                              span.status Отсутствует
-                              span.status-date
-                            .status-bottom
-                              span.edit Изменить статус
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status.status-null
-                          .order-status-body
-                            .status-top
-                              span.status Не звонили
-                              span.status-date
-                            .status-bottom
-                              span.edit Изменить статус
-                          a.order-status-edit(href='#')
-                      li.col-sm-2
-                        .order-status.status-null
-                          .order-status-body
-                            .status-top
-                              span.status Не Выдан
-                              span.status-date
-                            .status-bottom
-                              span.edit Изменить статус
-                          a.order-status-edit(href='#')
+          //- // Заказ
+          //- article.order
+          //-   header.order-header
+          //-     .order-id
+          //-       | заказ
+          //-       span 0002
+          //-     .order-basket 13
+          //-     a.btn.btn-sm.order-add(href='#order-add')
+          //-       i.fa.fa-plus-circle(aria-hidden='true')
+          //-   section.order-body
+          //-     ul.order-list
+          //-       li.order-list-item
+          //-         header.order-list-item-header
+          //-           span.badge.badge-pur 1
+          //-           span.order-date.sep-dot 11.12.16
+          //-           span.order-name.sep-dot Название товара
+          //-           span.order-count.sep-dot
+          //-             i 1
+          //-             |  шт
+          //-           span.order-float-date 16.12.16
+          //-           a.btn.btn-success.btn-xs(href='#', data-toggle='open-log') История действий
+          //-           a.remove-order-status(href='#', data-toggle='remove-order')
+          //-         .container-fluid
+          //-           ul.order-status-list.row
+          //-             li.col-sm-2
+          //-               .order-status
+          //-                 .order-status-body
+          //-                   .status-top
+          //-                     span.status Обработан
+          //-                     span.status-date 12.12.16
+          //-                   .status-bottom
+          //-                     span Фамилия Имя Отчество
+          //-                 a.order-status-edit(href='#')
+          //-             li.col-sm-2
+          //-               .order-status
+          //-                 .order-status-body
+          //-                   .status-top
+          //-                     span.status 12.12.16
+          //-                     span.status-date 12.12.16
+          //-                   .status-bottom
+          //-                     span Фамилия Имя Отчество
+          //-                 a.order-status-edit(href='#')
+          //-             li.col-sm-2
+          //-               .order-status
+          //-                 .order-status-body
+          //-                   .status-top
+          //-                     span.status Заказан
+          //-                     span.status-date 12.12.16
+          //-                   .status-bottom
+          //-                     span Фамилия Имя Отчество
+          //-                 a.order-status-edit(href='#')
+          //-             li.col-sm-2
+          //-               .order-status
+          //-                 .order-status-body
+          //-                   .status-top
+          //-                     span.status Отложен
+          //-                     span.status-date 12.12.16
+          //-                   .status-bottom
+          //-                     span Фамилия Имя Отчество
+          //-                 a.order-status-edit(href='#')
+          //-             li.col-sm-2
+          //-               .order-status
+          //-                 .order-status-body
+          //-                   .status-top
+          //-                     span.status Дозвон
+          //-                     span.status-date 12.12.16
+          //-                   .status-bottom
+          //-                     span Фамилия Имя Отчество
+          //-                 a.order-status-edit(href='#')
+          //-             li.col-sm-2
+          //-               .order-status
+          //-                 .order-status-body
+          //-                   .status-top
+          //-                     span.status Выдан
+          //-                     span.status-date 12.12.16
+          //-                   .status-bottom
+          //-                     span Фамилия Имя Отчество
+          //-                 a.order-status-edit(href='#')
+          //-       li.order-list-item
+          //-         header.order-list-item-header
+          //-           span.badge.badge-pur 2
+          //-           span.order-date.sep-dot 11.12.16
+          //-           span.order-name.sep-dot Название товара
+          //-           span.order-count.sep-dot
+          //-             i 1
+          //-             |  шт
+          //-           span.order-float-date 16.12.16
+          //-           a.btn.btn-success.btn-xs(href='#', data-toggle='open-log') История действий
+          //-           a.remove-order-status(href='#', data-toggle='remove-order')
+          //-         .container-fluid
+          //-           ul.order-status-list.row
+          //-             li.col-sm-2
+          //-               .order-status.status-danger
+          //-                 // status-danger
+          //-                 .order-status-body
+          //-                   .status-top
+          //-                     span.status Не обработан
+          //-                     span.status-date 12.12.16
+          //-                   .status-bottom
+          //-                     span Фамилия Имя Отчество
+          //-                 a.order-status-edit(href='#')
+          //-             li.col-sm-2
+          //-               .order-status.status-null
+          //-                 // ждет обработки status-null
+          //-                 .order-status-body
+          //-                   .status-top
+          //-                     span.status --.--.--
+          //-                     span.status-date
+          //-                   .status-bottom
+          //-                     span.edit Уточнить дату
+          //-                 a.order-status-edit(href='#')
+          //-             li.col-sm-2
+          //-               .order-status.status-null
+          //-                 .order-status-body
+          //-                   .status-top
+          //-                     span.status Не Заказан
+          //-                     span.status-date
+          //-                   .status-bottom
+          //-                     span.edit Изменить статус
+          //-                 a.order-status-edit(href='#')
+          //-             li.col-sm-2
+          //-               .order-status.status-null
+          //-                 .order-status-body.status-null
+          //-                   .status-top
+          //-                     span.status Отсутствует
+          //-                     span.status-date
+          //-                   .status-bottom
+          //-                     span.edit Изменить статус
+          //-                 a.order-status-edit(href='#')
+          //-             li.col-sm-2
+          //-               .order-status.status-null
+          //-                 .order-status-body
+          //-                   .status-top
+          //-                     span.status Не звонили
+          //-                     span.status-date
+          //-                   .status-bottom
+          //-                     span.edit Изменить статус
+          //-                 a.order-status-edit(href='#')
+          //-             li.col-sm-2
+          //-               .order-status.status-null
+          //-                 .order-status-body
+          //-                   .status-top
+          //-                     span.status Не Выдан
+          //-                     span.status-date
+          //-                   .status-bottom
+          //-                     span.edit Изменить статус
+          //-                 a.order-status-edit(href='#')
+          //-       li.order-list-item
+          //-         header.order-list-item-header
+          //-           span.badge.badge-pur 3
+          //-           span.order-date.sep-dot 11.12.16
+          //-           span.order-name.sep-dot Название товара
+          //-           span.order-count.sep-dot
+          //-             i 1
+          //-             |  шт
+          //-           span.order-float-date 16.12.16
+          //-           a.btn.btn-success.btn-xs(href='#', data-toggle='open-log') История действий
+          //-           a.remove-order-status(href='#', data-toggle='remove-order')
+          //-         .container-fluid
+          //-           ul.order-status-list.row
+          //-             li.col-sm-2
+          //-               .order-status
+          //-                 // status-danger
+          //-                 .order-status-body
+          //-                   .status-top
+          //-                     span.status  обработан
+          //-                     span.status-date 12.12.16
+          //-                   .status-bottom
+          //-                     span Фамилия Имя Отчество
+          //-                 a.order-status-edit(href='#')
+          //-             li.col-sm-2
+          //-               .order-status.status-danger
+          //-                 .order-status-body
+          //-                   .status-top
+          //-                     span.status --.--.--
+          //-                     span.status-date
+          //-                   .status-bottom
+          //-                     span.edit Изменить статус
+          //-                 a.order-status-edit(href='#')
+          //-             li.col-sm-2
+          //-               .order-status.status-null
+          //-                 .order-status-body
+          //-                   .status-top
+          //-                     span.status Не Заказан
+          //-                     span.status-date
+          //-                   .status-bottom
+          //-                     span.edit Изменить статус
+          //-                 a.order-status-edit(href='#')
+          //-             li.col-sm-2
+          //-               .order-status.status-null
+          //-                 .order-status-body.status-null
+          //-                   .status-top
+          //-                     span.status Отсутствует
+          //-                     span.status-date
+          //-                   .status-bottom
+          //-                     span.edit Изменить статус
+          //-                 a.order-status-edit(href='#')
+          //-             li.col-sm-2
+          //-               .order-status.status-null
+          //-                 .order-status-body
+          //-                   .status-top
+          //-                     span.status Не звонили
+          //-                     span.status-date
+          //-                   .status-bottom
+          //-                     span.edit Изменить статус
+          //-                 a.order-status-edit(href='#')
+          //-             li.col-sm-2
+          //-               .order-status.status-null
+          //-                 .order-status-body
+          //-                   .status-top
+          //-                     span.status Не Выдан
+          //-                     span.status-date
+          //-                   .status-bottom
+          //-                     span.edit Изменить статус
+          //-                 a.order-status-edit(href='#')
           // end Заказ
       .ayout-dark
       .action

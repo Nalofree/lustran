@@ -22,6 +22,9 @@ function getDateReadeble(date){
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
+  if (!req.cookies.location) {
+    res.redirect('/locations');
+  }
   // res.send('respond with a resource');
   var now = new Date();
   sequelize.authenticate().then(function() {

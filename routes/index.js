@@ -46,6 +46,9 @@ function getTimeReadebleYesterday(date){
 var days = ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  if (!req.cookies.location) {
+    res.redirect('/locations');
+  }
   // res.render('index', { title: 'Главная' });
   // var now = new Date();
   // var late;

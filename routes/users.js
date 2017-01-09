@@ -11,6 +11,9 @@ var sequelize = new Sequelize('heroku_a5572bedbd1fbe3', 'b816998663244e', 'b2320
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
+  if (!req.cookies.location) {
+    res.redirect('/locations');
+  }
   // res.send('respond with a resource');
   sequelize.authenticate().then(function() {
       console.log('Connect to DB created!');
