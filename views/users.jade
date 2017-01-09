@@ -1,9 +1,9 @@
 extends layout
 
 block content
-  h1= title
   //- p Welcome to #{title}
   .container.canter-content
+    h1= title
     .adduser.btn.btn-default Добавить нового
     
     from.banuserpin(method='post', name='requirepin', enctype="multipart/form-data")
