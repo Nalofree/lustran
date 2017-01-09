@@ -108,7 +108,7 @@ block content
                     li.order-list-item
                       // удаленный заказ staus-removed orders[i].goods[j].
                       header.order-list-item-header
-                        span.badge.badge-pur 1
+                        span.badge.badge-pur= j+1
                         span.order-date.sep-dot= getDateReadeble(orders[i].goods[j].createdAt)
                         span.order-name.sep-dot= orders[i].goods[j].name
                         span.order-count.sep-dot
@@ -128,8 +128,8 @@ block content
                                     span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
                                   .status-bottom
                                     span= orders[i].user.name
-                                a.order-status-edit(href='#')
-                            - else
+                                a.order-status-edit(href='#', data-title='processed, '+orders[i].goods[j].id)
+                            - else if (orders[i].goods[j].processed == 1)
                               .order-status
                                 .order-status-body
                                   .status-top
@@ -137,7 +137,16 @@ block content
                                     span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
                                   .status-bottom
                                     span= orders[i].user.name
-                                a.order-status-edit(href='#')
+                                a.order-status-edit(href='#', data-title='processed, '+orders[i].goods[j].id)
+                            - else
+                              .order-status
+                                .order-status-body
+                                  .status-top
+                                    span.status В обработке
+                                    span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
+                                  .status-bottom
+                                    span= orders[i].user.name
+                                a.order-status-edit(href='#', data-title='processed, '+orders[i].goods[j].id)
                           li.col-sm-2
                             - if (orders[i].goods[j].spicifieddate == null)
                               .order-status.status-danger
@@ -147,7 +156,7 @@ block content
                                     span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
                                   .status-bottom
                                     span= orders[i].user.name
-                                a.order-status-edit(href='#')
+                                a.order-status-edit(href='#', data-title='spicifieddate, '+orders[i].goods[j].id)
                             - else
                               .order-status
                                 .order-status-body
@@ -156,7 +165,7 @@ block content
                                     //- span.status-date 12.12.16
                                   .status-bottom
                                     //- span Фамилия Имя Отчество
-                                a.order-status-edit(href='#')
+                                a.order-status-edit(href='#', data-title='spicifieddate, '+orders[i].goods[j].id)
                           li.col-sm-2
                             - if (orders[i].goods[j].ordered == 0)
                               .order-status.status-danger
@@ -166,7 +175,7 @@ block content
                                     span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
                                   .status-bottom
                                     span= orders[i].user.name
-                                a.order-status-edit(href='#')
+                                a.order-status-edit(href='#', data-title='ordered, '+orders[i].goods[j].id)
                             - else
                               .order-status
                                 .order-status-body
@@ -175,9 +184,9 @@ block content
                                     span.status-date 12.12.16
                                   .status-bottom
                                     span Фамилия Имя Отчество
-                                a.order-status-edit(href='#')
+                                a.order-status-edit(href='#', data-title='ordered, '+orders[i].goods[j].id)
                           li.col-sm-2
-                            - if (orders[i].goods[j].ordered == 0)
+                            - if (orders[i].goods[j].postponed == 0)
                               .order-status.status-danger
                                 .order-status-body
                                   .status-top
@@ -185,7 +194,7 @@ block content
                                     span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
                                   .status-bottom
                                     span= orders[i].user.name
-                                a.order-status-edit(href='#')
+                                a.order-status-edit(href='#', data-title='postponed, '+orders[i].goods[j].id)
                             - else
                               .order-status
                                 .order-status-body
@@ -194,7 +203,7 @@ block content
                                     span.status-date 12.12.16
                                   .status-bottom
                                     span Фамилия Имя Отчество
-                                a.order-status-edit(href='#')
+                                a.order-status-edit(href='#', data-title='postponed, '+orders[i].goods[j].id)
                           li.col-sm-2
                             - if (orders[i].goods[j].callstatus == 0)
                               .order-status.status-danger
@@ -204,7 +213,7 @@ block content
                                     span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
                                   .status-bottom
                                     span= orders[i].user.name
-                                a.order-status-edit(href='#')
+                                a.order-status-edit(href='#', data-title='callstatus, '+orders[i].goods[j].id)
                             - else if (orders[i].goods[j].callstatus == 1)
                               .order-status
                                 .order-status-body
@@ -213,7 +222,7 @@ block content
                                     span.status-date 12.12.16
                                   .status-bottom
                                     span Фамилия Имя Отчество
-                                a.order-status-edit(href='#')
+                                a.order-status-edit(href='#', data-title='callstatus, '+orders[i].goods[j].id)
                             - else
                               .order-status
                                 .order-status-body
@@ -222,9 +231,9 @@ block content
                                     span.status-date 12.12.16
                                   .status-bottom
                                     span Фамилия Имя Отчество
-                                a.order-status-edit(href='#')
+                                a.order-status-edit(href='#', data-title='callstatus, '+orders[i].goods[j].id)
                           li.col-sm-2
-                            - if (orders[i].goods[j].callstatus == 0)
+                            - if (orders[i].goods[j].issued == 0)
                               .order-status.status-danger
                                 .order-status-body
                                   .status-top
@@ -232,7 +241,7 @@ block content
                                     span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
                                   .status-bottom
                                     span= orders[i].user.name
-                                a.order-status-edit(href='#')
+                                a.order-status-edit(href='#', data-title='issued, '+orders[i].goods[j].id)
                             - else
                               .order-status
                                 .order-status-body
@@ -241,7 +250,7 @@ block content
                                     span.status-date 12.12.16
                                   .status-bottom
                                     span Фамилия Имя Отчество
-                                a.order-status-edit(href='#')
+                                a.order-status-edit(href='#', data-title='issued, '+orders[i].goods[j].id)
                 //- li.order-list-item
                 //-   header.order-list-item-header
                 //-     span.badge.badge-pur 2
@@ -639,7 +648,7 @@ block content
                 button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-action') Отмена
               .col-sm-6
                 button.btn.btn-done.btn-block(type='button', data-toggle='save-action') Сохранить
-      .odal-layout
+      .modal-layout
       //- .modal-log
       //-   .modal-log-header
       //-     .log-info

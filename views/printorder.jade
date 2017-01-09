@@ -15,8 +15,8 @@ link(rel='stylesheet', href='/stylesheets/printorder.css')
       th Количество
       th Ед.
       th Предоплата
-    tr
-      - for (var i=0;i<order.goods.length;i++)
+    - for (var i=0;i<order.goods.length;i++)
+      tr
         td= i+1
         td= order.goods[i].name
         td= order.goods[i].number
@@ -25,7 +25,7 @@ link(rel='stylesheet', href='/stylesheets/printorder.css')
   p.small.left= "Всего наименований "+order.goods.length+","
   br
   hr
-  .col-md-6
+  .col-md-6.col-sm-6.col-lg-6.col-xs-6
     p= "Исполнитель  _____________________"
-  .col-md-6
+  .col-md-6.col-sm-6.col-lg-6.col-xs-6
     p= "Заказчик  _____________________"

@@ -164,6 +164,22 @@ $(document).ready(function(){
 		var offsetLeft = $(this).offset().left - 150 + $(this).width()/2;
 		$('.layout-dark').height($('body').height());
 		$('.layout-dark').show();
+		var datatitle = $(this).attr('data-title');
+		var gooddata = {
+			ordernumber: $(this).closest('.order').find('.order-id span').text(),
+			goodname: $(this).closest('.order-list-item').find('.order-name').text(),
+			googid: datatitle.split(',')[1]
+		}
+		console.log(gooddata);
+		$('.action .action-order').text(gooddata.ordernumber);
+		$('.action .action-shop').text(gooddata.goodname);
+		statustype = datatitle.split(',')[0];
+		switch(statustype) {
+			case 'processed':
+			$('.action-row').empty();
+			$('.action-row').append('<select name=status>');
+
+		}
 		$('.action').addClass('show');
 		$('.action').css({'top':offsetTop, 'left':offsetLeft});
 	})
