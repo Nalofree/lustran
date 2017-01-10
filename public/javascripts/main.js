@@ -242,110 +242,139 @@ $(document).ready(function(){
 
 	//Сохранить Action
 	$('body').on('click','[data-toggle=save-action]',function(){
-		$('.layout-dark').hide();
-		$('.action').removeClass('show');
-		switch(statustype) {
-			case 'processed':
-			console.log(statusarea);
-			statusarea.removeClass('status-danger');
-			if ($('select[name="status"] option:selected').val() == 0) {
-				statusarea.addClass('status-danger');
-				statusarea.find('.status').text('не обработан');
-				var now = new Date();
-				statusarea.find('.status-date').text(getDateSuperReadeble(now));
-			}else if($('select[name="status"] option:selected').val() == 1) {
+		if ($('[name=yourpin]').val()){
+			$('.layout-dark').hide();
+			$('.action').removeClass('show');
+			var statusval;
+			switch(statustype) {
+				case 'processed':
+				// console.log(statusarea);
 				statusarea.removeClass('status-danger');
-				statusarea.find('.status').text('В обработке');
-				var now = new Date();
-				statusarea.find('.status-date').text(getDateSuperReadeble(now));
-			}else{
+				statusval = $('select[name="status"] option:selected').val();
+				if ($('select[name="status"] option:selected').val() == 0) {
+					statusarea.addClass('status-danger');
+					statusarea.find('.status').text('не обработан');
+					var now = new Date();
+					statusarea.find('.status-date').text(getDateSuperReadeble(now));
+				}else if($('select[name="status"] option:selected').val() == 1) {
+					statusarea.removeClass('status-danger');
+					statusarea.find('.status').text('В обработке');
+					var now = new Date();
+					statusarea.find('.status-date').text(getDateSuperReadeble(now));
+				}else{
+					statusarea.removeClass('status-danger');
+					statusarea.find('.status').text('Обработан');
+					var now = new Date();
+					statusarea.find('.status-date').text(getDateSuperReadeble(now));
+				}
+				break;
+				case 'ordered':
 				statusarea.removeClass('status-danger');
-				statusarea.find('.status').text('Обработан');
-				var now = new Date();
-				statusarea.find('.status-date').text(getDateSuperReadeble(now));
-			}
-			break;
-			case 'ordered':
-			statusarea.removeClass('status-danger');
-			if ($('select[name="status"] option:selected').val() == 0) {
-				statusarea.addClass('status-danger');
-				statusarea.find('.status').text('не Заказан');
-				var now = new Date();
-				statusarea.find('.status-date').text(getDateSuperReadeble(now));
-			}else{
+				statusval = $('select[name="status"] option:selected').val();
+				if ($('select[name="status"] option:selected').val() == 0) {
+					statusarea.addClass('status-danger');
+					statusarea.find('.status').text('не Заказан');
+					var now = new Date();
+					statusarea.find('.status-date').text(getDateSuperReadeble(now));
+				}else{
+					statusarea.removeClass('status-danger');
+					statusarea.find('.status').text('Заказан');
+					var now = new Date();
+					statusarea.find('.status-date').text(getDateSuperReadeble(now));
+				}
+				break;
+				case 'spicifieddate':
 				statusarea.removeClass('status-danger');
-				statusarea.find('.status').text('Заказан');
-				var now = new Date();
-				statusarea.find('.status-date').text(getDateSuperReadeble(now));
-			}
-			break;
-			case 'spicifieddate':
-			statusarea.removeClass('status-danger');
-			if ($('input[name="status"]').val()) {
-				var date = new Date($('input[name="status"]').val());
+				statusval = $('input[name="status"]').val();
+				if ($('input[name="status"]').val()) {
+					var date = new Date($('input[name="status"]').val());
+					statusarea.removeClass('status-danger');
+					statusarea.find('.status').text(getDateReadeble(date));
+					var now = new Date();
+					statusarea.find('.status-date').text(getDateSuperReadeble(now));
+				}else{
+					statusarea.addClass('status-danger');
+					statusarea.find('.status').text('--.--.--');
+					var now = new Date();
+					statusarea.find('.status-date').text(getDateSuperReadeble(now));
+				}
+				break;
+				case 'postponed':
 				statusarea.removeClass('status-danger');
-				statusarea.find('.status').text(getDateReadeble(date));
-				var now = new Date();
-				statusarea.find('.status-date').text(getDateSuperReadeble(now));
-			}else{
-				statusarea.addClass('status-danger');
-				statusarea.find('.status').text('--.--.--');
-				var now = new Date();
-				statusarea.find('.status-date').text(getDateSuperReadeble(now));
-			}
-			break;
-			case 'postponed':
-			statusarea.removeClass('status-danger');
-			if ($('select[name="status"] option:selected').val() == 0) {
-				statusarea.addClass('status-danger');
-				statusarea.find('.status').text('Не отложен');
-				var now = new Date();
-				statusarea.find('.status-date').text(getDateSuperReadeble(now));
-			}else if($('select[name="status"] option:selected').val() == 1) {
+				statusval = $('select[name="status"] option:selected').val();
+				if ($('select[name="status"] option:selected').val() == 0) {
+					statusarea.addClass('status-danger');
+					statusarea.find('.status').text('Не отложен');
+					var now = new Date();
+					statusarea.find('.status-date').text(getDateSuperReadeble(now));
+				}else if($('select[name="status"] option:selected').val() == 1) {
+					statusarea.removeClass('status-danger');
+					statusarea.find('.status').text('Проверен и отложен');
+					var now = new Date();
+					statusarea.find('.status-date').text(getDateSuperReadeble(now));
+				}else{
+					statusarea.addClass('status-danger');
+					statusarea.find('.status').text('Есть деффект');
+					var now = new Date();
+					statusarea.find('.status-date').text(getDateSuperReadeble(now));
+				}
+				break;
+				case 'callstatus':
 				statusarea.removeClass('status-danger');
-				statusarea.find('.status').text('Проверен и отложен');
-				var now = new Date();
-				statusarea.find('.status-date').text(getDateSuperReadeble(now));
-			}else{
-				statusarea.addClass('status-danger');
-				statusarea.find('.status').text('Есть деффект');
-				var now = new Date();
-				statusarea.find('.status-date').text(getDateSuperReadeble(now));
-			}
-			break;
-			case 'callstatus':
-			statusarea.removeClass('status-danger');
-			if ($('select[name="status"] option:selected').val() == 0) {
-				statusarea.addClass('status-danger');
-				statusarea.find('.status').text('Не звонили');
-				var now = new Date();
-				statusarea.find('.status-date').text(getDateSuperReadeble(now));
-			}else if($('select[name="status"] option:selected').val() == 1) {
-				statusarea.addClass('status-danger');
-				statusarea.find('.status').text('Не дозвон');
-				var now = new Date();
-				statusarea.find('.status-date').text(getDateSuperReadeble(now));
-			}else{
+				statusval = $('select[name="status"] option:selected').val();
+				if ($('select[name="status"] option:selected').val() == 0) {
+					statusarea.addClass('status-danger');
+					statusarea.find('.status').text('Не звонили');
+					var now = new Date();
+					statusarea.find('.status-date').text(getDateSuperReadeble(now));
+				}else if($('select[name="status"] option:selected').val() == 1) {
+					statusarea.addClass('status-danger');
+					statusarea.find('.status').text('Не дозвон');
+					var now = new Date();
+					statusarea.find('.status-date').text(getDateSuperReadeble(now));
+				}else{
+					statusarea.removeClass('status-danger');
+					statusarea.find('.status').text('Дозвон');
+					var now = new Date();
+					statusarea.find('.status-date').text(getDateSuperReadeble(now));
+				}
+				break;
+				case 'issued':
 				statusarea.removeClass('status-danger');
-				statusarea.find('.status').text('Дозвон');
-				var now = new Date();
-				statusarea.find('.status-date').text(getDateSuperReadeble(now));
-			}
-			break;
-			case 'issued':
-			statusarea.removeClass('status-danger');
-			if ($('select[name="status"] option:selected').val() == 0) {
-				statusarea.addClass('status-danger');
-				statusarea.find('.status').text('не выдан');
-				var now = new Date();
-				statusarea.find('.status-date').text(getDateSuperReadeble(now));
-			}else{
-				statusarea.removeClass('status-danger');
-				statusarea.find('.status').text('выдан');
-				var now = new Date();
-				statusarea.find('.status-date').text(getDateSuperReadeble(now));
-			}
-			break;
+				statusval = $('select[name="status"] option:selected').val();
+				if ($('select[name="status"] option:selected').val() == 0) {
+					statusarea.addClass('status-danger');
+					statusarea.find('.status').text('не выдан');
+					var now = new Date();
+					statusarea.find('.status-date').text(getDateSuperReadeble(now));
+				}else{
+					statusarea.removeClass('status-danger');
+					statusarea.find('.status').text('выдан');
+					var now = new Date();
+					statusarea.find('.status-date').text(getDateSuperReadeble(now));
+				}
+				break;
+			};
+			var statusdata = {
+				statustype: statustype,
+				statusval: statusval,
+				goodid: goodid,
+				yourpin: $('[name=yourpin]').val(),
+				locationid: getCookie('location')
+			};
+			$.ajax({
+				url: '/orders',
+				type: 'POST',
+				data: statusdata,
+				success: function (data, status, error) {
+					console.log(data, status, error);
+				},
+				error: function (data, status, error) {
+					console.log(data, status, error);
+				}
+			});
+		}else{
+			alert('Введите ПИН');
 		}
 	})
 

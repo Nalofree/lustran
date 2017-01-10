@@ -215,16 +215,116 @@ router.post('/', function(req, res, next) {
     sequelize.sync().then(function() {
       console.log('Success!');
       // res.send("123");
-      orders.findAll({
-        include: [users, locations, goods]
-      }).then(function (forders) {
-        console.log({orders: forders});
-        res.render('orders', {orders: forders});
-        // res.send({order: order});
+      goods.findOne({
+        where: {
+          id: req.body.goodid
+        }
+      }).then(function (good) {
+        function getStatusNmae(statustype, statusval) {
+          var statusname;
+          switch (statustype) {
+            case 'processed':
+            if (statusval == 0) {
+              statusname = "Не обработан";
+            }else if(statusval == 1){
+              statusname = "В обработке";
+            }else{
+              statusname = "Обработан";
+            }
+            break;
+            case 'ordered':
+            if (statusval == 0) {
+              statusname = "Не заказан";
+            }else{
+              statusname = "Заказан";
+            }
+            break;
+            case 'spicifieddate':
+            statusname = new Date(statusval);
+            break;
+            case 'postponed':
+            if (statusval == 0) {
+              statusname = "Не отложен";
+            }else if(statusval == 1){
+              statusname = "Проверен и отложен";
+            }else{
+              statusname = "Есть деффект";
+            }
+            break;
+            case 'callstatus':
+            if (statusval == 0) {
+              statusname = "Не звонили";
+            }else if(statusval == 1){
+              statusname = "Не дозвон";
+            }else{
+              statusname = "Дозвон";
+            }
+            break;
+            case 'issued':
+            if (statusval == 0) {
+              statusname = "Не выдвн";
+            }else{
+              statusname = "Выдвн";
+            }
+            break;
+          }
+        }
+        var goodupdatedata = {};
+        var actiondata = {};
+        switch (req.body.statustype) {
+          case 'processed':
+          googupdatedata = {
+            processed: req.body.statusval
+          };
+          actiondata = {
+
+          }
+          break;
+          case 'ordered':
+          googupdatedata = {
+            ordered: req.body.statusval
+          };
+          actiondata = {
+
+          }
+          break;
+          case 'spicifieddate':
+          googupdatedata = {
+            spicifieddate: req.body.statusval
+          };
+          actiondata = {
+
+          }
+          break;
+          case 'postponed':
+          googupdatedata = {
+            postponed: req.body.statusval
+          };
+          actiondata = {
+
+          }
+          break;
+          case 'callstatus':
+          googupdatedata = {
+            callstatus: req.body.statusval
+          };
+          actiondata = {
+
+          }
+          break;
+          case 'issued':
+          googupdatedata = {
+            issued: req.body.statusval
+          };
+          actiondata = {
+
+          }
+          break;
+        }
       }).catch(function (err) {
         res.send(err);
-        console.log('order error: ' + err);
-      });
+        console.log('Database error: ' + err);
+      })
     }).catch(function(err) {
       console.log('Database error: ' + err);
     });

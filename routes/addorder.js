@@ -340,10 +340,71 @@ router.post('/', function(req, res, next) {
               req.body.goods[i].orderId = order.id;
             };
             newgoods = req.body.goods;
-            console.log('newgoods ' + newgoods[0].orderId);
-            goods.bulkCreate(newgoods).then(function (addedgoods) {
-              console.log(addedgoods);
-              res.send({err: false, orderid: order.id});
+            // console.log('newgoods ' + newgoods[0].orderId);
+            goods.bulkCreate(newgoods, {individualHooks: true}).then(function (addedgoods) {
+              // console.log('addedgoods '+addedgoods);
+              for (var i = 0; i < addedgoods.length; i++) {
+                console.log(addedgoods[i].id);
+              }
+              // res.send({err: false, orderid: order.id});
+              actionsarr = [];
+              for (var i = 0; i < addedgoods.length; i++) {
+                actionsarr.push({
+                  userId: user.id,
+                  locationId: req.body.locationid,
+                  statusname: 'Обработка',
+                  startstatus: 'Не обработан',
+                  endstatus: 'Не обработан',
+                  goodId: addedgoods[i].id
+                });
+                actionsarr.push({
+                  userId: user.id,
+                  locationId: req.body.locationid,
+                  statusname: 'Уточненная дата',
+                  startstatus: '0',
+                  endstatus: '0',
+                  goodId: addedgoods[i].id
+                });
+                actionsarr.push({
+                  userId: user.id,
+                  locationId: req.body.locationid,
+                  statusname: 'Заказ',
+                  startstatus: 'Не заказан',
+                  endstatus: 'Не заказан',
+                  goodId: addedgoods[i].id
+                });
+                actionsarr.push({
+                  userId: user.id,
+                  locationId: req.body.locationid,
+                  statusname: 'Отложен',
+                  startstatus: 'Не отложен',
+                  endstatus: 'Не отложен',
+                  goodId: addedgoods[i].id
+                });
+                actionsarr.push({
+                  userId: user.id,
+                  locationId: req.body.locationid,
+                  statusname: 'Дозвон',
+                  startstatus: 'Не звонили',
+                  endstatus: 'Не звонили',
+                  goodId: addedgoods[i].id
+                });
+                actionsarr.push({
+                  userId: user.id,
+                  locationId: req.body.locationid,
+                  statusname: 'Выдача',
+                  startstatus: 'Не выдан',
+                  endstatus: 'Не выдан',
+                  goodId: addedgoods[i].id
+                });
+              }
+              console.log(actionsarr);
+                actions.bulkCreate(actionsarr).then(function(newactions){
+                  res.send({err: false, orderid: order.id});
+                }).catch(function(err){
+                  res.send(err);
+                  console.log('actions error: ' + err);
+                });
             }).catch(function (err) {
               res.send(err);
               console.log('goods error: ' + err);
