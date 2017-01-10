@@ -321,6 +321,16 @@ router.post('/', function(req, res, next) {
           }
           break;
         }
+        goods.uspdate({
+          googupdatedata,
+          where{
+            id: req.body.goodid
+          }
+        }).then(function (goods) {
+          res.send({err:false});
+        }).catch(function (err) {
+          res.send(err);
+        })
       }).catch(function (err) {
         res.send(err);
         console.log('Database error: ' + err);
