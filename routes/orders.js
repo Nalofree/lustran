@@ -270,12 +270,14 @@ router.post('/', function(req, res, next) {
           }
         }
         var goodupdatedata = {};
+        var roles = [];
         var actiondata = {};
         switch (req.body.statustype) {
           case 'processed':
           googupdatedata = {
             processed: req.body.statusval
           };
+          roles=['manager', 'supplier'];
           actiondata = {
 
           }
@@ -284,6 +286,7 @@ router.post('/', function(req, res, next) {
           googupdatedata = {
             ordered: req.body.statusval
           };
+          roles=['supplier','supplier'];
           actiondata = {
 
           }
@@ -292,6 +295,7 @@ router.post('/', function(req, res, next) {
           googupdatedata = {
             spicifieddate: req.body.statusval
           };
+          roles=['supplier','supplier'];
           actiondata = {
 
           }
@@ -300,6 +304,7 @@ router.post('/', function(req, res, next) {
           googupdatedata = {
             postponed: req.body.statusval
           };
+          roles=['saler','saler'];
           actiondata = {
 
           }
@@ -308,6 +313,7 @@ router.post('/', function(req, res, next) {
           googupdatedata = {
             callstatus: req.body.statusval
           };
+          roles=['saler','supplier'];
           actiondata = {
 
           }
@@ -316,29 +322,47 @@ router.post('/', function(req, res, next) {
           googupdatedata = {
             issued: req.body.statusval
           };
+          roles=['saler', 'saler'];
           actiondata = {
 
           }
           break;
-        }
-        goods.uspdate({
-          googupdatedata,
-          where{
-            id: req.body.goodid
+        };
+        console.log(googupdatedata);
+        users.findOne({
+          where: {
+            pin: req.body.yourpin,
+            status: {
+              $or: roles
+            }
           }
-        }).then(function (goods) {
-          res.send({err:false});
+        }).then(function (user) {
+          if (user) {
+            goods.update(googupdatedata, {
+              where: {
+                id: req.body.goodid
+              }
+            }).then(function (goods) {
+              res.send({err:false});
+            }).catch(function (err) {
+              res.send(err);
+            });
+          }else{
+            res.send({err: 'Неверный ПИН'});
+          }
         }).catch(function (err) {
-          res.send(err);
-        })
+          res.send({err: err});
+        });
       }).catch(function (err) {
-        res.send(err);
+        res.send({err: err});
         console.log('Database error: ' + err);
       })
     }).catch(function(err) {
+      res.send({err: err});
       console.log('Database error: ' + err);
     });
   }).catch(function(err) {
+    res.send({err: err});
     console.log('Connection error: ' + err);
   });
 });

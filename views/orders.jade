@@ -133,7 +133,7 @@ block content
                               .order-status
                                 .order-status-body
                                   .status-top
-                                    span.status Обработан
+                                    span.status В обработке
                                     span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
                                   .status-bottom
                                     span= orders[i].user.name
@@ -142,7 +142,7 @@ block content
                               .order-status
                                 .order-status-body
                                   .status-top
-                                    span.status В обработке
+                                    span.status Обработан
                                     span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
                                   .status-bottom
                                     span= orders[i].user.name
@@ -162,9 +162,9 @@ block content
                                 .order-status-body
                                   .status-top
                                     span.status= getDateReadeble(orders[i].goods[j].spicifieddate)
-                                    //- span.status-date 12.12.16
+                                    span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
                                   .status-bottom
-                                    //- span Фамилия Имя Отчество
+                                    span= orders[i].user.name
                                 a.order-status-edit(href='#', data-title='spicifieddate, '+orders[i].goods[j].id)
                           li.col-sm-2
                             - if (orders[i].goods[j].ordered == 0)
@@ -195,11 +195,20 @@ block content
                                   .status-bottom
                                     span= orders[i].user.name
                                 a.order-status-edit(href='#', data-title='postponed, '+orders[i].goods[j].id)
-                            - else
+                            - else if (orders[i].goods[j].postponed == 1)
                               .order-status
                                 .order-status-body
                                   .status-top
-                                    span.status Отложен
+                                    span.status Проверен и отложен
+                                    span.status-date 12.12.16
+                                  .status-bottom
+                                    span Фамилия Имя Отчество
+                                a.order-status-edit(href='#', data-title='postponed, '+orders[i].goods[j].id)
+                            - else
+                              .order-status.status-danger
+                                .order-status-body
+                                  .status-top
+                                    span.status Есть деффект
                                     span.status-date 12.12.16
                                   .status-bottom
                                     span Фамилия Имя Отчество
