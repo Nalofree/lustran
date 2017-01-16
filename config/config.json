@@ -7,10 +7,10 @@
     "dialect": "mysql"
   },
   "test": {
-    "username": "lustran_user",
-    "password": "lustranpass",
-    "database": "lustran_db",
-    "host": "127.0.0.1",
+    "username": "b816998663244e",
+    "password": "b23209db",
+    "database": "heroku_a5572bedbd1fbe3",
+    "host": "eu-cdbr-west-01.cleardb.com",
     "dialect": "mysql"
   },
   "production": {
