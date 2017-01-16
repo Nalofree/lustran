@@ -9,7 +9,22 @@ block content
       h3= "Добавить место"
       .form-group
         label(for='name') Название
-        input(type='text',name='name',placeholder='Название места',required).form-control
+        input(type='text',name='fullname',placeholder='Полное название магазина',required).form-control
+      .form-group
+        label(for='name') Краткое название
+        input(type='text',name='alias',placeholder='Краткое название магазина',required).form-control
+      .form-group
+        label(for='name') Адрес
+        input(type='text',name='adres',placeholder='Адрес магазина',required).form-control
+      .form-group
+        label(for='name') Время открытия
+        input(type='time',name='opentime',required).form-control
+      .form-group
+        label(for='name') Время закрытия
+        input(type='time',name='closetime',required).form-control
+      .form-group
+        label(for='name') Пароль
+        input(type='password',name='password',placeholder='Пароль для магазина',required).form-control
       .form-group
         label(for='yourpin') Ваш пин
         input(type='password',name='yourpin',placeholder='Ваш пин',required).form-control
@@ -21,7 +36,7 @@ block content
       h3= "Подтвердите действие"
       .form-group
         label(for='yourpin')
-        input(type='password',name='yourpin',placeholder='ПИН', required='required').form-control
+        input(type='password',name='yourpin',placeholder='ПИН', required='required', autofocus).form-control
       .form-group
         button.btn.btn-success.setlocpin-submit(type='submit') Подтвердить
     
@@ -29,7 +44,7 @@ block content
       h3= "Подтвердите действие"
       .form-group
         label(for='yourpin')
-        input(type='password',name='yourpin',placeholder='ПИН', required='required').form-control
+        input(type='password',name='yourpin',placeholder='ПИН', required='required', autofocus).form-control
       .form-group
         button.btn.btn-success.dellocpin-submit(type='submit') Подтвердить
     
@@ -38,14 +53,17 @@ block content
       table.table.locations-table
         tr
           th Название
+          th Часы работы
           th
           th
         - for (var i = 0; i < locations.length; i++)
           tr(id= locations[i].id)
-            td= locations[i].name
+            td= locations[i].fullname
+            td= 'c ' + locations[i].opentime + ' по ' + locations[i].closetime
             td 
               .btn.btn-success.choose-location(data-title=  locations[i].id) Выбрать
             td 
               .btn.btn-danger.delete-location(data-title=  locations[i].id) Удалить
     - else
-      p Мест пока нет, но вы можете их добавить
+      .panel.panel-default
+        .panel-body Мест пока нет, но вы можете их добавить

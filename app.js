@@ -4,7 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var Sequelize = require('sequelize');
+// var Sequelize = require('sequelize');
 
 var index = require('./routes/index');
 var orders = require('./routes/orders');
@@ -29,18 +29,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-var sequelize = new Sequelize('heroku_a5572bedbd1fbe3', 'b816998663244e', 'b23209db', {
-  host: 'eu-cdbr-west-01.cleardb.com',
-  dialect: 'mysql',
-  logging: true
-  // storage: 'path/to/database.sqlite'
-});
-
-sequelize.authenticate().then(function() {
-    console.log('Connect to DB created!');
-}).catch(function(err) {
-    console.log('Connection error: ' + err);
-});
+// var sequelize = new Sequelize('heroku_a5572bedbd1fbe3', 'b816998663244e', 'b23209db', {
+//   host: 'eu-cdbr-west-01.cleardb.com',
+//   dialect: 'mysql',
+//   logging: true
+//   // storage: 'path/to/database.sqlite'
+// });
+//
+// sequelize.authenticate().then(function() {
+//     console.log('Connect to DB created!');
+// }).catch(function(err) {
+//     console.log('Connection error: ' + err);
+// });
 
 app.use('/', index);
 app.use('/orders', orders);

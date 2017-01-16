@@ -1,0 +1,31 @@
+function (err) {
+      if (err) {
+        res.send({err: err});
+      }else{
+        sheet1.set(1, 1, 'Отчет за: ');
+        sheet1.set(2, 1, getTimeReadeble(now));
+        sheet1.set(1, 2, 'Дата');
+        sheet1.set(2, 2, 'Место');
+        sheet1.set(3, 2, 'Имя сотрудника');
+        sheet1.set(4, 2, 'Приход/Исход');
+        sheet1.set(5, 2, 'Опоздание');
+        for (var i = 0; i < datastring.length; i++) {
+          var subarr = datastring[i].split(';');
+          // console.log(datastring[i]);
+          for (var j = 0; j < subarr.length; j++) {
+            var col = j + 1;
+            var row = i + 3;
+            sheet1.set(col, row, subarr[j]);
+            // console.log(i+3);
+          };
+        };
+        workbook.save(function(ok){
+          if (!ok) {
+            workbook.cancel();
+          }else{
+            res.send({filename: filename});
+            console.log('congratulations, your workbook created');
+          }
+        });
+      }
+    }

@@ -16,9 +16,10 @@ html
         a(href="/users") Пользователи
       //- li
       //-   a.location-name(href="/locations") location-name
-    .container.location-name
-      | Место: 
-      a.location-name(href="/locations")
+    .container
+      .col-md-3.col-md-offset-9.panel.panel-default
+        | Место: 
+        a.location-name(href="/locations")
     .lustran-page
       nav.lustran-nav
         a.lustran-nav-item(href='/addorder')
@@ -32,8 +33,10 @@ html
           | Отметиться
       block content
     script(type='text/javascript', src='javascripts/jquery-3.1.1.min.js')
+    script(type='text/javascript', src='javascripts/jquery.filedownload.js')
     script(type='text/javascript', src='vendor/bootstrap/assets/javascripts/bootstrap.min.js')
     script(type='text/javascript', src='javascripts/inputmask.js')
+    script(type='text/javascript', src='javascripts/jquery.inputmask.js')
     script(type='text/javascript', src='javascripts/main.js')
     script(type='text/javascript', src='javascripts/users.js')
     script(type='text/javascript', src='javascripts/locations.js')

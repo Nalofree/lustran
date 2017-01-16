@@ -71,8 +71,8 @@ function getLoc(locid) {
 				if (data.err) {
 					alert(data.err);
 				}else{
-					$('a.location-name').text(data.locations.name);
-					$('.new-order-shop').text(data.locations.name);
+					$('a.location-name').text(data.locations.alias);
+					$('.new-order-shop').text(data.locations.alias);
 				}
 			},
 			error: function (data, status, error) {
@@ -155,9 +155,10 @@ $(document).ready(function(){
 	})
 
 	// Валидация инпутов
-	// $('[data-input=time]').inputmask('hh:mm',{ "placeholder": "чч.мм" });
+	$('[data-input=time]').inputmask('hh:mm',{ "placeholder": "чч.мм" });
+	$('[type=time]').inputmask('99:99');//,{ "placeholder": "99.99" });
 	// $('[data-input=date]').inputmask('dd/mm/yyyy',{ "placeholder": "дд/мм/гггг" });
-	// $('[data-input=phone]').inputmask('+7 (999) 999-99-99');
+	$('[data-input=phone]').inputmask('+7 (999) 999-99-99');
 	// $('[data-input=number]').inputmask({mask:'9{*}',greedy: false});
 
 	//Отмена стандартного действия ссылок

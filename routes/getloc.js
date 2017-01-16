@@ -1,52 +1,17 @@
 var express = require('express');
 var router = express.Router();
-var Sequelize = require('sequelize');
+var models  = require('../models');
 
-var sequelize = new Sequelize('heroku_a5572bedbd1fbe3', 'b816998663244e', 'b23209db', {
-  host: 'eu-cdbr-west-01.cleardb.com',
-  dialect: 'mysql',
-  logging: true
-  // storage: 'path/to/database.sqlite'
-});
-
-/* GET users listing. */
 router.post('/', function(req, res, next) {
-  // res.send('respond with a resource');
-  // res.render('orders');
-  sequelize.authenticate().then(function() {
-      console.log('Connect to DB created!');
-      // res.send('Connect to DB created!');
-      var locations = sequelize.define('locations', {
-        id: {
-            type: Sequelize.INTEGER,
-            primaryKey: true,
-            autoIncrement: true
-        },
-        name: Sequelize.TEXT
-      });
-        locations.sync().then(function() {
-          console.log('Success!');
-          locations.findOne({
-            where: {
-              id: req.body.locid
-            }
-          }).then(function (locations) {
-            res.send({err: false, locations: locations});
-          }).catch(function (err) {
-            console.log('locations err: ' + locations);
-            res.send({err: 'locations err: ' + err});
-          });
-        // }).catch(function(err) {
-        //   console.log('Database error: ' + err);
-        //   res.send({err: 'Users err: ' + err});
-        // });
-      }).catch(function(err) {
-        console.log('Database error: ' + err);
-        res.send({err: 'Database err: ' + err});
-      });
-  }).catch(function(err) {
-      console.log('Connection error: ' + err);
-      res.send({err: 'Connection err: ' + err});
+  models.locations.findOne({
+    where: {
+      id: req.body.locid
+    }
+  }).then(function (locations) {
+    res.send({err: false, locations: locations});
+  }).catch(function (err) {
+    console.log('locations err: ' + locations);
+    res.send({err: 'locations err: ' + err});
   });
 });
 

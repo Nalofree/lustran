@@ -6,6 +6,19 @@ block content
     h1= title
     .adduser.btn.btn-default Добавить нового
     
+    .userinfo
+      h3 Информация о пользователе
+      p 
+        span= 'Имя пользователя: '
+        span.username= ''
+      p 
+        span= 'ПИН пользователя: '
+        span.userpin= ''
+      p 
+        span= 'Статус пользователя: '
+        span.userstatus= ''
+      .btn.btn-default.userinfo-close Закрыть
+    
     from.banuserpin(method='post', name='requirepin', enctype="multipart/form-data")
       h3= "Подтвердите действие"
       .form-group
@@ -13,6 +26,14 @@ block content
         input(type='password',name='yourpin',placeholder='ПИН', required='required').form-control
       .form-group
         button.btn.btn-success.banuserpin-submit(type='submit') Подтвердить
+    
+    from.getuserinfo(method='post', name='requirepin', enctype="multipart/form-data")
+      h3= "Подтвердите действие"
+      .form-group
+        label(for='yourpin')
+        input(type='password',name='yourpin',placeholder='ПИН', required='required').form-control
+      .form-group
+        button.btn.btn-success.getuserinfo-submit(type='submit') Подтвердить
         
     form.adduserform(method='post', name='addusrform', enctype="multipart/form-data")
       h3= "Добавить пользователя"
@@ -37,7 +58,10 @@ block content
       h3= "Изменить данные пользователя"
       .form-group
         label(for='fio') ФИО
-        input(type='text',name='fio',placeholder='ФИО',required).form-control
+        input(type='text',name='fio',placeholder='ФИО',required).form-control        
+      .form-group
+        label(for='userpin') Пин пользователя
+        input(type='password',name='userpin',placeholder='Пин пользователя',required).form-control
       .form-group
         label(for='status') Статус
         select(name='status', required).form-control
@@ -64,6 +88,7 @@ block content
           th Статус
           th
           th
+          th
         - for (var i = 0; i < users.length; i++)
           tr(id=users[i].id)
             td= users[i].name
@@ -75,6 +100,8 @@ block content
                 .btn.btn-success.ban-user.usernotactive(data-title=users[i].id)= "Разрешить"
             td
               .btn.btn-default.edit-user(data-title=users[i].id)= "Изменить"
+            td
+              .btn.btn-default.getinfo-user(data-title=users[i].id)= "О пользователе"
         //- p= users[i].name + " " + users[i].status
     - else
       p= "Пользователей пока нет, руководитель имеет право добавить пользователя"

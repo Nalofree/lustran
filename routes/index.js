@@ -1,346 +1,217 @@
 var express = require('express');
 var router = express.Router();
-var Sequelize = require('sequelize');
-
-var sequelize = new Sequelize('heroku_a5572bedbd1fbe3', 'b816998663244e', 'b23209db', {
-  host: 'eu-cdbr-west-01.cleardb.com',
-  dialect: 'mysql',
-  logging: true
-  // storage: 'path/to/database.sqlite'
-});
+var models  = require('../models');
+const fs = require('fs');
+var excelbuilder = require('msexcel-builder');
+// var windows1251 = require('windows-1251');
+// var iconv = require('iconv-lite');
 
 function getTimeReadeble(date){
-  var readebleTime;//1998-02-03 22:23:00
-      readebleTime = ('00' + date.getDate()).slice(-2) + '.' +
-        ('00' + (date.getMonth()+1)).slice(-2) + '.' +
-        date.getFullYear() + ' ' +
-        ('00' + date.getHours()).slice(-2) + ':' +
-        ('00' + date.getMinutes()).slice(-2);
-        // ('00' + date.getSeconds()).slice(-2);
-      // console.log(now);
-      return readebleTime;
+	var readebleTime;//1998-02-03 22:23:00
+	var year = date.getFullYear();
+			readebleTime = ('00' + date.getDate()).slice(-2) + '.' +
+				('00' + (date.getMonth()+1)).slice(-2) + '.' +
+				year + ' ' +
+				('00' + date.getHours()).slice(-2) + ':' +
+				('00' + date.getMinutes()).slice(-2);
+				// ('00' + date.getSeconds()).slice(-2);
+			// console.log(now);
+			return readebleTime;
 };
 
-function getDateReadeble(date){
-  var readebleTime;//1998-02-03 22:23:00
-      readebleTime = ('00' + date.getDate()).slice(-2) + '.' +
-        ('00' + (date.getMonth()+1)).slice(-2) + '.' +
-        date.getFullYear();
-        // ('00' + date.getSeconds()).slice(-2);
-      // console.log(now);
-      return readebleTime;
-};
-
-function getTimeReadebleYesterday(date){
-  var readebleTime;//1998-02-03 22:23:00
-      date.setDate(date.getDate()-1);
-      readebleTime = ('00' + date.getDate()).slice(-2) + '.' +
-        ('00' + (date.getMonth()+1)).slice(-2) + '.' +
-        date.getFullYear() + ' ' +
-        ('00' + date.getHours()).slice(-2) + ':' +
-        ('00' + date.getMinutes()).slice(-2);
-        // ('00' + date.getSeconds()).slice(-2);
-      // console.log(now);
-      return readebleTime;
-};
-var days = ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  if (!req.cookies.location) {
-    res.redirect('/locations');
-  }
-  // res.render('index', { title: 'Главная' });
-  // var now = new Date();
-  // var late;
-  // if ((now.getHours() == 9 && now.getMinutes() >= 15) || (now.getHours() > 9)) {
-  //   late = 1;
-  // }else{
-  //   late = 0;
-  // }
-  // console.log("late: " + late);
-  sequelize.authenticate().then(function() {
-    console.log('Connect to DB created!');
-    var checks = sequelize.define('checks', {
-      id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-      },
-      locationId: Sequelize.INTEGER,
-      userId: Sequelize.INTEGER,
-      late: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0
+router.get('/', function(req, res) {
+  var now = new Date();
+  var prenow = new Date(new Date() - 24 * 60 * 60 * 1000);
+  var startDate = prenow.setHours(0);
+  var startDate = prenow.setMinutes(0);
+  var endDate = now.setHours(23);
+  var endDate = now.setMinutes(59);
+  console.log(startDate);
+  console.log(endDate);
+  models.checks.findAll({
+    include: [ models.users, models.locations ],
+    where: {
+      createdAt: {
+        $lt: new Date(endDate),
+        $gt: new Date(startDate)
       }
-    });
-    var users = sequelize.define('users', {
-      id: {
-          type: Sequelize.INTEGER,
-          primaryKey: true,
-          autoIncrement: true
-      },
-      name: Sequelize.TEXT,
-      pin: Sequelize.TEXT,
-      status: Sequelize.TEXT,
-      active: {
-          type: Sequelize.INTEGER,
-          defaultValue: 1
-      }
-    });
-    var locations = sequelize.define('locations', {
-      id: {
-          type: Sequelize.INTEGER,
-          primaryKey: true,
-          autoIncrement: true
-      },
-      name: Sequelize.TEXT
-    });
-    checks.belongsTo(users);
-    checks.belongsTo(locations);
-    // checks.hasOne(users, { as: 'user' });
-    // checks.hasOne(locations, { as: 'location' });
-    sequelize.sync().then(function() {
-      console.log('Success!');
-      // var today = getTimeNow());
-      // var yesterday = getTimeYesterday();
-      checks.findAll({
-        include: [ users, locations ],
-        // include: [ locations ],
-        // group: 'createdAt',
-        where: {
-          createdAt: {
-            $lt: new Date(),
-            $gt: new Date(new Date() - 24 * 60 * 60 * 1000)
-          }
-        }
-      }).then(function (checks) {
-        // res.send(checks);
-        // var now = Date();
-        // console.log(now.toString());
-
-        // console.log(checks);
-        for (var i = 0; i < checks.length; i++) {
-          // console.log(getTimeReadeble(checks[i].createdAt));
-          checks[i].checkTime = getTimeReadeble(checks[i].createdAt);
-        };
-        var now = new Date();
-        var nowdate = getDateReadeble(now);
-        nowdate = nowdate + ", " + days[now.getDay()];
-        console.log(nowdate);
-        res.render('index', { title: 'Главная', checks: checks, nowdate: nowdate });
-      }).catch(function (err) {
-        res.send({err: err, text: 'what'});
-        console.log('checks error: ' + err);
-      });
-    }).catch(function(err) {
-      console.log('Database error: ' + err);
-    });
-  }).catch(function(err) {
-    console.log('Connection error: ' + err);
+    }
+  }).then(function(checks) {
+    res.render('index', { title: 'Главная', checks: checks });
+  }).catch(function (err) {
+    res.send(err);
   });
 });
 
 router.post('/', function(req, res, next) {
-  // res.render('index', { title: 'Главная' });
-  sequelize.authenticate().then(function() {
-    console.log('Connect to DB created!');
-    var checks = sequelize.define('checks', {
-      id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-      },
-      locationId: Sequelize.INTEGER,
-      userId: Sequelize.INTEGER,
-      late: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0
-      }
-    });
-    var users = sequelize.define('users', {
-      id: {
-          type: Sequelize.INTEGER,
-          primaryKey: true,
-          autoIncrement: true
-      },
-      name: Sequelize.TEXT,
-      pin: Sequelize.TEXT,
-      status: Sequelize.TEXT,
-      active: {
-          type: Sequelize.INTEGER,
-          defaultValue: 1
-      }
-    });
-    var locations = sequelize.define('locations', {
-      id: {
-          type: Sequelize.INTEGER,
-          primaryKey: true,
-          autoIncrement: true
-      },
-      name: Sequelize.TEXT
-    });
-    checks.belongsTo(users);
-    checks.belongsTo(locations);
-    // checks.hasOne(users, { as: 'user' });
-    // checks.hasOne(locations, { as: 'location' });
-    users.sync().then(function() {
-      console.log('Success!');
-      users.findOne({
+  var now = new Date();
+  var startDate = now.setHours(0);
+  var startDate = now.setMinutes(0);
+  var endDate = now.setHours(23);
+  var endDate = now.setMinutes(59);
+  // console.log(startDate);
+  // console.log(endDate);
+  models.users.findOne({
+    where: {
+      pin: req.body.yourpin,
+      active: 1
+    }
+  }).then(function (user) {
+    if (user) {
+      models.locations.findOne({
         where: {
-          pin: req.body.yourpin
+          id: req.body.locid
         }
-      }).then(function (user) {
-        // res.send(users);
-        //res.render('users', {users: users, title: "Пользователи"});
-        if (user) {
-          checks.findOne({
-            include: [ users, locations ],
-            where: {
-              createdAt: {
-                $lt: new Date(),
-                $gt: new Date(new Date() - 24 * 60 * 60 * 1000)
-              },
-              userId: user.id
+      }).then(function (location) {
+        models.checks.findAll({
+          where: {
+            userId: user.id,
+            createdAt: {
+              $lt: new Date(endDate),
+              $gt: new Date(startDate)
             }
-          }).then(function (checkuser) {
-            var now = new Date();
-            console.log(getDateReadeble(now));
-            if (checkuser && getDateReadeble(checkuser.createdAt) == getDateReadeble(now)) {
-              console.log(getDateReadeble(checkuser.createdAt) + "=" + getDateReadeble(now));
-              res.send({
-                err: 'Вы уже отмечались сегодня'
+          }
+        }).then(function (checks) {
+          // res.send(checks);
+          if (checks.length > 0) {
+            // Нкжно узнать пришёл уходил ли человек, если не уходил, создаём отметку об уходе, если уходил, то необходимо отправить сообщение об этом, ушедший сегодня не может отметиться снова.
+            var exitFlag = 0;
+            for (var i = 0; i < checks.length; i++) {
+              // checks[i]
+              if (checks[i].io == 1) {
+                exitFlag = 1;
+              };
+            };
+            // res.send({err: exitFlag});
+            if (exitFlag == 0) {
+              models.checks.create({
+                userId: user.id,
+                locationId: req.body.locid,
+                late: 0,
+                io: 1
+              }).then(function (check) {
+                res.send({check: check, err: false, user: user, location: location});
+              }).catch(function (err) {
+                console.log(err);
+                res.send({err: err});
               });
             }else{
-              checks.sync().then(function() {
-                console.log('Success!');
-                var now = new Date();
-                var late;
-                if ((now.getHours() == 9 && now.getMinutes() >= 15) || (now.getHours() > 9)) {
-                  late = 1;
-                }else{
-                  late = 0;
-                }
-                checks.create({
-                  locationId: req.body.locid,
-                  userId: user.id,
-                  late: late,
-                  include: [ users, locations ]
-                }).then(function (check) {
-                  // res.send(checks);
-                  // check.checkTime = getTimeReadeble(check.createdAt);
-                  check.checkTime = getTimeReadeble(check.createdAt);
-                  console.log(check.checkTime);
-                  res.send({
-                    err: false,
-                    check: check,
-                    user: user
-                  });
-                }).catch(function (err) {
-                  res.send(err);
-                  console.log('checks error: ' + err);
-                });
-              }).catch(function(err) {
-                res.send(err);
-                console.log('Database error: ' + err);
-              });
+              res.send({err: 'Отметка об уходе уже существует, снова отметиться можео завтра'});
             }
-          }).catch(function (err) {
-            res.send(err);
-            console.log('checks error: ' + err);
-          });
-        }else{
-          res.send({
-            err: 'Неверный пин'
-          });
-        }
+          }else{
+            openhours = location.opentime.split(':')[0].slice(-1);
+            // res.send(openhours);
+            var late = 0;
+            if ((now.getUTCHours+8 > openhours) || (now.getUTCHours+8 == openhours && now.getUTCMinutes+8 > 15)) { /* Тут нужно для каждого магазина нужно установть timezone и её пробавлять к УТЦшным временам, но мы же торопимся */
+              late = 1;
+            }else{
+              late = 0;
+            }
+            models.checks.create({
+              userId: user.id,
+              locationId: req.body.locid,
+              late: late,
+              io: 0
+            }).then(function (check) {
+              res.send({check: check, err: false, user: user, location: location});
+            }).catch(function (err) {
+              console.log(err);
+              res.send({err: err});
+            });
+          }
+        }).catch(function (err) {
+          console.log(err);
+          res.send({err: err});
+        });
       }).catch(function (err) {
-        console.log('Users err: ' + err);
-        res.send('Users err: ' + err);
-      })
-    }).catch(function(err) {
-      console.log('Database error: ' + err);
-      res.send('Database error: ' + err);
-    });
-  }).catch(function(err) {
-    console.log('Connection error: ' + err);
+        console.log(err);
+        res.send({err: err});
+      });
+    }else{
+      res.send({err: 'Неверный ПИН'})
+    }
+  }).catch(function (err) {
+    res.send({err: err});
   });
 });
 
 router.post('/getcheckorder', function(req, res, next) {
-  sequelize.authenticate().then(function() {
-    console.log('Connect to DB created!');
-    var checks = sequelize.define('checks', {
-      id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-      },
-      locationId: Sequelize.INTEGER,
-      userId: Sequelize.INTEGER,
-      late: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0
+  var whereObject = {
+    include: [ models.users, models.locations ],
+    where: {
+      createdAt: {
+        $lt: new Date(req.body.enddate),
+        $gt: new Date(req.body.startdate)
       }
-    });
-    var users = sequelize.define('users', {
-      id: {
-          type: Sequelize.INTEGER,
-          primaryKey: true,
-          autoIncrement: true
-      },
-      name: Sequelize.TEXT,
-      pin: Sequelize.TEXT,
-      status: Sequelize.TEXT,
-      active: {
-          type: Sequelize.INTEGER,
-          defaultValue: 1
-      }
-    });
-    var locations = sequelize.define('locations', {
-      id: {
-          type: Sequelize.INTEGER,
-          primaryKey: true,
-          autoIncrement: true
-      },
-      name: Sequelize.TEXT
-    });
-    checks.belongsTo(users);
-    checks.belongsTo(locations);
-    sequelize.sync().then(function() {
-      console.log('Success!');
-      var whereObject = {
-        include: [ users, locations ],
-        where: {
-          createdAt: {
-            $lt: new Date(req.body.enddate),
-            $gt: new Date(req.body.startdate)
-          }
-        }
-      };
-      if (req.body.latesonly == 1) {
-        whereObject.where.late = 1;
-      }
-      checks.findAll(whereObject).then(function (checks) {
-        for (var i = 0; i < checks.length; i++) {
-          checks[i].checkTime = getTimeReadeble(checks[i].createdAt);
-        };
-        var now = new Date();
-        var nowdate = getDateReadeble(now);
-        nowdate = nowdate + ", " + days[now.getDay()];
-        console.log(nowdate);
-        res.send({checks: checks, nowdate: nowdate });
-      }).catch(function (err) {
-        res.send({err: err, text: 'what'});
-        console.log('checks error: ' + err);
-      });
-    }).catch(function(err) {
-      res.send({err: err, text: 'what'});
-      console.log('Database error: ' + err);
-    });
-  }).catch(function(err) {
-    res.send({err: err, text: 'what'});
-    console.log('Connection error: ' + err);
+    }
+  };
+  console.log(whereObject);
+  if (req.body.latesonly == 1) {
+    whereObject.where.late = 1;
+  }
+  models.checks.findAll(whereObject).then(function (checks) {
+    res.send({checks: checks});
+  }).catch(function (err) {
+    console.log(err);
+    res.send({err: err});
   });
+});
+
+router.post('/exportchecks', function (req, res, next) {
+  var now = new Date();
+  var filename = 'exportchecks' + now.getTime() + '.xlsx';
+  var datastring = req.body.charr;
+  // console.log();
+  var workbook = excelbuilder.createWorkbook(__dirname+'/../exports/checks/', filename);
+  var sheet1 = workbook.createSheet('sheet1', 10, datastring.length+2);
+  if (datastring && datastring.length > 0) {
+    fs.writeFile(__dirname+'/../exports/checks/'+filename, function (err) {
+      if (err) {
+        res.send({err: err});
+      }else{
+        sheet1.width(1, 15);
+        sheet1.width(2, 15);
+        sheet1.width(3, 40);
+        sheet1.width(4, 15);
+        sheet1.width(5, 15);
+        sheet1.set(1, 1, 'Отчет за: ');
+        sheet1.set(2, 1, getTimeReadeble(now));
+        sheet1.set(1, 2, 'Дата');
+        sheet1.set(2, 2, 'Место');
+        sheet1.set(3, 2, 'Имя сотрудника');
+        sheet1.set(4, 2, 'Приход/Исход');
+        sheet1.set(5, 2, 'Опоздание');
+        for (var i = 0; i < datastring.length; i++) {
+          var subarr = datastring[i].split(';');
+          // console.log(datastring[i]);
+          for (var j = 0; j < subarr.length; j++) {
+            var col = j + 1;
+            var row = i + 3;
+            sheet1.set(col, row, subarr[j]);
+            // console.log(i+3);
+          };
+        };
+        workbook.save(function(err){
+          if (err) {
+            workbook.cancel();
+            res.send({err: err});
+          }else{
+            // res.send({path: __dirname+'/../exports/checks/'+filename});
+            res.send(filename);
+            // res.download(__dirname+'/../exports/checks/'+filename, 'Отчет_об_отметках.xlsx');
+            console.log('congratulations, your workbook created');
+          }
+        });
+      }
+    });
+  }else{
+    res.send({err: 'Нет отметок!'});
+  }
+});
+
+router.get('/download-:file',function(req,res){
+  var file = __dirname+'/../exports/checks/'+req.params.file;
+  res.download(file);
 });
 
 module.exports = router;

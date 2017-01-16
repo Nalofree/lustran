@@ -13297,10 +13297,10 @@ h2 {
 /* line 448, ../sass/_components.sass */
 .checking-in-list-item {
   margin-bottom: 5px;
+  padding: 3px 5px;
 }
 /* line 450, ../sass/_components.sass */
 .checking-in-list-item.lateness {
-  padding: 3px 5px;
   border-radius: 5px;
   background-color: #d35d5d;
   color: #fff;
@@ -13549,7 +13549,7 @@ label.check {
   margin: 20px;
 }
 
-.adduserform, .edituserform, .banuserpin, .addlocform, .setlocpin, .dellocpin, .addorder {
+.adduserform, .edituserform, .banuserpin, .addlocform, .setlocpin, .dellocpin, .addorder, .getuserinfo, .userinfo {
   display: none;
   position: fixed;
   color: #000;
@@ -13563,6 +13563,10 @@ label.check {
   margin-left: -150px;
   top: 100px;
   z-index: 500;
+}
+
+.addlocform {
+  position: absolute;
 }
 
 .close-layout {
@@ -13616,7 +13620,8 @@ label.check {
 .location-name:active,
 .location-name:link,
 .location-name:visited {
-  color: #fff;
+  color: #000;
+  line-height: 30px;
 }
 
 a.location-name:hover {

@@ -4,6 +4,7 @@ $(document).ready(function () {
     e.preventDefault();
     $(".close-layout").fadeIn();
     $(".addlocform").fadeIn();
+    $(".setlocpin input[name=fullname]").focus();
   });
   $('.close-layout').click(function () {
     $('.addlocform').fadeOut();
@@ -13,7 +14,13 @@ $(document).ready(function () {
     e.preventDefault();
     var data = {
       name: $(".addlocform input[name='name']").val(),
-      yourpin: $(".addlocform input[name='yourpin']").val()
+      fullname: $(".addlocform input[name='fullname']").val(),
+      opentime: $(".addlocform input[name='opentime']").val(),
+      closetime: $(".addlocform input[name='closetime']").val(),
+      password: $(".addlocform input[name='password']").val(),
+      alias: $(".addlocform input[name='alias']").val(),
+      adres: $(".addlocform input[name='adres']").val(),
+      yourpin: $(".addlocform input[name='yourpin']").val(),
     }
     console.log(data);
     $.ajax({
@@ -25,7 +32,7 @@ $(document).ready(function () {
         if (data.err) {
           alert(data.err);
         }else{
-          $('.locations-table tbody').append('<tr id="'+data.locations.id+'"><td>'+data.locations.name+'</td><td><div data-title="'+data.locations.id+'" class="btn btn-success choose-location">Выбрать</div></td><td><div data-title="'+data.locations.id+'" class="btn btn-danger delete-location">Удалить</div></td></tr>');
+          $('.locations-table tbody').append('<tr id="'+data.location.id+'"><td>'+data.location.fullname+'</td><td> c ' + data.location.opentime + ' по ' + data.location.closetime+'</td><td><div data-title="'+data.location.id+'" class="btn btn-success choose-location">Выбрать</div></td><td><div data-title="'+data.location.id+'" class="btn btn-danger delete-location">Удалить</div></td></tr>');
           $('.addlocform').fadeOut();
           $('.close-layout').fadeOut();
           $('.addlocform input').val('');
@@ -44,6 +51,7 @@ $(document).ready(function () {
     $(".setlocpin").fadeIn();
     $(".close-layout").fadeIn();
     $(".setlocpin-submit").attr('data-title',$(this).attr('data-title'));
+    $(".setlocpin input[name=yourpin]").focus();
   });
 
   $('.setlocpin-submit').click(function (e) {
@@ -95,6 +103,7 @@ $(document).ready(function () {
     $(".dellocpin").fadeIn();
     $(".close-layout").fadeIn();
     $(".dellocpin-submit").attr('data-title',$(this).attr('data-title'));
+    $(".setlocpin input[name=yourpin]").focus();
   });
 
   $(".dellocpin-submit").click(function (e) {

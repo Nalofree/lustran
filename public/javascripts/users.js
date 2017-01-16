@@ -43,13 +43,18 @@ $(document).ready(function () {
     $(".edituserform").fadeOut();
     $('.setlocpin').fadeOut();
     $(".dellocpin").fadeOut();
+    $(".banuserpin").fadeOut();
     $('from.addorder').fadeOut();
+    $('.getuserinfo').fadeOut();
+    $('.userinfo').fadeOut();
   });
   $(".adduser-cancel").click(function (e) {
     e.preventDefault();
     $(".adduserform").fadeOut();
     $(".close-layout").fadeOut();
   });
+
+
 
   $(".adduser-submit").click(function (e) {
     e.preventDefault();
@@ -70,7 +75,7 @@ $(document).ready(function () {
             alert(data.err);
           }else{
             alert("ФИО: "+data.user.name+" пин: "+data.user.pin+" должность: "+data.user.status);
-            $('.users-table tbody').append('<tr id="'+data.user.id+'"><td>'+data.user.name+'</td><td>'+statusToAlias(data.user.status)+'</td><td><div data-title="'+data.user.id+'" class="btn btn-danger ban-user">Запретить</div></td><td><div data-title="'+data.user.id+'" class="btn btn-default edit-user">Изменить</div></td></tr>');
+            $('.users-table tbody').append('<tr id="'+data.user.id+'"><td>'+data.user.name+'</td><td>'+statusToAlias(data.user.status)+'</td><td><div data-title="'+data.user.id+'" class="btn btn-danger ban-user">Запретить</div></td><td><div data-title="'+data.user.id+'" class="btn btn-default edit-user">Изменить</div></td><td><div data-title="'+data.user.id+'" class="btn btn-default getinfo-user">О пользователе</div></td></tr>');
             $(".adduserform").fadeOut();
             $(".close-layout").fadeOut();
             $('.adduserform input').val('');
@@ -92,6 +97,8 @@ $(document).ready(function () {
     $('.banuserpin').fadeIn();
     // var status = "manager";
     $('.banuserpin .banuserpin-submit').attr('data-title',$(this).attr('data-title'));
+    $('.banuserpin input[name="yourpin"]').val('');
+    $('.banuserpin input[name="yourpin"]').focus();
   });
 
   $('.banuserpin-submit').click(function (e) {
@@ -104,13 +111,8 @@ $(document).ready(function () {
         userid: button.attr('data-title')
       };
       data.yourpin = $('.banuserpin input[name="yourpin"]').val();
-      if(button.hasClass('useractive')) {
-        url = '/users/banuser';
-      }else{
-        url = '/users/unbanuser';
-      }
       $.ajax({
-        url: url,
+        url: '/users/banuser',
         type: 'POST',
         data: data,
         success: function (data, error, status) {
@@ -165,6 +167,8 @@ $(document).ready(function () {
     $(".close-layout").fadeOut();
   });
 
+  $('.edituserform input[name="userpin"]').inputmask('9999');
+
   $('.edituser-submit').click(function (e) {
     e.preventDefault();
     if($('.edituserform input[name="fio"]').val() && $('.edituserform select[name="status"]').val() && $('.edituserform input[name="yourpin"]').val()){
@@ -174,6 +178,11 @@ $(document).ready(function () {
         yourpin: $('.edituserform input[name="yourpin"]').val(),
         userid: $(this).attr('data-title')
       };
+      if ($('.edituserform input[name="userpin"]').val()) {
+        data.userpin = $('.edituserform input[name="userpin"]').val();
+      }else{
+        data.userpin = false;
+      }
       $.ajax({
         url: '/users/updateuser',
         type: 'POST',
@@ -212,5 +221,88 @@ $(document).ready(function () {
     }else{
       $('.users-table tr').show();
     }
+  });
+
+  $(".getinfo-user").click(function () {
+    $('.close-layout').fadeIn();
+    $('.getuserinfo').fadeIn();
+    var userid = $(this).attr('data-title');
+    $('.getuserinfo-submit').attr('data-title', userid);
+    $('.getuserinfo input[name="yourpin"]').val('');
+    $('.getuserinfo input[name="yourpin"]').focus();
+  });
+
+  $('.getuserinfo-submit').click(function (e) {
+    e.preventDefault();
+    if ($('.getuserinfo input[name=yourpin]').val()) {
+      // alert($('.getuserinfo input[name=yourpin]').val() + ' ' + $(this).attr('data-title'));
+      data = {
+        userid: $(this).attr('data-title'),
+        yourpin: $('.getuserinfo input[name=yourpin]').val()
+      }
+      $.ajax({
+        url: '/users/getuserinfo',
+        type: 'POST',
+        data: data,
+        success: function (data, status, error) {
+          console.log(data, status, error);
+          // $('.close-layout').fadeOut();
+          $('.getuserinfo').fadeOut();
+          $('.userinfo').fadeIn();
+          $('.userinfo .username').text(data.name);
+          $('.userinfo .userpin').text(data.pin);
+          $('.userinfo .userstatus').text(statusToAlias(data.status));
+        },
+        error: function (data, status, error) {
+          console.log(data, status, error);
+          $('.close-layout').fadeOut();
+          $('.getuserinfo').fadeOut();
+        }
+      });
+    }else{
+      alert('Введите ПИН');
+    }
+  });
+
+$('.getuserinfo input[name=yourpin]').keydown(function( event ) {
+  if ( event.which == 13 ) {
+    event.preventDefault();
+    if ($('.getuserinfo input[name=yourpin]').val()) {
+      // alert($('.getuserinfo input[name=yourpin]').val() + ' ' + $(this).attr('data-title'));
+      data = {
+        userid: $('.getuserinfo-submit').attr('data-title'),
+        yourpin: $('.getuserinfo input[name=yourpin]').val()
+      }
+      $.ajax({
+        url: '/users/getuserinfo',
+        type: 'POST',
+        data: data,
+        success: function (data, status, error) {
+          console.log(data, status, error);
+          // $('.close-layout').fadeOut();
+          $('.getuserinfo').fadeOut();
+          $('.userinfo').fadeIn();
+          $('.userinfo .username').text(data.name);
+          $('.userinfo .userpin').text(data.pin);
+          $('.userinfo .userstatus').text(statusToAlias(data.status));
+        },
+        error: function (data, status, error) {
+          console.log(data, status, error);
+          $('.close-layout').fadeOut();
+          $('.getuserinfo').fadeOut();
+        }
+      });
+    }else{
+      alert('Введите ПИН');
+    }
+  }
+});
+
+  $('.userinfo-close').click(function () {
+    $('.userinfo').fadeOut();
+    $('.close-layout').fadeOut();
+    $('.userinfo .username').text('');
+    $('.userinfo .userpin').text('');
+    $('.userinfo .userstatus').text('');
   });
 });
