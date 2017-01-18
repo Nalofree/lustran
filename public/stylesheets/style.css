@@ -13549,7 +13549,7 @@ label.check {
   margin: 20px;
 }
 
-.adduserform, .edituserform, .banuserpin, .addlocform, .setlocpin, .dellocpin, .addorder, .getuserinfo, .userinfo {
+.adduserform, .edituserform, .banuserpin, .addlocform, .setlocpin, .dellocpin, .addorder, .getuserinfo, .userinfo, .editlocpin {
   display: none;
   position: fixed;
   color: #000;
@@ -13565,7 +13565,7 @@ label.check {
   z-index: 500;
 }
 
-.addlocform {
+.addlocform, .editlocpin {
   position: absolute;
 }
 

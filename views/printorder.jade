@@ -1,31 +1,52 @@
 link(rel='stylesheet', href='/stylesheets/style.css')
 link(rel='stylesheet', href='/stylesheets/printorder.css')
+- var getReadebleDateTime = function(date) {
+-   readebleDate = date.getDate() + '.' + date.getMonth()+1 + '.' + date.getFullYear() +' '+ ('00' + date.getHours()).slice(-2) +':'+ ('00' + date.getMinutes()).slice(-2)
+-   return readebleDate;
+- }
+- var getReadebleDate = function(date) {
+-   readebleDate = date.getDate() + '.' + date.getMonth()+1 + '.' + date.getFullYear()
+-   return readebleDate;
+- }
 .printorder-wrap
   p.small= "При отсутсвии предоплаты поступления заказанного товара не гарантируется"
-  h3= "Заказ № " + order.number
+  .row
+    .col-md-8.col-sm-8.col-lg-8.col-xs-8
+      h3= "Заказ № " + order.number + " от " + getReadebleDate(order.createdAt)
+    .col-md-4.col-sm-4.col-lg-4.col-xs-4#barcode(data-title=order.number)
+      //- img(src="http://placehold.it/200x50", alt="alt")
   hr
   p.small.left= "Исполнитель: ИП Бобров Александр Алексеевич, ИНН 030903342269, тел. 8(3952)94-08-40"
   p.small.left= "Продавец, оформивший заказ: "+order.user.name
-  p.small.left= "Адрес магазина: "+order.location.name
-  p.small.left= "Заказчик: " + order.customername + " " + order.customerphone
+  p.small.left= "Магазин: " + order.location.fullname + ", по адресу " + order.location.adres
+  p.small.left= "Заказчик: " + order.customername + ", тел." + order.customerphone
+  - var itog = 0
   table.table.table-bordered
     tr
       th №
-      th Товары
+      th Товар
       th Количество
       th Ед.
+      th Плановая дата доставки
       th Предоплата
     - for (var i=0;i<order.goods.length;i++)
+      - itog = itog + parseInt(order.goods[i].prepay)
       tr
         td= i+1
-        td= order.goods[i].name
-        td= order.goods[i].number
+        td= order.goods[i].name + ", " + order.goods[i].vencode
+        td= order.goods[i].num
         td= "шт"
-        td= order.goods[i].prepayment
+        td= getReadebleDate(order.goods[i].inddate)
+        td= order.goods[i].prepay+"p"
+  p.right
+    strong= "Сумма предоплаты: " + itog+"p"
   p.small.left= "Всего наименований "+order.goods.length+","
-  br
+  p.left= summ
   hr
   .col-md-6.col-sm-6.col-lg-6.col-xs-6
     p= "Исполнитель  _____________________"
   .col-md-6.col-sm-6.col-lg-6.col-xs-6
     p= "Заказчик  _____________________"
+script(type='text/javascript', src='../javascripts/jquery-3.1.1.min.js')
+script(type='text/javascript', src='../javascripts/jquery-barcode.min.js')
+script(type='text/javascript', src='../javascripts/printorder.js')

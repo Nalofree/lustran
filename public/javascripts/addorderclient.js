@@ -1,54 +1,128 @@
 $(document).ready(function () {
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth()+1; //January is 0!
+  var yyyy = today.getFullYear();
+   if(dd<10){
+          dd='0'+dd
+      }
+      if(mm<10){
+          mm='0'+mm
+      }
+  today = yyyy+'-'+mm+'-'+dd;
+  $(".new-order-form input[type=date]").attr("min", today);
+  var goods = [];
+  var order = {};
   $('.setorder-button').click(function(e) {
     e.preventDefault();
-    $('from.addorder').fadeIn();
-    $('.close-layout').fadeIn();
-  });
-
-  $('.addorder-submit').click(function(e) {
-    e.preventDefault();
-    if ($('.addorder input[name=yourpin]').val()) {
-      var order = {};
-      var goods = [];
+    if ($('input[name=customername]').val() && $('input[name=customerphone]').val()) {
       $('.new-order-form-row.good-item').each(function() {
         var good = {};
-        good.article = $(this).find('input[name=article]').val();
+        good.vencode = $(this).find('input[name=vencode]').val();
         good.name = $(this).find('input[name=name]').val();
-        good.number = $(this).find('input[name=number]').val();
-        good.indicativedate = $(this).find('input[name=indicativedate]').val();
-        good.prepayment = $(this).find('input[name=prepayment]').val();
+        good.num = $(this).find('input[name=number]').val();
+        good.inddate = $(this).find('input[name=indicativedate]').val();
+        good.prepay = $(this).find('input[name=prepayment]').val();
         goods.push(good);
       });
-      order.goods = goods;
       order.customername = $('input[name=customername]').val();
       order.customerphone = $('input[name=customerphone]').val();
       order.comment = $('textarea[name=comment]').val();
       order.locationid = getCookie('location');
       order.number = $('.new-order-iter').text();
-      order.yourpin = $('input[name=yourpin]').val();
-      console.log(order);
+      $('.close-layout').fadeIn();
+      $('.addorder').fadeIn();
+      $(".addorder input[name=yourpin]").val('');
+      $(".addorder input[name=yourpin]").focus();
+    }else{
+      alert('Заполните поля имени заказчика и номера телефона заказчика!')
+    }
+  });
+  $(".addorder-submit").click(function (e) {
+    e.preventDefault();
+    if ($(".addorder input[name=yourpin]").val()) {
+      var yourpin = $(".addorder input[name=yourpin]").val();
+      // console.log(goods);
+      // console.log(order);
+      // console.log(yourpin);
+      var data = {
+        yourpin: yourpin,
+        goods: goods,
+        order: order,
+      }
+      $('.addorder').fadeOut();
+      $(".addorder input[name=yourpin]").val('');
       $.ajax({
         url: '/addorder',
         type: 'POST',
-        data: order,
-        success: function(data, status, error) {
-          // console.log(data, status, error);
-          if (data.err) {
-            alert(data.err);
-          }else{
-            // console.log(data);
-            $('from.addorder').fadeOut();
-            $('.close-layout').fadeOut();
-            $('input[name=yourpin]').val('');
-            document.location.href="/addorder/printorder"+data.orderid;
-          }
-        },
-        error: function(data, status, error) {
+        data: data,
+        success: function (data, status, error) {
           console.log(data, status, error);
+          $('.close-layout').fadeOut();
+          // $(".new-order-form").reset();
+          document.getElementById("neworderform").reset();
+          $(".new-order-id").text(parseInt($(".new-order-id").text())+1);
+          $(".new-order-iter").text(parseInt($(".new-order-iter").text())+1);
+          window.open(
+            '/addorder/order-'+data.order.id,
+            '_blank' // <- This is what makes it open in a new window.
+          );
+        },
+        error: function (data, status, error) {
+          console.log(data, status, error);
+          $('.close-layout').fadeOut();
         }
       });
     }else{
-      alert('Заполните ПИН');
+      alert("Введите ПИН");
     }
   });
 });
+
+//
+//   $('.addorder-submit').click(function(e) {
+//     e.preventDefault();
+//     if ($('.addorder input[name=yourpin]').val()) {
+//       var order = {};
+//       var goods = [];
+//       $('.new-order-form-row.good-item').each(function() {
+//         var good = {};
+//         good.article = $(this).find('input[name=article]').val();
+//         good.name = $(this).find('input[name=name]').val();
+//         good.number = $(this).find('input[name=number]').val();
+//         good.indicativedate = $(this).find('input[name=indicativedate]').val();
+//         good.prepayment = $(this).find('input[name=prepayment]').val();
+//         goods.push(good);
+//       });
+//       order.goods = goods;
+//       order.customername = $('input[name=customername]').val();
+//       order.customerphone = $('input[name=customerphone]').val();
+//       order.comment = $('textarea[name=comment]').val();
+//       order.locationid = getCookie('location');
+//       order.number = $('.new-order-iter').text();
+//       order.yourpin = $('input[name=yourpin]').val();
+//       console.log(order);
+//       $.ajax({
+//         url: '/addorder',
+//         type: 'POST',
+//         data: order,
+//         success: function(data, status, error) {
+//           // console.log(data, status, error);
+//           if (data.err) {
+//             alert(data.err);
+//           }else{
+//             // console.log(data);
+//             $('from.addorder').fadeOut();
+//             $('.close-layout').fadeOut();
+//             $('input[name=yourpin]').val('');
+//             document.location.href="/addorder/printorder"+data.orderid;
+//           }
+//         },
+//         error: function(data, status, error) {
+//           console.log(data, status, error);
+//         }
+//       });
+//     }else{
+//       alert('Заполните ПИН');
+//     }
+//   });

@@ -158,30 +158,74 @@ module.exports = router;
 //   });
 // });
 
-router.post('/delloc', function(req, res, next) {
-  models.users.findOne({
+router.post('/getlocinfo', function(req, res, next) {
+  models.locations.findOne({
     where: {
-      pin: req.body.yourpin
+      id: req.body.locid
     }
-  }).then(function(user) {
-    if (user) {
-      if (user.status == 'manager') {
-        models.locations.destroy({
-          where: {
-            id: req.body.id
-          }
-        }).then(function (location) {
-          res.send({err: false, location: location})
-        })
-      }else{
-        res.send({err: 'Недостаточно прав, обратитесь к руководителю'});
-      }
-    }else{
-      res.send({err: 'Не верный ПИН'});
-    }
+  }).then(function (location) {
+    res.send({err: false, location: location})
   }).catch(function (err) {
     res.send({err:err});
     console.log(err);
   });
 });
-module.exports = router;
+
+router.post('/updatelocinfo', function(req, res, next) {
+  models.users.findOne({
+    where: {
+      pin: req.body.yourpin
+    }
+  }).then(function (user) {
+    if (user) {
+      if (user.status == "manager") {
+        models.locations.update(
+          {
+            fullname: req.body.fullname,
+            alias: req.body.alias,
+            adres: req.body.adres,
+            opentime: req.body.opentime,
+            closetime: req.body.closetime
+          },{
+            where: {
+              id: req.body.locid
+            }
+          }
+        ).then(function (location) {
+          // res.send({err: false, location: location})
+          models.locations.findOne({
+            where: {
+              id: req.body.locid
+            }
+          }).then(function (location) {
+            res.send({err: false, location: location});
+          }).catch(function (err) {
+            res.send({err:err});
+            console.log(err);
+          });
+        }).catch(function (err) {
+          res.send({err:err});
+          console.log(err);
+        });
+      }else{
+        res.send({err:'Недостаточно прав'});
+      }
+    }else{
+      res.send({err:'Неверный ПИН'});
+    }
+  }).catch(function (err) {
+    res.send({err:err});
+    console.log(err);
+  });
+  // models.locations.findOne({
+  //   where: {
+  //     id: req.body.locid
+  //   }
+  // }).then(function (location) {
+  //   res.send({err: false, location: location})
+  // }).catch(function (err) {
+  //   res.send({err:err});
+  //   console.log(err);
+  // });
+});
+// module.exports = router;

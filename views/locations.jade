@@ -22,9 +22,9 @@ block content
       .form-group
         label(for='name') Время закрытия
         input(type='time',name='closetime',required).form-control
-      .form-group
-        label(for='name') Пароль
-        input(type='password',name='password',placeholder='Пароль для магазина',required).form-control
+      //- .form-group
+      //-   label(for='name') Пароль
+      //-   input(type='password',name='password',placeholder='Пароль для магазина',required).form-control
       .form-group
         label(for='yourpin') Ваш пин
         input(type='password',name='yourpin',placeholder='Ваш пин',required).form-control
@@ -40,13 +40,31 @@ block content
       .form-group
         button.btn.btn-success.setlocpin-submit(type='submit') Подтвердить
     
-    from.dellocpin(method='post', name='requirepin', enctype="multipart/form-data")
+    from.editlocpin(method='post', name='requirepin', enctype="multipart/form-data")
       h3= "Подтвердите действие"
       .form-group
-        label(for='yourpin')
-        input(type='password',name='yourpin',placeholder='ПИН', required='required', autofocus).form-control
+        label(for='name') Название
+        input(type='text',name='fullname',placeholder='Полное название магазина',required).form-control
       .form-group
-        button.btn.btn-success.dellocpin-submit(type='submit') Подтвердить
+        label(for='name') Краткое название
+        input(type='text',name='alias',placeholder='Краткое название магазина',required).form-control
+      .form-group
+        label(for='name') Адрес
+        input(type='text',name='adres',placeholder='Адрес магазина',required).form-control
+      .form-group
+        label(for='name') Время открытия
+        input(type='time',name='opentime',required).form-control
+      .form-group
+        label(for='name') Время закрытия
+        input(type='time',name='closetime',required).form-control
+      //- .form-group
+      //-   label(for='name') Пароль
+      //-   input(type='password',name='password',placeholder='Пароль для магазина',required).form-control
+      .form-group
+        label(for='yourpin') Ваш пин
+        input(type='password',name='yourpin',placeholder='Ваш пин',required).form-control
+      .form-group
+        button.btn.btn-success.editlocpin-submit(type='submit') Подтвердить
     
     br
     - if (locations.length > 0)
@@ -63,7 +81,8 @@ block content
             td 
               .btn.btn-success.choose-location(data-title=  locations[i].id) Выбрать
             td 
-              .btn.btn-danger.delete-location(data-title=  locations[i].id) Удалить
+              //- .btn.btn-danger.delete-location(data-title=  locations[i].id) Удалить
+              .btn.btn-default.edit-location(data-title=  locations[i].id) Редактировать
     - else
       .panel.panel-default
         .panel-body Мест пока нет, но вы можете их добавить

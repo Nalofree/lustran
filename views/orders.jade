@@ -93,173 +93,182 @@ block content
                   span.badge.badge-pur-light 0
         .lustran-container
           // Заказ
-          -for (var i=0;i<orders.length;i++)
-            article.order
-              header.order-header
-                .order-id
-                  | заказ
-                  span= orders[i].number
-                .order-basket 13
-                a.btn.btn-sm.order-add(href='/addorder')
-                  i.fa.fa-plus-circle(aria-hidden='true')
-              section.order-body
-                ul.order-list
-                  - for (var j=0;j<orders[i].goods.length;j++)
-                    li.order-list-item
-                      // удаленный заказ staus-removed orders[i].goods[j].
-                      header.order-list-item-header
-                        span.badge.badge-pur= j+1
-                        span.order-date.sep-dot= getDateReadeble(orders[i].goods[j].createdAt)
-                        span.order-name.sep-dot= orders[i].goods[j].name
-                        span.order-count.sep-dot
-                          i= orders[i].goods[j].number
-                          |  шт
-                        span.order-float-date= getDateReadeble(orders[i].goods[j].indicativedate)
-                        a.btn.btn-success.btn-xs(href='#', data-toggle='open-log') История действий
-                        a.remove-order-status(href='#', data-toggle='remove-order')
-                      .container-fluid
-                        ul.order-status-list.row
-                          li.col-sm-2
-                            - if (orders[i].goods[j].processed == 0)
-                              .order-status.status-danger
-                                .order-status-body
-                                  .status-top
-                                    span.status Не обработан
-                                    span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
-                                  .status-bottom
-                                    span= orders[i].user.name
-                                a.order-status-edit(href='#', data-title='processed, '+orders[i].goods[j].id)
-                            - else if (orders[i].goods[j].processed == 1)
-                              .order-status
-                                .order-status-body
-                                  .status-top
-                                    span.status В обработке
-                                    span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
-                                  .status-bottom
-                                    span= orders[i].user.name
-                                a.order-status-edit(href='#', data-title='processed, '+orders[i].goods[j].id)
-                            - else
-                              .order-status
-                                .order-status-body
-                                  .status-top
-                                    span.status Обработан
-                                    span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
-                                  .status-bottom
-                                    span= orders[i].user.name
-                                a.order-status-edit(href='#', data-title='processed, '+orders[i].goods[j].id)
-                          li.col-sm-2
-                            - if (orders[i].goods[j].spicifieddate == null)
-                              .order-status.status-danger
-                                .order-status-body
-                                  .status-top
-                                    span.status --.--.--
-                                    span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
-                                  .status-bottom
-                                    span= orders[i].user.name
-                                a.order-status-edit(href='#', data-title='spicifieddate, '+orders[i].goods[j].id)
-                            - else
-                              .order-status
-                                .order-status-body
-                                  .status-top
-                                    span.status= getDateReadeble(orders[i].goods[j].spicifieddate)
-                                    span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
-                                  .status-bottom
-                                    span= orders[i].user.name
-                                a.order-status-edit(href='#', data-title='spicifieddate, '+orders[i].goods[j].id)
-                          li.col-sm-2
-                            - if (orders[i].goods[j].ordered == 0)
-                              .order-status.status-danger
-                                .order-status-body
-                                  .status-top
-                                    span.status Не заказан
-                                    span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
-                                  .status-bottom
-                                    span= orders[i].user.name
-                                a.order-status-edit(href='#', data-title='ordered, '+orders[i].goods[j].id)
-                            - else
-                              .order-status
-                                .order-status-body
-                                  .status-top
-                                    span.status Заказан
-                                    span.status-date 12.12.16
-                                  .status-bottom
-                                    span Фамилия Имя Отчество
-                                a.order-status-edit(href='#', data-title='ordered, '+orders[i].goods[j].id)
-                          li.col-sm-2
-                            - if (orders[i].goods[j].postponed == 0)
-                              .order-status.status-danger
-                                .order-status-body
-                                  .status-top
-                                    span.status Не отложен
-                                    span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
-                                  .status-bottom
-                                    span= orders[i].user.name
-                                a.order-status-edit(href='#', data-title='postponed, '+orders[i].goods[j].id)
-                            - else if (orders[i].goods[j].postponed == 1)
-                              .order-status
-                                .order-status-body
-                                  .status-top
-                                    span.status Проверен и отложен
-                                    span.status-date 12.12.16
-                                  .status-bottom
-                                    span Фамилия Имя Отчество
-                                a.order-status-edit(href='#', data-title='postponed, '+orders[i].goods[j].id)
-                            - else
-                              .order-status.status-danger
-                                .order-status-body
-                                  .status-top
-                                    span.status Есть деффект
-                                    span.status-date 12.12.16
-                                  .status-bottom
-                                    span Фамилия Имя Отчество
-                                a.order-status-edit(href='#', data-title='postponed, '+orders[i].goods[j].id)
-                          li.col-sm-2
-                            - if (orders[i].goods[j].callstatus == 0)
-                              .order-status.status-danger
-                                .order-status-body
-                                  .status-top
-                                    span.status Не звонили
-                                    span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
-                                  .status-bottom
-                                    span= orders[i].user.name
-                                a.order-status-edit(href='#', data-title='callstatus, '+orders[i].goods[j].id)
-                            - else if (orders[i].goods[j].callstatus == 1)
-                              .order-status
-                                .order-status-body
-                                  .status-top
-                                    span.status Дозвон
-                                    span.status-date 12.12.16
-                                  .status-bottom
-                                    span Фамилия Имя Отчество
-                                a.order-status-edit(href='#', data-title='callstatus, '+orders[i].goods[j].id)
-                            - else
-                              .order-status
-                                .order-status-body
-                                  .status-top
-                                    span.status Не дозвон
-                                    span.status-date 12.12.16
-                                  .status-bottom
-                                    span Фамилия Имя Отчество
-                                a.order-status-edit(href='#', data-title='callstatus, '+orders[i].goods[j].id)
-                          li.col-sm-2
-                            - if (orders[i].goods[j].issued == 0)
-                              .order-status.status-danger
-                                .order-status-body
-                                  .status-top
-                                    span.status Не выдан
-                                    span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
-                                  .status-bottom
-                                    span= orders[i].user.name
-                                a.order-status-edit(href='#', data-title='issued, '+orders[i].goods[j].id)
-                            - else
-                              .order-status
-                                .order-status-body
-                                  .status-top
-                                    span.status Выдан
-                                    span.status-date 12.12.16
-                                  .status-bottom
-                                    span Фамилия Имя Отчество
-                                a.order-status-edit(href='#', data-title='issued, '+orders[i].goods[j].id)
+          - if (orders.length > 0)
+            -for (var i=0;i<orders.length;i++)
+              article.order
+                header.order-header
+                  .order-id
+                    | заказ
+                    span= orders[i].number
+                  //- .order-basket 13
+                  //- a.btn.btn-sm.order-add(href='/addorder')
+                    i.fa.fa-plus-circle(aria-hidden='true')
+                section.order-body
+                  ul.order-list
+                    - if (orders[i].goods)
+                      - for (var j=0;j<orders[i].goods.length;j++)
+                        //- p= orders[i].goods
+                        li.order-list-item
+                          // удаленный заказ staus-removed orders[i].goods[j].
+                          header.order-list-item-header
+                            span.badge.badge-pur= j+1
+                            span.order-date.sep-dot= getReadebleDate(orders[i].goods[j].createdAt)
+                            span.order-name.sep-dot= orders[i].goods[j].name
+                            span.order-count.sep-dot
+                              i= orders[i].goods[j].num
+                              |  шт
+                            span.order-float-date= getDateReadeble(orders[i].goods[j].inddate)
+                            a.btn.btn-success.btn-xs(href='#', data-toggle='open-log') История действий
+                            a.remove-order-status(href='#', data-toggle='remove-order')
+                          .container-fluid
+                            ul.order-status-list.row
+                              li.col-sm-2
+                                .order-status.status-danger
+                                  .order-status-body
+                                    .status-top
+                                      span.status Не обработан
+                                      span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
+                                    .status-bottom
+                                      span= orders[i].user.name
+                                  a.order-status-edit(href='#', data-title='processed, '+orders[i].goods[j].id)
+                                //- - else if (orders[i].goods[j].processed == 1)
+                                //-   .order-status
+                                //-     .order-status-body
+                                //-       .status-top
+                                //-         span.status В обработке
+                                //-         span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
+                                //-       .status-bottom
+                                //-         span= orders[i].user.name
+                                //-     a.order-status-edit(href='#', data-title='processed, '+orders[i].goods[j].id)
+                                //- - else
+                                //-   .order-status
+                                //-     .order-status-body
+                                //-       .status-top
+                                //-         span.status Обработан
+                                //-         span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
+                                //-       .status-bottom
+                                //-         span= orders[i].user.name
+                                //-     a.order-status-edit(href='#', data-title='processed, '+orders[i].goods[j].id)
+                              li.col-sm-2
+                                .order-status.status-danger
+                                  .order-status-body
+                                    .status-top
+                                      span.status --.--.--
+                                      span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
+                                    .status-bottom
+                                      span= orders[i].user.name
+                                  a.order-status-edit(href='#', data-title='spicifieddate, '+orders[i].goods[j].id)
+                                //- - else
+                                //-   .order-status
+                                //-     .order-status-body
+                                //-       .status-top
+                                //-         span.status= getDateReadeble(orders[i].goods[j].spicifieddate)
+                                //-         span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
+                                //-       .status-bottom
+                                //-         span= orders[i].user.name
+                                //-     a.order-status-edit(href='#', data-title='spicifieddate, '+orders[i].goods[j].id)
+                              li.col-sm-2
+                                //- - if (orders[i].goods[j].ordered == 0)
+                                .order-status.status-danger
+                                  .order-status-body
+                                    .status-top
+                                      span.status Не заказан
+                                      span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
+                                    .status-bottom
+                                      span= orders[i].user.name
+                                  a.order-status-edit(href='#', data-title='ordered, '+orders[i].goods[j].id)
+                                //- - else
+                                //-   .order-status
+                                //-     .order-status-body
+                                //-       .status-top
+                                //-         span.status Заказан
+                                //-         span.status-date 12.12.16
+                                //-       .status-bottom
+                                //-         span Фамилия Имя Отчество
+                                //-     a.order-status-edit(href='#', data-title='ordered, '+orders[i].goods[j].id)
+                              li.col-sm-2
+                                //- - if (orders[i].goods[j].postponed == 0)
+                                .order-status.status-danger
+                                  .order-status-body
+                                    .status-top
+                                      span.status Не отложен
+                                      span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
+                                    .status-bottom
+                                      span= orders[i].user.name
+                                  a.order-status-edit(href='#', data-title='postponed, '+orders[i].goods[j].id)
+                                //- - else if (orders[i].goods[j].postponed == 1)
+                                //-   .order-status
+                                //-     .order-status-body
+                                //-       .status-top
+                                //-         span.status Проверен и отложен
+                                //-         span.status-date 12.12.16
+                                //-       .status-bottom
+                                //-         span Фамилия Имя Отчество
+                                //-     a.order-status-edit(href='#', data-title='postponed, '+orders[i].goods[j].id)
+                                //- - else
+                                //-   .order-status.status-danger
+                                //-     .order-status-body
+                                //-       .status-top
+                                //-         span.status Есть деффект
+                                //-         span.status-date 12.12.16
+                                //-       .status-bottom
+                                //-         span Фамилия Имя Отчество
+                                //-     a.order-status-edit(href='#', data-title='postponed, '+orders[i].goods[j].id)
+                              li.col-sm-2
+                                //- - if (orders[i].goods[j].callstatus == 0)
+                                .order-status.status-danger
+                                  .order-status-body
+                                    .status-top
+                                      span.status Не звонили
+                                      span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
+                                    .status-bottom
+                                      span= orders[i].user.name
+                                  a.order-status-edit(href='#', data-title='callstatus, '+orders[i].goods[j].id)
+                                //- - else if (orders[i].goods[j].callstatus == 1)
+                                //-   .order-status
+                                //-     .order-status-body
+                                //-       .status-top
+                                //-         span.status Дозвон
+                                //-         span.status-date 12.12.16
+                                //-       .status-bottom
+                                //-         span Фамилия Имя Отчество
+                                //-     a.order-status-edit(href='#', data-title='callstatus, '+orders[i].goods[j].id)
+                                //- - else
+                                //-   .order-status
+                                //-     .order-status-body
+                                //-       .status-top
+                                //-         span.status Не дозвон
+                                //-         span.status-date 12.12.16
+                                //-       .status-bottom
+                                //-         span Фамилия Имя Отчество
+                                //-     a.order-status-edit(href='#', data-title='callstatus, '+orders[i].goods[j].id)
+                              li.col-sm-2
+                                //- - if (orders[i].goods[j].issued == 0)
+                                .order-status.status-danger
+                                  .order-status-body
+                                    .status-top
+                                      span.status Не выдан
+                                      span.status-date= getDateReadeble(orders[i].goods[j].createdAt)
+                                    .status-bottom
+                                      span= orders[i].user.name
+                                  a.order-status-edit(href='#', data-title='issued, '+orders[i].goods[j].id)
+                                //- - else
+                                //-   .order-status
+                                //-     .order-status-body
+                                //-       .status-top
+                                //-         span.status Выдан
+                                //-         span.status-date 12.12.16
+                                //-       .status-bottom
+                                //-         span Фамилия Имя Отчество
+                                //-     a.order-status-edit(href='#', data-title='issued, '+orders[i].goods[j].id)
+                    - else
+                      .container
+                        .panel.panel-default
+                          .panel-body= "Товаров пока нет"
+          - else
+            .container
+              .panel.panel-default
+                .panel-body= "Заказов пока нет"
                 //- li.order-list-item
                 //-   header.order-list-item-header
                 //-     span.badge.badge-pur 2

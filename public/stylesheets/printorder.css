@@ -5,6 +5,7 @@ body {
 .printorder-wrap {
   display: inline-block;;
   width: 80%;
+  margin-top: 50px;
 }
 
 .table {
@@ -17,4 +18,8 @@ body {
 
 .left {
   text-align: left;
+}
+
+.right {
+  text-align: right;
 }

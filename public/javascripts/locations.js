@@ -9,6 +9,7 @@ $(document).ready(function () {
   $('.close-layout').click(function () {
     $('.addlocform').fadeOut();
     $('.close-layout').fadeOut();
+    $('.editlocpin').fadeOut();
   });
   $('.addloc-submit').click(function (e) {
     e.preventDefault();
@@ -32,7 +33,7 @@ $(document).ready(function () {
         if (data.err) {
           alert(data.err);
         }else{
-          $('.locations-table tbody').append('<tr id="'+data.location.id+'"><td>'+data.location.fullname+'</td><td> c ' + data.location.opentime + ' по ' + data.location.closetime+'</td><td><div data-title="'+data.location.id+'" class="btn btn-success choose-location">Выбрать</div></td><td><div data-title="'+data.location.id+'" class="btn btn-danger delete-location">Удалить</div></td></tr>');
+          $('.locations-table tbody').append('<tr id="'+data.location.id+'"><td>'+data.location.fullname+'</td><td> c ' + data.location.opentime + ' по ' + data.location.closetime+'</td><td><div data-title="'+data.location.id+'" class="btn btn-success choose-location">Выбрать</div></td><td><div data-title="'+data.location.id+'" class="btn btn-default edit-location">Редактировать</div></td></tr>');
           $('.addlocform').fadeOut();
           $('.close-layout').fadeOut();
           $('.addlocform input').val('');
@@ -98,56 +99,75 @@ $(document).ready(function () {
     }
   })
 
-  $( ".locations-table" ).on( "click", "div.delete-location", function() {
+  $( ".locations-table" ).on( "click", "div.edit-location", function() {
     // alert($(this).attr('data-title'));
-    $(".dellocpin").fadeIn();
+    $(".editlocpin").fadeIn();
     $(".close-layout").fadeIn();
-    $(".dellocpin-submit").attr('data-title',$(this).attr('data-title'));
-    $(".setlocpin input[name=yourpin]").focus();
+    $(".editlocpin-submit").attr('data-title',$(this).attr('data-title'));
+    // $(".editlocpin input[name='opentime']").val("10:10");
+    data = {
+      locid: $(this).attr('data-title')
+    }
+    $.ajax({
+      url: '/locations/getlocinfo',
+      type: 'POST',
+      data: data,
+      success: function (data, status, error) {
+        console.log(data, status, error);
+        $(".editlocpin").fadeIn();
+        $(".editlocpin input[name='fullname']").val(data.location.fullname);
+        $(".editlocpin input[name='alias']").val(data.location.alias);
+        $(".editlocpin input[name='adres']").val(data.location.adres);
+        $(".editlocpin input[name='opentime']").val(data.location.opentime);
+        $(".editlocpin input[name='closetime']").val(data.location.closetime);
+      },
+      error: function (data, status, error) {
+        console.log(data, status, error);
+        $(".close-layout").fadeOut();
+      }
+    });
   });
 
-  $(".dellocpin-submit").click(function (e) {
+  $(".editlocpin-submit").click(function (e) {
     e.preventDefault();
-    var locId = $(".dellocpin-submit").attr('data-title');
-    if (locId == getCookie("location")) {
-      alert('Перед удалением выберите другое место как автивное');
-      $(".dellocpin").fadeOut();
-      $(".dellocpin input[name=yourpin]").val('')
-      $(".close-layout").fadeOut();
+    if ($(".editlocpin input[name='fullname']").val() && $(".editlocpin input[name='alias']").val() && $(".editlocpin input[name='adres']").val() && $(".editlocpin input[name='opentime']").val() && $(".editlocpin input[name='closetime']").val() && $(".editlocpin input[name='yourpin']").val()) {
+      // alert('ok');
+      var data = {};
+      data.fullname = $(".editlocpin input[name='fullname']").val();
+      data.alias = $(".editlocpin input[name='alias']").val();
+      data.adres = $(".editlocpin input[name='adres']").val();
+      data.opentime = $(".editlocpin input[name='opentime']").val();
+      data.closetime = $(".editlocpin input[name='closetime']").val();
+      data.yourpin = $(".editlocpin input[name='yourpin']").val();
+      data.locid = $(this).attr('data-title');
+      console.log(data);
+      $.ajax({
+        url: '/locations/updatelocinfo',
+        type: 'POST',
+        data: data,
+        success: function (data, status, error) {
+          console.log(data, status, error);
+          // $('.locations-table tbody').append('<tr id="'+data.location.id+'"><td>'+data.location.fullname+'</td><td> c ' + data.location.opentime + ' по ' + data.location.closetime+'</td><td><div data-title="'+data.location.id+'" class="btn btn-success choose-location">Выбрать</div></td><td><div data-title="'+data.location.id+'" class="btn btn-default edit-location">Редактировать</div></td></tr>');
+          $('tr#'+data.location.id).html('<td>'+data.location.fullname+'</td><td> c ' + data.location.opentime + ' по ' + data.location.closetime+'</td><td><div data-title="'+data.location.id+'" class="btn btn-success choose-location">Выбрать</div></td><td><div data-title="'+data.location.id+'" class="btn btn-default edit-location">Редактировать</div></td>');
+          $(".editlocpin input[name='fullname']").val('');
+          $(".editlocpin input[name='alias']").val('');
+          $(".editlocpin input[name='adres']").val('');
+          $(".editlocpin input[name='opentime']").val('');
+          $(".editlocpin input[name='closetime']").val('');
+          $(".editlocpin input[name='yourpin']").val('');
+          $(".editlocpin").fadeOut();
+          $(".close-layout").fadeOut();
+        },
+        error: function (data, status, error) {
+          console.log(data, status, error);
+        }
+      });
     }else{
-      var thisloc = $('.locations-table .delete-location[data-title='+locId+']').parent().parent();
-      if ($(".dellocpin input[name=yourpin]").val()) {
-        var data = {
-          id: locId,
-          yourpin: $(".dellocpin input[name=yourpin]").val()
-        };
-        $.ajax({
-          url: '/locations/delloc',
-          type: 'POST',
-          data: data,
-          success: function (data, status, error) {
-            if (data.err) {
-              alert(data.err);
-            }else{
-              // console.log(data, status, error);
-              $(".dellocpin").fadeOut();
-              $(".dellocpin input[name=yourpin]").val('')
-              $(".close-layout").fadeOut();
-              thisloc.fadeOut();
-            }
-          },
-          error: function (data, status, error) {
-            console.log(data, status, error);
-            $(".dellocpin").fadeOut();
-            $(".dellocpin input[name=yourpin]").val('')
-            $(".close-layout").fadeOut();
-            // thisloc.fadeOut();
-          }
-        });
-      }else{
-        alert('Заполните поля');
-      }
+      alert('Заполните все поля!');
     }
+    // alert($(this).attr('data-title'));
+    // input(type='time',name='opentime',required).form-control
+    // $(".editlocpin input[name='opentime']").value = "22:53:05";
   });
 
   $('.addloc-cancel').click(function (e) {

@@ -72,7 +72,6 @@ function getLoc(locid) {
 					alert(data.err);
 				}else{
 					$('a.location-name').text(data.locations.alias);
-					$('.new-order-shop').text(data.locations.alias);
 				}
 			},
 			error: function (data, status, error) {

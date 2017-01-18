@@ -9,86 +9,6 @@ block content
       .form-group
         button.btn.btn-success.addorder-submit(type='submit') Подтвердить
     main.lustran-main
-      //- nav.navbar.lustran-navbar.navbar-static-top
-        //- .lustran-container-nav
-        //-   .collapse.navbar-collapse
-        //-     ul.nav.navbar-nav
-        //-       li.filter-menu
-        //-         a.dropdown-toggle.lustran-dropdown(href='#', role='button', aria-haspopup='true', aria-expanded='false')
-        //-           | Фильтр&nbsp
-        //-           span.caret
-        //-         ul.dropdown-menu.lustran-dropdown-menu.filter-menu-dropdown
-        //-           li
-        //-             a(href='#') ID заказа
-        //-           li
-        //-             a(href='#') Наименование
-        //-           li
-        //-             a(href='#') Артикул
-        //-           li
-        //-             a(href='#') Ориентировочная дата
-        //-       li.status-menu
-        //-         a.lustran-dropdown(href='#', role='button')
-        //-           | Выберите статус&nbsp
-        //-           span.caret
-        //-         .status-menu-dropdown
-        //-           .dropdown
-        //-             button#dropdownMenu1.btn.btn-default.dropdown-toggle.lustran-drop(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true') Обработан
-        //-             ul.dropdown-menu(aria-labelledby='dropdownMenu1')
-        //-               li
-        //-                 a(href='#') Обработан
-        //-               li
-        //-                 a(href='#') Не обработан
-        //-           .dropdown
-        //-             button#dropdownMenu2.btn.btn-default.dropdown-toggle.lustran-drop(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true') Заказан
-        //-             ul.dropdown-menu(aria-labelledby='dropdownMenu2')
-        //-               li
-        //-                 a(href='#') Заказан
-        //-               li
-        //-                 a(href='#') Не заказан
-        //-           .dropdown
-        //-             button#dropdownMenu3.btn.btn-default.dropdown-toggle.lustran-drop(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true') Проверен и отложен
-        //-             ul.dropdown-menu(aria-labelledby='dropdownMenu3')
-        //-               li
-        //-                 a(href='#') Проверен и отложен
-        //-               li
-        //-                 a(href='#') Отсутствует
-        //-           .dropdown
-        //-             button#dropdownMenu4.btn.btn-default.dropdown-toggle.lustran-drop(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true') Звонили
-        //-             ul.dropdown-menu(aria-labelledby='dropdownMenu4')
-        //-               li
-        //-                 a(href='#') Звонили
-        //-               li
-        //-                 a(href='#') Не звонили
-        //-           .dropdown
-        //-             button#dropdownMenu5.btn.btn-default.dropdown-toggle.lustran-drop(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true') Выдан
-        //-             ul.dropdown-menu(aria-labelledby='dropdownMenu5')
-        //-               li
-        //-                 a(href='#') Выдан
-        //-               li
-        //-                 a(href='#') Не выдан
-        //-           .status-menu-check
-        //-             input(type='checkbox')
-        //-             label Уточнить дату
-        //-             input(type='checkbox')
-        //-             label Ориентировочная
-        //-             input(type='checkbox')
-        //-             label Уточненная
-        //-     form.navbar-form.navbar-left.lustran-search-form
-        //-       .form-group
-        //-         input.form-control(type='text', placeholder='Поиск...')
-        //-     ul.nav.navbar-nav.navbar-right
-        //-       li.navbar-text
-        //-         | Заказов всего 
-        //-         span.badge.badge-pur-light 1
-        //-       li.navbar-text
-        //-         | В обработке 
-        //-         span.badge.badge-pur-light 2
-        //-       li.navbar-text
-        //-         | Выдано 
-        //-         span.badge.badge-pur-light 6
-        //-       li.navbar-text
-        //-         | Дефект 
-        //-         span.badge.badge-pur-light 0
       .lustran-container
         .new-order-wrapper
           h2 Добавление нового заказа
@@ -97,23 +17,27 @@ block content
               .new-order-info
                 .new-order-info-row
                   | ID заказа&nbsp
-                  span.new-order-id= orderdate.number
+                  span.new-order-id= ordernumber
                   | &nbspот&nbsp
-                  span.new-order-date= nowdate
+                  span.new-order-date= getReadebleDate(new Date())
                 .new-order-info-row
-                  span.new-order-shop Название магазина
+                  | Название магазина: 
+                  span.new-order-shop= location.fullname
+                .new-order-info-row
+                  | Адрес магазина: 
+                  span.new-order-shop= location.adres
                 //- .new-order-info-row
                 //-   span.new-order-person ФИО сотрудника
                 .new-order-info-row
                   | Порядковай номер&nbsp
-                  span.new-order-iter= orderdate.number
+                  span.new-order-iter= ordernumber
               .new-order-barcode(style='background-image: url(img/shtrihcod.png);')
             .new-order-body
-              form.new-order-form(action='')
+              form.new-order-form#neworderform(action='')
                 .new-order-form-row.good-item.row
                   fieldset.col-sm-2
                     label(for='') Артикул
-                    input.form-control(type='text', name='article')
+                    input.form-control(type='text', name='vencode')
                   fieldset.col-sm-3
                     label(for='') Наименование товара
                     input.form-control(type='text', name='name')
@@ -135,12 +59,12 @@ block content
                       label(for='')
                         | ФИО заказчика
                         span *
-                      input.form-control(type='text', required='', name='customername')
+                      input.form-control(type='text', required, name='customername')
                     fieldset
                       label(for='')
                         | Телефон заказчика
                         span *
-                      input.form-control(type='text', data-input='phone', required='', name='customerphone')
+                      input.form-control(type='text', data-input='phone', required, name='customerphone')
                   fieldset.col-sm-6.col-sm-offset-1
                     label(for='') Комментарий
                     textarea.form-control(id='', cols='30', rows='5', name='comment')
