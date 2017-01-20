@@ -148,7 +148,7 @@ router.post('/setprocessed', function (req, res, next) {
     }
   }).then(function (user) {
     if (user) {
-      if (user.status == 'saler' || user.status == 'manager') {
+      if (user.status == 'supplier' || user.status == 'manager') {
         models.goods.findOne({
           include: [models.processed],
           where: {
@@ -212,7 +212,7 @@ router.post('/setspicdate', function (req, res, next) {
     }
   }).then(function (user) {
     if (user) {
-      if (user.status == 'saler' || user.status == 'manager') {
+      if (user.status == 'supplier' || user.status == 'manager') {
         models.goods.findOne({
           include: [models.spicdate, models.processed],
           where: {
@@ -291,7 +291,7 @@ router.post('/setordered', function (req, res, next) {
     }
   }).then(function (user) {
     if (user) {
-      if (user.status == 'saler' || user.status == 'manager') {
+      if (user.status == 'supplier') {
         models.goods.findOne({
           include: [models.ordered, models.processed],
           where: {
@@ -355,7 +355,7 @@ router.post('/setpostponed', function (req, res, next) {
     }
   }).then(function (user) {
     if (user) {
-      if (user.status == 'saler' || user.status == 'manager') {
+      if (user.status == 'saler') {
         models.goods.findOne({
           include: [models.postponed, models.ordered],
           where: {
@@ -422,7 +422,7 @@ router.post('/setcallstatus', function (req, res, next) {
     }
   }).then(function (user) {
     if (user) {
-      if (user.status == 'saler' || user.status == 'manager') {
+      if (user.status == 'saler' || user.status == 'supplier') {
         models.goods.findOne({
           include: [models.callstatus, models.postponed],
           where: {
@@ -489,7 +489,7 @@ router.post('/setissued', function (req, res, next) {
     }
   }).then(function (user) {
     if (user) {
-      if (user.status == 'saler' || user.status == 'manager') {
+      if (user.status == 'saler') {
         models.goods.findOne({
           include: [models.issued, models.callstatus],
           where: {
