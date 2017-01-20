@@ -2,6 +2,15 @@ var express = require('express');
 var router = express.Router();
 var models  = require('../models');
 
+function getDateSuperReadeble(date){
+	var readebleTime;//1998-02-03 22:23:00
+	var year = date.getFullYear();
+			readebleTime = ('00' + date.getDate()).slice(-2) + '.' +
+			('00' + (date.getMonth()+1)).slice(-2) + '.' +
+			year;
+			return readebleTime;
+};
+
 /* GET orders listing. */
 router.get('/', function(req, res, next) {
   if (!req.cookies.location) {
@@ -85,7 +94,7 @@ router.post('/getgoodhistiry', function (req,res,next) {
                 actions.push(processed[i]);
               }
               for (var i = 0; i < spicdate.length; i++) {
-                spicdate[i].alias = spicdate[i].statusval == 0 ? "УД: --.--.--" : "УД: "+spicdate[i].statusval;
+                spicdate[i].alias = spicdate[i].statusval == null ? "УД: --.--.--" : "УД: "+getDateSuperReadeble(spicdate[i].statusval);
                 actions.push(spicdate[i]);
               }
               for (var i = 0; i < ordered.length; i++) {
@@ -157,7 +166,8 @@ router.post('/setprocessed', function (req, res, next) {
               statusval: req.body.statusval,
               alias: alias,
               locationId: req.cookies.location,
-              userId: user.id
+              userId: user.id,
+              goodId: req.body.goodid
             }).then(function (processed) {
               models.goods.update({
                 processedId: processed.id
@@ -170,11 +180,11 @@ router.post('/setprocessed', function (req, res, next) {
               }).catch(function (err) {
                 res.send({err: err});
                 console.log(err);
-              })
+              });
             }).catch(function (err) {
               res.send({err: err});
               console.log(err);
-            })
+            });
           }else{
             res.send({err: 'Заказ уже обработан!'});
           }
@@ -204,36 +214,63 @@ router.post('/setspicdate', function (req, res, next) {
     if (user) {
       if (user.status == 'saler' || user.status == 'manager') {
         models.goods.findOne({
-          include: [models.spicdate],
+          include: [models.spicdate, models.processed],
           where: {
             id: req.body.goodid
           }
         }).then(function (good) {
-          models.spicdate.create({
-            statusval: req.body.statusval,
-            locationId: req.cookies.location,
-            userId: user.id
-          }).then(function (spicdate) {
-            models.goods.update({
-              spicdateId: spicdate.id
-            },{
-              where: {
-                id: req.body.goodid
-              }
-            }).then(function (goods) {
-              res.send({spicdate: spicdate, user: user})
+          if (good.processed.statusval == 1) {
+            models.spicdate.create({
+              statusval: req.body.statusval,
+              locationId: req.cookies.location,
+              userId: user.id,
+              goodId: req.body.goodid
+            }).then(function (spicdate) {
+              models.goods.update({
+                spicdateId: spicdate.id
+              },{
+                where: {
+                  id: req.body.goodid
+                }
+              }).then(function (goods) {
+                models.processed.create({
+                  statusval: 2,
+                  alias: 'Обработан',
+                  locationId: req.cookies.location,
+                  userId: user.id,
+                  goodId: req.body.goodid
+                }).then(function (processed) {
+                  models.goods.update({
+                    processedId: processed.id
+                  },{
+                    where: {
+                      id: req.body.goodid
+                    }
+                  }).then(function (goods) {
+                    res.send({spicdate: spicdate, user: user});
+                  }).catch(function (err) {
+                    res.send({err: err});
+                    console.log(err);
+                  });
+                }).catch(function (err) {
+                  res.send({err: err});
+                  console.log(err);
+                });
+              }).catch(function (err) {
+                res.send({err: err});
+                console.log(err);
+              });
             }).catch(function (err) {
               res.send({err: err});
               console.log(err);
-            })
-          }).catch(function (err) {
-            res.send({err: err});
-            console.log(err);
-          })
+            });
+          }else{
+            res.send({err: 'Поставьте товар в обработку!'});
+          }
         }).catch(function (err) {
           res.send({err: err});
           console.log(err);
-        })
+        });
       }else{
         res.send({err: 'Недостаточно прав'});
       }
@@ -243,6 +280,268 @@ router.post('/setspicdate', function (req, res, next) {
   }).catch(function (err) {
     res.send({err: err});
     console.log(err);
+  })
+});
+
+router.post('/setordered', function (req, res, next) {
+  // res.send('response');
+  models.users.findOne({
+    where: {
+      pin: req.body.yourpin
+    }
+  }).then(function (user) {
+    if (user) {
+      if (user.status == 'saler' || user.status == 'manager') {
+        models.goods.findOne({
+          include: [models.ordered, models.processed],
+          where: {
+            id: req.body.goodid
+          }
+        }).then(function (good) {
+          if (good.processed.statusval == 2) {
+            var alias;
+            if (req.body.statusval == 0) {
+              alias = 'Не заказан'
+            }else{
+              alias = 'Заказан'
+            }
+            models.ordered.create({
+              statusval: req.body.statusval,
+              alias: alias,
+              locationId: req.cookies.location,
+              userId: user.id,
+              goodId: req.body.goodid
+            }).then(function (ordered) {
+              models.goods.update({
+                orderedId: ordered.id
+              },{
+                where: {
+                  id: req.body.goodid
+                }
+              }).then(function (goods) {
+                res.send({ordered: ordered, user: user})
+              }).catch(function (err) {
+                res.send({err: err});
+                console.log('update goods',err);
+              })
+            }).catch(function (err) {
+              res.send({err: err});
+              console.log('ordered',err);
+            });
+          }else{
+            res.send({err: 'Поставьте товар в обработку и уточните дату!'});
+          }
+        }).catch(function (err) {
+          res.send({err: err});
+          console.log('goods',err);
+        })
+      }else{
+        res.send({err: 'Недостаточно прав'});
+      }
+    }else{
+      res.send({err: 'Неверный ПИН'});
+    }
+  }).catch(function (err) {
+    res.send({err: err});
+    console.log('user',err);
+  })
+});
+
+router.post('/setpostponed', function (req, res, next) {
+  // res.send('response');
+  models.users.findOne({
+    where: {
+      pin: req.body.yourpin
+    }
+  }).then(function (user) {
+    if (user) {
+      if (user.status == 'saler' || user.status == 'manager') {
+        models.goods.findOne({
+          include: [models.postponed, models.ordered],
+          where: {
+            id: req.body.goodid
+          }
+        }).then(function (good) {
+          var alias;
+          if (req.body.statusval == 0) {
+            alias = 'Не отложен';
+          }else if(req.body.statusval == 1){
+            alias = 'Отложен';
+          }else{
+            alias = 'Есть деффект';
+          }
+					// console.log("models.ordered.statusval: "+goods.ordered.statusval);
+          if (good.ordered.statusval == 1) {
+            models.postponed.create({
+              statusval: req.body.statusval,
+              alias: alias,
+              locationId: req.cookies.location,
+              userId: user.id,
+              goodId: req.body.goodid
+            }).then(function (postponed) {
+              models.goods.update({
+                postponedId: postponed.id
+              },{
+                where: {
+                  id: req.body.goodid
+                }
+              }).then(function (goods) {
+                res.send({postponed: postponed, user: user})
+              }).catch(function (err) {
+                res.send({err: err});
+                console.log('update goods',err);
+              })
+            }).catch(function (err) {
+              res.send({err: err});
+              console.log('postponed',err);
+            });
+          }else{
+            res.send({err: 'Незаказыннй товар отложить нельзя!'});
+          }
+        }).catch(function (err) {
+          res.send({err: err});
+          console.log('goods',err);
+        })
+      }else{
+        res.send({err: 'Недостаточно прав'});
+      }
+    }else{
+      res.send({err: 'Неверный ПИН'});
+    }
+  }).catch(function (err) {
+    res.send({err: err});
+    console.log('user',err);
+  })
+});
+
+router.post('/setcallstatus', function (req, res, next) {
+  // res.send('response');
+  models.users.findOne({
+    where: {
+      pin: req.body.yourpin
+    }
+  }).then(function (user) {
+    if (user) {
+      if (user.status == 'saler' || user.status == 'manager') {
+        models.goods.findOne({
+          include: [models.callstatus, models.postponed],
+          where: {
+            id: req.body.goodid
+          }
+        }).then(function (good) {
+          var alias;
+          if (req.body.statusval == 0) {
+            alias = 'Не звонили';
+          }else if(req.body.statusval == 1){
+            alias = 'Дозвон';
+          }else{
+            alias = 'Не дозвон';
+          }
+					console.log('good.issued.statusval: '+good.postponed.statusval);
+          if (good.postponed.statusval == 1) {
+            models.callstatus.create({
+              statusval: req.body.statusval,
+              alias: alias,
+              locationId: req.cookies.location,
+              userId: user.id,
+              goodId: req.body.goodid
+            }).then(function (callstatus) {
+              models.goods.update({
+                callstatusId: callstatus.id
+              },{
+                where: {
+                  id: req.body.goodid
+                }
+              }).then(function (goods) {
+                res.send({callstatus: callstatus, user: user})
+              }).catch(function (err) {
+                res.send({err: err});
+                console.log('update goods',err);
+              })
+            }).catch(function (err) {
+              res.send({err: err});
+              console.log('callstatus',err);
+            });
+          }else{
+            res.send({err: 'Сначала отложите товар!'});
+          }
+        }).catch(function (err) {
+          res.send({err: err});
+          console.log('goods',err);
+        })
+      }else{
+        res.send({err: 'Недостаточно прав'});
+      }
+    }else{
+      res.send({err: 'Неверный ПИН'});
+    }
+  }).catch(function (err) {
+    res.send({err: err});
+    console.log('user',err);
+  })
+});
+
+router.post('/setissued', function (req, res, next) {
+  // res.send('response');
+  models.users.findOne({
+    where: {
+      pin: req.body.yourpin
+    }
+  }).then(function (user) {
+    if (user) {
+      if (user.status == 'saler' || user.status == 'manager') {
+        models.goods.findOne({
+          include: [models.issued, models.callstatus],
+          where: {
+            id: req.body.goodid
+          }
+        }).then(function (good) {
+          var alias;
+          if (req.body.statusval == 0) {
+            alias = 'Не выдан';
+          }else{
+            alias = 'Выдан';
+          }
+          if (good.callstatus.statusval == 1) {
+            models.issued.create({
+              statusval: req.body.statusval,
+              alias: alias,
+              locationId: req.cookies.location,
+              userId: user.id,
+              goodId: req.body.goodid
+            }).then(function (issued) {
+              models.goods.update({
+                issuedId: issued.id
+              },{
+                where: {
+                  id: req.body.goodid
+                }
+              }).then(function (goods) {
+                res.send({issued: issued, user: user})
+              }).catch(function (err) {
+                res.send({err: err});
+                console.log('update goods',err);
+              })
+            }).catch(function (err) {
+              res.send({err: err});
+              console.log('issued',err);
+            });
+          }else{
+            res.send({err: 'Перед выдачей дозвонитесь клиенту!'});
+          }
+        }).catch(function (err) {
+          res.send({err: err});
+          console.log('goods',err);
+        })
+      }else{
+        res.send({err: 'Недостаточно прав'});
+      }
+    }else{
+      res.send({err: 'Неверный ПИН'});
+    }
+  }).catch(function (err) {
+    res.send({err: err});
+    console.log('user',err);
   })
 });
 

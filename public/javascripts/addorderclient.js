@@ -67,6 +67,8 @@ $(document).ready(function () {
             '/addorder/order-'+data.order.id,
             '_blank' // <- This is what makes it open in a new window.
           );
+          goods = [];
+          order = {};
         },
         error: function (data, status, error) {
           console.log(data, status, error);

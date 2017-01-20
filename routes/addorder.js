@@ -99,6 +99,9 @@ router.post('/', function (req, res, nex) {
               statusval: 0,
               alias: 'Не выдан'
             }
+            // console.log(' : ');
+            // console.log(goods);
+            // console.log(' : ');
             for (var i = 0; i < goods.length; i++) {
               goodids.push(goods[i].id);
               processed.goodId = goods[i].id;

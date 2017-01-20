@@ -143,19 +143,75 @@ block content
                                     .status-bottom
                                       span= orders[i].goods[j].processed.user.name
                                   a.order-status-edit.processed(href='#', data-title= orders[i].goods[j].id)
+                                  .action.processed-action
+                                    .action-header
+                                      .action-info
+                                        .new-order-info-row
+                                          - 
+                                          span.action-date= getDateReadeble(now)
+                                          | &nbsp
+                                          //- span.action-time 12.12.16
+                                        //- .new-order-info-row
+                                        //-   | Изменения в заказе:&nbsp
+                                        //-   span.action-order 0001
+                                        //- .new-order-info-row
+                                        //-   | Товар:&nbsp
+                                        //-   span.action-shop Название товара
+                                        i.fa.fa-times-circle.close-action(aria-hidden='true', data-toggle='close-action')
+                                    .action-body
+                                      .form-group
+                                        .row.action-row
+                                          label.col-sm-12(for='') Введите ваш пин-код
+                                          .col-sm-6
+                                            .input-group
+                                              input.form-control(type='password', name='yourpin')
+                                        .row.action-row.choose-satus
+                                        .row.action-row
+                                          .col-sm-6
+                                            button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-action') Отмена
+                                          .col-sm-6
+                                            button.btn.btn-done.btn-block(type='button', data-toggle='save-action') Сохранить
                               li.col-sm-2
-                                - if (orders[i].goods[j].spicdate.statusval == 0)
+                                - if (orders[i].goods[j].spicdate.statusval == null)
                                   - goodstatus = 'status-danger'
                                 - else
                                   - goodstatus = ''
                                 .order-status(class=goodstatus)
                                   .order-status-body
                                     .status-top
-                                      span.status= orders[i].goods[j].spicdate.statusval == 0 ? "--.--.--" : getDateReadeble(orders[i].goods[j].spicdate.statusval)
+                                      span.status= orders[i].goods[j].spicdate.statusval == null ? "--.--.--" : getDateReadeble(orders[i].goods[j].spicdate.statusval)
                                       span.status-date= getDateReadeble(orders[i].goods[j].spicdate.createdAt)
                                     .status-bottom
                                       span= orders[i].goods[j].spicdate.user.name
                                   a.order-status-edit.spicdate(href='#', data-title= orders[i].goods[j].id)
+                                  .action.spicdate-action
+                                    .action-header
+                                      .action-info
+                                        .new-order-info-row
+                                          - 
+                                          span.action-date= getDateReadeble(now)
+                                          | &nbsp
+                                          //- span.action-time 12.12.16
+                                        //- .new-order-info-row
+                                        //-   | Изменения в заказе:&nbsp
+                                        //-   span.action-order 0001
+                                        //- .new-order-info-row
+                                        //-   | Товар:&nbsp
+                                        //-   span.action-shop Название товара
+                                        i.fa.fa-times-circle.close-action(aria-hidden='true', data-toggle='close-action')
+                                    .action-body
+                                      .form-group
+                                        .row.action-row
+                                          label.col-sm-12(for='') Введите ваш пин-код
+                                          .col-sm-6
+                                            .input-group
+                                              input.form-control(type='password', name='yourpin')
+                                        .row.action-row.choose-satus
+                                        .row.action-row
+                                          .col-sm-6
+                                            button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-action') Отмена
+                                          .col-sm-6
+                                            button.btn.btn-done.btn-block(type='button', data-toggle='save-action') Сохранить
                               li.col-sm-2
                                 - if (orders[i].goods[j].ordered.statusval == 0)
                                   - goodstatus = 'status-danger'
@@ -169,8 +225,36 @@ block content
                                     .status-bottom
                                       span= orders[i].goods[j].ordered.user.name
                                   a.order-status-edit.ordered(href='#', data-title= orders[i].goods[j].id)
+                                  .action.ordered-action
+                                    .action-header
+                                      .action-info
+                                        .new-order-info-row
+                                          - 
+                                          span.action-date= getDateReadeble(now)
+                                          | &nbsp
+                                          //- span.action-time 12.12.16
+                                        //- .new-order-info-row
+                                        //-   | Изменения в заказе:&nbsp
+                                        //-   span.action-order 0001
+                                        //- .new-order-info-row
+                                        //-   | Товар:&nbsp
+                                        //-   span.action-shop Название товара
+                                        i.fa.fa-times-circle.close-action(aria-hidden='true', data-toggle='close-action')
+                                    .action-body
+                                      .form-group
+                                        .row.action-row
+                                          label.col-sm-12(for='') Введите ваш пин-код
+                                          .col-sm-6
+                                            .input-group
+                                              input.form-control(type='password', name='yourpin')
+                                        .row.action-row.choose-satus
+                                        .row.action-row
+                                          .col-sm-6
+                                            button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-action') Отмена
+                                          .col-sm-6
+                                            button.btn.btn-done.btn-block(type='button', data-toggle='save-action') Сохранить
                               li.col-sm-2
-                                - if (orders[i].goods[j].postponed.statusval == 0)
+                                - if (orders[i].goods[j].postponed.statusval == 0 || orders[i].goods[j].postponed.statusval == 2)
                                   - goodstatus = 'status-danger'
                                 - else
                                   - goodstatus = ''
@@ -182,8 +266,36 @@ block content
                                     .status-bottom
                                       span= orders[i].goods[j].postponed.user.name
                                   a.order-status-edit.postponed(href='#', data-title= orders[i].goods[j].id)
+                                  .action.postponed-action
+                                    .action-header
+                                      .action-info
+                                        .new-order-info-row
+                                          - 
+                                          span.action-date= getDateReadeble(now)
+                                          | &nbsp
+                                          //- span.action-time 12.12.16
+                                        //- .new-order-info-row
+                                        //-   | Изменения в заказе:&nbsp
+                                        //-   span.action-order 0001
+                                        //- .new-order-info-row
+                                        //-   | Товар:&nbsp
+                                        //-   span.action-shop Название товара
+                                        i.fa.fa-times-circle.close-action(aria-hidden='true', data-toggle='close-action')
+                                    .action-body
+                                      .form-group
+                                        .row.action-row
+                                          label.col-sm-12(for='') Введите ваш пин-код
+                                          .col-sm-6
+                                            .input-group
+                                              input.form-control(type='password', name='yourpin')
+                                        .row.action-row.choose-satus
+                                        .row.action-row
+                                          .col-sm-6
+                                            button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-action') Отмена
+                                          .col-sm-6
+                                            button.btn.btn-done.btn-block(type='button', data-toggle='save-action') Сохранить
                               li.col-sm-2
-                                - if (orders[i].goods[j].callstatus.statusval == 0)
+                                - if (orders[i].goods[j].callstatus.statusval == 0 || orders[i].goods[j].callstatus.statusval == 2)
                                   - goodstatus = 'status-danger'
                                 - else
                                   - goodstatus = ''
@@ -195,6 +307,34 @@ block content
                                     .status-bottom
                                       span= orders[i].goods[j].callstatus.user.name
                                   a.order-status-edit.callstatus(href='#', data-title= orders[i].goods[j].id)
+                                  .action.callstatus-action
+                                    .action-header
+                                      .action-info
+                                        .new-order-info-row
+                                          - 
+                                          span.action-date= getDateReadeble(now)
+                                          | &nbsp
+                                          //- span.action-time 12.12.16
+                                        //- .new-order-info-row
+                                        //-   | Изменения в заказе:&nbsp
+                                        //-   span.action-order 0001
+                                        //- .new-order-info-row
+                                        //-   | Товар:&nbsp
+                                        //-   span.action-shop Название товара
+                                        i.fa.fa-times-circle.close-action(aria-hidden='true', data-toggle='close-action')
+                                    .action-body
+                                      .form-group
+                                        .row.action-row
+                                          label.col-sm-12(for='') Введите ваш пин-код
+                                          .col-sm-6
+                                            .input-group
+                                              input.form-control(type='password', name='yourpin')
+                                        .row.action-row.choose-satus
+                                        .row.action-row
+                                          .col-sm-6
+                                            button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-action') Отмена
+                                          .col-sm-6
+                                            button.btn.btn-done.btn-block(type='button', data-toggle='save-action') Сохранить
                               li.col-sm-2
                                 - if (orders[i].goods[j].issued.statusval == 0)
                                   - goodstatus = 'status-danger'
@@ -208,6 +348,27 @@ block content
                                     .status-bottom
                                       span= orders[i].goods[j].issued.user.name
                                   a.order-status-edit.issued(href='#', data-title= orders[i].goods[j].id)
+                                  .action.issued-action
+                                    .action-header
+                                      .action-info
+                                        .new-order-info-row
+                                          - 
+                                          span.action-date= getDateReadeble(now)
+                                          | &nbsp
+                                        i.fa.fa-times-circle.close-action(aria-hidden='true', data-toggle='close-action')
+                                    .action-body
+                                      .form-group
+                                        .row.action-row
+                                          label.col-sm-12(for='') Введите ваш пин-код
+                                          .col-sm-6
+                                            .input-group
+                                              input.form-control(type='password', name='yourpin')
+                                        .row.action-row.choose-satus
+                                        .row.action-row
+                                          .col-sm-6
+                                            button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-action') Отмена
+                                          .col-sm-6
+                                            button.btn.btn-done.btn-block(type='button', data-toggle='save-action') Сохранить
                     - else
                       .container
                         .panel.panel-default
@@ -216,403 +377,7 @@ block content
             .container
               .panel.panel-default
                 .panel-body= "Заказов пока нет"
-                //- li.order-list-item
-                //-   header.order-list-item-header
-                //-     span.badge.badge-pur 2
-                //-     span.order-date.sep-dot 11.12.16
-                //-     span.order-name.sep-dot Название товара
-                //-     span.order-count.sep-dot
-                //-       i 1
-                //-       |  шт
-                //-     span.order-float-date 16.12.16
-                //-     a.btn.btn-success.btn-xs(href='#', data-toggle='open-log') История действий
-                //-     a.remove-order-status(href='#', data-toggle='remove-order')
-                //-   .container-fluid
-                //-     ul.order-status-list.row
-                //-       li.col-sm-2
-                //-         .order-status.status-danger
-                //-           // status-danger
-                //-           .order-status-body
-                //-             .status-top
-                //-               span.status Не обработан
-                //-               span.status-date 12.12.16
-                //-             .status-bottom
-                //-               span Фамилия Имя Отчество
-                //-           a.order-status-edit(href='#')
-                //-       li.col-sm-2
-                //-         .order-status.status-null
-                //-           // ждет обработки status-null
-                //-           .order-status-body
-                //-             .status-top
-                //-               span.status --.--.--
-                //-               span.status-date
-                //-             .status-bottom
-                //-               span.edit Уточнить дату
-                //-           a.order-status-edit(href='#')
-                //-       li.col-sm-2
-                //-         .order-status.status-null
-                //-           .order-status-body
-                //-             .status-top
-                //-               span.status Не Заказан
-                //-               span.status-date
-                //-             .status-bottom
-                //-               span.edit Изменить статус
-                //-           a.order-status-edit(href='#')
-                //-       li.col-sm-2
-                //-         .order-status.status-null
-                //-           .order-status-body.status-null
-                //-             .status-top
-                //-               span.status Отсутствует
-                //-               span.status-date
-                //-             .status-bottom
-                //-               span.edit Изменить статус
-                //-           a.order-status-edit(href='#')
-                //-       li.col-sm-2
-                //-         .order-status.status-null
-                //-           .order-status-body
-                //-             .status-top
-                //-               span.status Не звонили
-                //-               span.status-date
-                //-             .status-bottom
-                //-               span.edit Изменить статус
-                //-           a.order-status-edit(href='#')
-                //-       li.col-sm-2
-                //-         .order-status.status-null
-                //-           .order-status-body
-                //-             .status-top
-                //-               span.status Не Выдан
-                //-               span.status-date
-                //-             .status-bottom
-                //-               span.edit Изменить статус
-                //-           a.order-status-edit(href='#')
-                //- li.order-list-item
-                //-   header.order-list-item-header
-                //-     span.badge.badge-pur 3
-                //-     span.order-date.sep-dot 11.12.16
-                //-     span.order-name.sep-dot Название товара
-                //-     span.order-count.sep-dot
-                //-       i 1
-                //-       |  шт
-                //-     span.order-float-date 16.12.16
-                //-     a.btn.btn-success.btn-xs(href='#', data-toggle='open-log') История действий
-                //-     a.remove-order-status(href='#', data-toggle='remove-order')
-                //-   .container-fluid
-                //-     ul.order-status-list.row
-                //-       li.col-sm-2
-                //-         .order-status
-                //-           // status-danger
-                //-           .order-status-body
-                //-             .status-top
-                //-               span.status  обработан
-                //-               span.status-date 12.12.16
-                //-             .status-bottom
-                //-               span Фамилия Имя Отчество
-                //-           a.order-status-edit(href='#')
-                //-       li.col-sm-2
-                //-         .order-status.status-danger
-                //-           .order-status-body
-                //-             .status-top
-                //-               span.status --.--.--
-                //-               span.status-date
-                //-             .status-bottom
-                //-               span.edit Изменить статус
-                //-           a.order-status-edit(href='#')
-                //-       li.col-sm-2
-                //-         .order-status.status-null
-                //-           .order-status-body
-                //-             .status-top
-                //-               span.status Не Заказан
-                //-               span.status-date
-                //-             .status-bottom
-                //-               span.edit Изменить статус
-                //-           a.order-status-edit(href='#')
-                //-       li.col-sm-2
-                //-         .order-status.status-null
-                //-           .order-status-body.status-null
-                //-             .status-top
-                //-               span.status Отсутствует
-                //-               span.status-date
-                //-             .status-bottom
-                //-               span.edit Изменить статус
-                //-           a.order-status-edit(href='#')
-                //-       li.col-sm-2
-                //-         .order-status.status-null
-                //-           .order-status-body
-                //-             .status-top
-                //-               span.status Не звонили
-                //-               span.status-date
-                //-             .status-bottom
-                //-               span.edit Изменить статус
-                //-           a.order-status-edit(href='#')
-                //-       li.col-sm-2
-                //-         .order-status.status-null
-                //-           .order-status-body
-                //-             .status-top
-                //-               span.status Не Выдан
-                //-               span.status-date
-                //-             .status-bottom
-                //-               span.edit Изменить статус
-                //-           a.order-status-edit(href='#')
-          // end Заказ
-          //- // Заказ
-          //- article.order
-          //-   header.order-header
-          //-     .order-id
-          //-       | заказ
-          //-       span 0002
-          //-     .order-basket 13
-          //-     a.btn.btn-sm.order-add(href='#order-add')
-          //-       i.fa.fa-plus-circle(aria-hidden='true')
-          //-   section.order-body
-          //-     ul.order-list
-          //-       li.order-list-item
-          //-         header.order-list-item-header
-          //-           span.badge.badge-pur 1
-          //-           span.order-date.sep-dot 11.12.16
-          //-           span.order-name.sep-dot Название товара
-          //-           span.order-count.sep-dot
-          //-             i 1
-          //-             |  шт
-          //-           span.order-float-date 16.12.16
-          //-           a.btn.btn-success.btn-xs(href='#', data-toggle='open-log') История действий
-          //-           a.remove-order-status(href='#', data-toggle='remove-order')
-          //-         .container-fluid
-          //-           ul.order-status-list.row
-          //-             li.col-sm-2
-          //-               .order-status
-          //-                 .order-status-body
-          //-                   .status-top
-          //-                     span.status Обработан
-          //-                     span.status-date 12.12.16
-          //-                   .status-bottom
-          //-                     span Фамилия Имя Отчество
-          //-                 a.order-status-edit(href='#')
-          //-             li.col-sm-2
-          //-               .order-status
-          //-                 .order-status-body
-          //-                   .status-top
-          //-                     span.status 12.12.16
-          //-                     span.status-date 12.12.16
-          //-                   .status-bottom
-          //-                     span Фамилия Имя Отчество
-          //-                 a.order-status-edit(href='#')
-          //-             li.col-sm-2
-          //-               .order-status
-          //-                 .order-status-body
-          //-                   .status-top
-          //-                     span.status Заказан
-          //-                     span.status-date 12.12.16
-          //-                   .status-bottom
-          //-                     span Фамилия Имя Отчество
-          //-                 a.order-status-edit(href='#')
-          //-             li.col-sm-2
-          //-               .order-status
-          //-                 .order-status-body
-          //-                   .status-top
-          //-                     span.status Отложен
-          //-                     span.status-date 12.12.16
-          //-                   .status-bottom
-          //-                     span Фамилия Имя Отчество
-          //-                 a.order-status-edit(href='#')
-          //-             li.col-sm-2
-          //-               .order-status
-          //-                 .order-status-body
-          //-                   .status-top
-          //-                     span.status Дозвон
-          //-                     span.status-date 12.12.16
-          //-                   .status-bottom
-          //-                     span Фамилия Имя Отчество
-          //-                 a.order-status-edit(href='#')
-          //-             li.col-sm-2
-          //-               .order-status
-          //-                 .order-status-body
-          //-                   .status-top
-          //-                     span.status Выдан
-          //-                     span.status-date 12.12.16
-          //-                   .status-bottom
-          //-                     span Фамилия Имя Отчество
-          //-                 a.order-status-edit(href='#')
-          //-       li.order-list-item
-          //-         header.order-list-item-header
-          //-           span.badge.badge-pur 2
-          //-           span.order-date.sep-dot 11.12.16
-          //-           span.order-name.sep-dot Название товара
-          //-           span.order-count.sep-dot
-          //-             i 1
-          //-             |  шт
-          //-           span.order-float-date 16.12.16
-          //-           a.btn.btn-success.btn-xs(href='#', data-toggle='open-log') История действий
-          //-           a.remove-order-status(href='#', data-toggle='remove-order')
-          //-         .container-fluid
-          //-           ul.order-status-list.row
-          //-             li.col-sm-2
-          //-               .order-status.status-danger
-          //-                 // status-danger
-          //-                 .order-status-body
-          //-                   .status-top
-          //-                     span.status Не обработан
-          //-                     span.status-date 12.12.16
-          //-                   .status-bottom
-          //-                     span Фамилия Имя Отчество
-          //-                 a.order-status-edit(href='#')
-          //-             li.col-sm-2
-          //-               .order-status.status-null
-          //-                 // ждет обработки status-null
-          //-                 .order-status-body
-          //-                   .status-top
-          //-                     span.status --.--.--
-          //-                     span.status-date
-          //-                   .status-bottom
-          //-                     span.edit Уточнить дату
-          //-                 a.order-status-edit(href='#')
-          //-             li.col-sm-2
-          //-               .order-status.status-null
-          //-                 .order-status-body
-          //-                   .status-top
-          //-                     span.status Не Заказан
-          //-                     span.status-date
-          //-                   .status-bottom
-          //-                     span.edit Изменить статус
-          //-                 a.order-status-edit(href='#')
-          //-             li.col-sm-2
-          //-               .order-status.status-null
-          //-                 .order-status-body.status-null
-          //-                   .status-top
-          //-                     span.status Отсутствует
-          //-                     span.status-date
-          //-                   .status-bottom
-          //-                     span.edit Изменить статус
-          //-                 a.order-status-edit(href='#')
-          //-             li.col-sm-2
-          //-               .order-status.status-null
-          //-                 .order-status-body
-          //-                   .status-top
-          //-                     span.status Не звонили
-          //-                     span.status-date
-          //-                   .status-bottom
-          //-                     span.edit Изменить статус
-          //-                 a.order-status-edit(href='#')
-          //-             li.col-sm-2
-          //-               .order-status.status-null
-          //-                 .order-status-body
-          //-                   .status-top
-          //-                     span.status Не Выдан
-          //-                     span.status-date
-          //-                   .status-bottom
-          //-                     span.edit Изменить статус
-          //-                 a.order-status-edit(href='#')
-          //-       li.order-list-item
-          //-         header.order-list-item-header
-          //-           span.badge.badge-pur 3
-          //-           span.order-date.sep-dot 11.12.16
-          //-           span.order-name.sep-dot Название товара
-          //-           span.order-count.sep-dot
-          //-             i 1
-          //-             |  шт
-          //-           span.order-float-date 16.12.16
-          //-           a.btn.btn-success.btn-xs(href='#', data-toggle='open-log') История действий
-          //-           a.remove-order-status(href='#', data-toggle='remove-order')
-          //-         .container-fluid
-          //-           ul.order-status-list.row
-          //-             li.col-sm-2
-          //-               .order-status
-          //-                 // status-danger
-          //-                 .order-status-body
-          //-                   .status-top
-          //-                     span.status  обработан
-          //-                     span.status-date 12.12.16
-          //-                   .status-bottom
-          //-                     span Фамилия Имя Отчество
-          //-                 a.order-status-edit(href='#')
-          //-             li.col-sm-2
-          //-               .order-status.status-danger
-          //-                 .order-status-body
-          //-                   .status-top
-          //-                     span.status --.--.--
-          //-                     span.status-date
-          //-                   .status-bottom
-          //-                     span.edit Изменить статус
-          //-                 a.order-status-edit(href='#')
-          //-             li.col-sm-2
-          //-               .order-status.status-null
-          //-                 .order-status-body
-          //-                   .status-top
-          //-                     span.status Не Заказан
-          //-                     span.status-date
-          //-                   .status-bottom
-          //-                     span.edit Изменить статус
-          //-                 a.order-status-edit(href='#')
-          //-             li.col-sm-2
-          //-               .order-status.status-null
-          //-                 .order-status-body.status-null
-          //-                   .status-top
-          //-                     span.status Отсутствует
-          //-                     span.status-date
-          //-                   .status-bottom
-          //-                     span.edit Изменить статус
-          //-                 a.order-status-edit(href='#')
-          //-             li.col-sm-2
-          //-               .order-status.status-null
-          //-                 .order-status-body
-          //-                   .status-top
-          //-                     span.status Не звонили
-          //-                     span.status-date
-          //-                   .status-bottom
-          //-                     span.edit Изменить статус
-          //-                 a.order-status-edit(href='#')
-          //-             li.col-sm-2
-          //-               .order-status.status-null
-          //-                 .order-status-body
-          //-                   .status-top
-          //-                     span.status Не Выдан
-          //-                     span.status-date
-          //-                   .status-bottom
-          //-                     span.edit Изменить статус
-          //-                 a.order-status-edit(href='#')
-          // end Заказ
       .ayout-dark
-      .action
-        .action-header
-          .action-info
-            .new-order-info-row
-              - 
-              span.action-date= getDateReadeble(now)
-              | &nbsp
-              //- span.action-time 12.12.16
-            .new-order-info-row
-              | Изменения в заказе:&nbsp
-              span.action-order 0001
-            .new-order-info-row
-              | Товар:&nbsp
-              span.action-shop Название товара
-            i.fa.fa-times-circle.close-action(aria-hidden='true', data-toggle='close-action')
-        .action-body
-          .form-group
-            .row.action-row
-              label.col-sm-12(for='') Введите ваш пин-код
-              .col-sm-6
-                .input-group
-                  input.form-control(type='password', name='yourpin')
-                  //- span.input-group-btn
-                  //-   button.btn.btn-pin(type='button')
-                  //-     i.fa.fa-check-circle(aria-hidden='true')
-              //- .col-sm-6.auth
-              //-   | Авторизирован как
-              //-   .auth-like Руководитель
-            .row.action-row.choose-satus
-              .col-sm-12
-                .dropdown
-                  button#actionDropdown.btn.btn-default.btn-block.dropdown-toggle.lustran-drop(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true') Заказан
-                  ul.dropdown-menu(aria-labelledby='actionDropdown')
-                    li
-                      a(href='#') Заказан
-                    li
-                      a(href='#') Не заказан
-            .row.action-row
-              .col-sm-6
-                button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-action') Отмена
-              .col-sm-6
-                button.btn.btn-done.btn-block(type='button', data-toggle='save-action') Сохранить
       .modal-layout
       //- .modal-log
       //-   .modal-log-header

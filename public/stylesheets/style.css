@@ -13367,8 +13367,9 @@ label.check {
 
 /* line 496, ../sass/_components.sass */
 .action {
-  visibility: hidden;
-  opacity: 0;
+  /*visibility: hidden;*/
+  /*opacity: 0;*/
+  display: none;
   position: absolute;
   z-index: 1101;
   width: 300px;
@@ -13567,12 +13568,14 @@ label.check {
 
 .history {
   display: none;
-  position: absolute;
+  position: fixed;
   color: #000;
   background-color: #fff;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0,0,0,0.4);
   width: 800px;
+  height: 600px;
+  overflow-y: scroll;
   padding: 10px;
   text-align: center;
   left: 50%;
