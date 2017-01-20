@@ -13,6 +13,9 @@ function getDateSuperReadeble(date){
 
 /* GET orders listing. */
 router.get('/', function(req, res, next) {
+	if (!req.session.isauth) {
+		res.redirect('/login');
+	}
   if (!req.cookies.location) {
     res.redirect('/locations');
   }

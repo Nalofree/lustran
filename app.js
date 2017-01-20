@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var cookieSession = require('cookie-session');
 // var Sequelize = require('sequelize');
 
 var index = require('./routes/index');
@@ -14,8 +15,23 @@ var accesserror = require('./routes/accesserror');
 var users = require('./routes/users');
 var pinauth = require('./routes/pinauth');
 var getloc = require('./routes/getloc');
+var login = require('./routes/login');
 
 var app = express();
+
+app.use(cookieSession({
+  name: 'session',
+  keys: ['key1', 'key2']
+}));
+
+// var auth = function (req, res, next) {
+//   if (!req.session.isauth) {
+//   	res.redirect('/login');
+//   }
+//   next();
+// };
+
+// app.use(auth);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -29,19 +45,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// var sequelize = new Sequelize('heroku_a5572bedbd1fbe3', 'b816998663244e', 'b23209db', {
-//   host: 'eu-cdbr-west-01.cleardb.com',
-//   dialect: 'mysql',
-//   logging: true
-//   // storage: 'path/to/database.sqlite'
-// });
-//
-// sequelize.authenticate().then(function() {
-//     console.log('Connect to DB created!');
-// }).catch(function(err) {
-//     console.log('Connection error: ' + err);
-// });
-
 app.use('/', index);
 app.use('/orders', orders);
 app.use('/addorder', addorder);
@@ -50,6 +53,7 @@ app.use('/accesserror', accesserror);
 app.use('/users', users);
 app.use('/pinauth', pinauth);
 app.use('/getloc', getloc);
+app.use('/login', login);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

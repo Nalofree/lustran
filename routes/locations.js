@@ -3,6 +3,9 @@ var router = express.Router();
 var models  = require('../models');
 
 router.get('/', function(req, res) {
+  if (!req.session.isauth) {
+		res.redirect('/login');
+	}
   models.locations.findAll().then(function(locations) {
     res.render('locations', {locations:locations, title: "Места"});
   });

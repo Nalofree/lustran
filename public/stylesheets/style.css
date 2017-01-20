@@ -13646,3 +13646,13 @@ label.check {
 a.location-name:hover {
   color: #aaa;
 }
+
+.login-form {
+  position: relative;
+  display: block;
+  color: #fff;
+  text-align: center;
+  width: 300px;
+  left: 50%;
+  margin-left: -150px;
+}

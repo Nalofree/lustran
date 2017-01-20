@@ -5,6 +5,9 @@ var rubles = require('rubles').rubles;
 // console.log(rubles(12.10));
 
 router.get('/', function (req, res, next) {
+  if (!req.session.isauth) {
+		res.redirect('/login');
+	}
   if (!req.cookies.location) {
     res.redirect('/locations');
   }else{

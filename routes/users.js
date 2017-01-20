@@ -4,6 +4,9 @@ var models  = require('../models');
 // var Sequelize = require('sequelize');
 
 router.get('/', function (req,res,next) {
+  if (!req.session.isauth) {
+		res.redirect('/login');
+	}
   models.users.findAll({
     order: 'name ASC'
   }).then(function (users) {

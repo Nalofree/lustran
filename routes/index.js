@@ -23,6 +23,9 @@ router.get('/', function(req, res) {
 	if (!req.cookies.location) {
     res.redirect('/locations');
   }
+	if (!req.session.isauth) {
+		res.redirect('/login');
+	}
   var now = new Date();
   var prenow = new Date(new Date() - 24 * 60 * 60 * 1000);
   var startDate = prenow.setHours(0);
