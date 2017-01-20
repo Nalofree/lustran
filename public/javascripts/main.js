@@ -134,6 +134,10 @@ function getTimeReadebleYesterday(date){
 
 $(document).ready(function(){
 
+	$('.close-layout').click(function () {
+		$('.action').removeClass('show');
+	});
+
 	getLoc(getCookie("location"));
 
 	//Удалить заказ
@@ -167,234 +171,208 @@ $(document).ready(function(){
 
 
 	//Изменить статус заказа
-	var statusarea, statustype, goodid;
-	$('body').delegate('.order-list-item:not(.status-removed) .order-status:not(.status-null) .order-status-edit','click',function(){
+	// var statusarea, statustype, goodid;
+	// $('body').delegate('.order-list-item:not(.status-removed) .order-status:not(.status-null) .order-status-edit','click',function(){
+	// 	var offsetTop = $(this).offset().top + $(this).height();
+	// 	var offsetLeft = $(this).offset().left - 150 + $(this).width()/2;
+	// 	statusarea = $(this).closest('.order-status');
+	// 	console.log(statusarea);
+	// 	$('.layout-dark').height($('body').height());
+	//
+	// 	$('.close-layout').fadeIn();
+	//
+	// 	var datatitle = $(this).attr('data-title');
+	// 	var gooddata = {
+	// 		ordernumber: $(this).closest('.order').find('.order-id span').text(),
+	// 		goodname: $(this).closest('.order-list-item').find('.order-name').text(),
+	// 		goodid: datatitle.split(',')[1]
+	// 	}
+	// 	goodid = gooddata.goodid;
+	// 	console.log(gooddata);
+	// 	$('.action .action-order').text(gooddata.ordernumber);
+	// 	$('.action .action-shop').text(gooddata.goodname);
+	// 	statustype = datatitle.split(',')[0];
+	// 	$('.action-row.choose-satus').empty();
+	// 	switch(statustype) {
+	// 		case 'processed':
+	// 		$('.action-row.choose-satus').empty();
+	// 		$('.action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не обработан</option><option value=1>В обработке</option><option value=2>Обработан</option></select></div>');
+	// 		break;
+	// 		case 'ordered':
+	// 		$('.action-row.choose-satus').empty();
+	// 		$('.action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не заказан</option><option value=1>Заказан</option></select></div>');
+	// 		break;
+	// 		case 'spicifieddate':
+	// 		$('.action-row.choose-satus').empty();
+	// 		$('.action-row.choose-satus').append('<div class="form-group"><input name="status" type="date" class="form-control"></div>');
+	// 		break;
+	// 		case 'postponed':
+	// 		$('.action-row.choose-satus').empty();
+	// 		$('.action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не отложен</option><option value=1>Проверен и отложен</option><option value=2>Есть деффект</option></select></div>');
+	// 		break;
+	// 		case 'callstatus':
+	// 		$('.action-row.choose-satus').empty();
+	// 		$('.action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не звонили</option><option value=1>Не дозвон</option><option value=2>Дозвон</option></select></div>');
+	// 		break;
+	// 		case 'issued':
+	// 		$('.action-row.choose-satus').empty();
+	// 		$('.action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не выдан</option><option value=1>Выдан</option></select></div>');
+	// 		break;
+	// 	}
+	// 	$('.action').addClass('show');
+	// 	$('.action').css({'top':offsetTop, 'left':offsetLeft});
+	// });
+
+	$(".order-status-edit.processed").click(function (e) {
+		e.preventDefault();
+		$('.close-layout').fadeIn();
+		$('.action').addClass('show');
+		var goodid = $(this).attr('data-title');
+		$('.action [name=yourpin]').val('');
 		var offsetTop = $(this).offset().top + $(this).height();
 		var offsetLeft = $(this).offset().left - 150 + $(this).width()/2;
-		statusarea = $(this).closest('.order-status');
-		// console.log(statusarea);
-		$('.layout-dark').height($('body').height());
-		$('.layout-dark').show();
-		var datatitle = $(this).attr('data-title');
-		var gooddata = {
-			ordernumber: $(this).closest('.order').find('.order-id span').text(),
-			goodname: $(this).closest('.order-list-item').find('.order-name').text(),
-			goodid: datatitle.split(',')[1]
-		}
-		goodid = gooddata.goodid;
-		console.log(gooddata);
-		$('.action .action-order').text(gooddata.ordernumber);
-		$('.action .action-shop').text(gooddata.goodname);
-		statustype = datatitle.split(',')[0];
 		$('.action-row.choose-satus').empty();
-		switch(statustype) {
-			case 'processed':
-			$('.action-row.choose-satus').empty();
-			$('.action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не обработан</option><option value=1>В обработке</option><option value=2>Обработан</option></select></div>');
-			break;
-			case 'ordered':
-			$('.action-row.choose-satus').empty();
-			$('.action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не заказан</option><option value=1>Заказан</option></select></div>');
-			break;
-			case 'spicifieddate':
-			$('.action-row.choose-satus').empty();
-			$('.action-row.choose-satus').append('<div class="form-group"><input name="status" type="date" class="form-control"></div>');
-			break;
-			case 'postponed':
-			$('.action-row.choose-satus').empty();
-			$('.action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не отложен</option><option value=1>Проверен и отложен</option><option value=2>Есть деффект</option></select></div>');
-			break;
-			case 'callstatus':
-			$('.action-row.choose-satus').empty();
-			$('.action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не звонили</option><option value=1>Не дозвон</option><option value=2>Дозвон</option></select></div>');
-			break;
-			case 'issued':
-			$('.action-row.choose-satus').empty();
-			$('.action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не выдан</option><option value=1>Выдан</option></select></div>');
-			break;
-		}
-		$('.action').addClass('show');
+		$('.action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не обработан</option><option value=1>В обработке</option></select></div>');
+		$('.action .btn-done').attr('data-title', goodid);
 		$('.action').css({'top':offsetTop, 'left':offsetLeft});
-	})
+	});
+
+	// $(".spicdate").click(function (e) {
+	// 	e.preventDefault();
+	// 	$('.close-layout').fadeIn();
+	// 	var offsetTop = $(this).offset().top + $(this).height();
+	// 	var offsetLeft = $(this).offset().left - 150 + $(this).width()/2;
+	// 	var goodid = $(this).attr('data-title');
+	// 	$('.action-row.choose-satus').empty();
+	// 	$('.action-row.choose-satus').append('<div class="form-group"><input name="status" type="date" class="form-control"></div>');
+	// 	$('.action').addClass('show');
+	// 	$('.action').addClass('spicdate');
+	// 	$('.action [data-toggle=save-action]').attr('data-title', goodid);
+	// 	$('.action').css({'top':offsetTop, 'left':offsetLeft});
+	// });
+
+	$('.action .btn-done').click(function (e) {
+		e.preventDefault();
+		if ($('.action [name=yourpin]').val()){
+			var data = {
+				yourpin: $('.action [name=yourpin]').val(),
+				goodid: $(this).attr('data-title'),
+				statusval: $('select[name="status"]').val()
+			}
+			console.log(data);
+			if ($('select[name="status"]').val() != 0) {
+				$(".processed[data-title="+data.goodid+"]").closest('.order-status').removeClass('status-danger');
+				$(".processed[data-title="+data.goodid+"]").closest('.order-status').find('.status-top .status').text('В обработке');
+			}else{
+				$(".processed[data-title="+data.goodid+"]").closest('.order-status').addClass('status-danger');
+				$(".processed[data-title="+data.goodid+"]").closest('.order-status').find('.status-top .status').text('Не обработан');
+			}
+			$.ajax({
+				url: '/orders/setprocessed',
+				type: 'POST',
+				data: data,
+				success: function (data, status, error) {
+					// console.log(data, status, error);
+					if (data.err) {
+						alert(data.err);
+					}else{
+						$('.close-layout').fadeOut();
+						$('.action').removeClass('show');
+						console.log(data.processed);
+						$(".processed[data-title="+data.goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.processed.createdAt)));
+						$(".processed[data-title="+data.goodid+"]").closest('.order-status').find('.status-bottom span').text(data.user.name);
+					}
+				},
+				error: function (data, status, error) {
+					console.log(data, status, error);
+					alert(error);
+				}
+			});
+		}else{
+			alert('Введите ПИН');
+		}
+	});
+
+	// $('.action').on('click','.spicdate [data-toggle=save-action]', function (e) {
+	// 	e.preventDefault();
+	// 	if ($('.action [name=yourpin]').val() && $('input[name="status"]')){
+	// 		var data = {
+	// 			yourpin: $('.action [name=yourpin]').val(),
+	// 			goodid: $(this).attr('data-title'),
+	// 			statusval: $('input[name="status"]').val()
+	// 		}
+	// 		console.log(data);
+	// 		if ($('select[name="status"]').val() != 0) {
+	// 			$(".spicdate[data-title="+data.goodid+"]").closest('.order-status').removeClass('status-danger');
+	// 			// $(".processed[data-title="+data.goodid+"]").closest('.order-status').find('.status-top .status').text('В обработке');
+	// 		}else{
+	// 			$(".spicdate[data-title="+data.goodid+"]").closest('.order-status').addClass('status-danger');
+	// 			// $(".processed[data-title="+data.goodid+"]").closest('.order-status').find('.status-top .status').text('Не обработан');
+	// 		}
+	// 		$.ajax({
+	// 			url: '/orders/setspicdate',
+	// 			type: 'POST',
+	// 			data: data,
+	// 			success: function (data, status, error) {
+	// 				// console.log(data, status, error);
+	// 				if (data.err) {
+	// 					alert(data.err);
+	// 				}else{
+	// 					$('.close-layout').fadeOut();
+	// 					$('.action').removeClass('show');
+	// 					console.log(data.spicdate);
+	// 					$(".spicdate[data-title="+data.goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.spicdate.createdAt)));
+	// 					$(".spicdate[data-title="+data.goodid+"]").closest('.order-status').find('.status-bottom span').text(data.user.name);
+	// 					$(".spicdate[data-title="+data.goodid+"]").closest('.order-status').find('.status-top .status').text(getDateSuperReadeble(new Date(data.spicdate.statusval)));
+	// 				}
+	// 			},
+	// 			error: function (data, status, error) {
+	// 				console.log(data, status, error);
+	// 				alert(error);
+	// 			}
+	// 		});
+	// 	}else{
+	// 		alert('Заполните поля');
+	// 	}
+	// });
+
+	// $('body').on('click','[data-toggle=save-action]',function(){
+	// 	if ($('[name=yourpin]').val()){
+	// 		$('.layout-dark').hide();
+	// 		$('.action').removeClass('show');
+	// 	}else{
+	// 		alert('Введите ПИН');
+	// 	}
+	// });
+
 
 	//Изменить статус заказа
-	$('body').delegate('.order-list-item:not(.status-removed) .order-status:not(.status-null) .status-bottom .edit','click',function(){
-		var offsetTop = $(this).offset().top + $(this).height() + 20;
-		var offsetLeft = $(this).offset().left - 150 + $(this).width()/2;
-		$('.layout-dark').height($('body').height());
-		$('.layout-dark').show();
-		$('.action').addClass('show');
-		$('.action').css({'top':offsetTop, 'left':offsetLeft});
-	})
+	// $('body').delegate('.order-list-item:not(.status-removed) .order-status:not(.status-null) .status-bottom .edit','click',function(){
+	// 	var offsetTop = $(this).offset().top + $(this).height() + 20;
+	// 	var offsetLeft = $(this).offset().left - 150 + $(this).width()/2;
+	// 	$('.layout-dark').height($('body').height());
+	// 	$('.layout-dark').show();
+	// 	$('.action').addClass('show');
+	// 	$('.action').css({'top':offsetTop, 'left':offsetLeft});
+	// })
 
 	//Закрыть Action
 	$('body').on('click','[data-toggle=close-action]',function(){
 		$('.layout-dark').hide();
 		$('.modal-layout').hide();
+		$('.close-layout').fadeOut();
 		$('.action').removeClass('show');
 	})
 
 	//Отмена Action
 	$('body').on('click','[data-toggle=cancel-action]',function(){
 		$('.layout-dark').hide();
+		$('.close-layout').fadeOut();
 		$('.action').removeClass('show');
 	})
 
 	//Сохранить Action
-	$('body').on('click','[data-toggle=save-action]',function(){
-		if ($('[name=yourpin]').val()){
-			$('.layout-dark').hide();
-			$('.action').removeClass('show');
-			var statusval;
-			switch(statustype) {
-				case 'processed':
-				statusval = $('select[name="status"] option:selected').val();
-				break;
-				case 'ordered':
-				statusval = $('select[name="status"] option:selected').val();
-				break;
-				case 'spicifieddate':
-				statusval = $('input[name="status"]').val();
-				break;
-				case 'postponed':
-				statusval = $('select[name="status"] option:selected').val();
-				break;
-				case 'callstatus':
-				statusval = $('select[name="status"] option:selected').val();
-				break;
-				case 'issued':
-				statusval = $('select[name="status"] option:selected').val();
-				break;
-			};
-			var statusdata = {
-				statustype: statustype,
-				statusval: statusval,
-				goodid: goodid,
-				yourpin: $('[name=yourpin]').val(),
-				locationid: getCookie('location')
-			};
-			$.ajax({
-				url: '/orders',
-				type: 'POST',
-				data: statusdata,
-				success: function (data, status, error) {
-					// console.log(data, status, error);
-					if (data.err) {
-						alert(data.err);
-					}else{
-						// console.log(data, status, error);
-						switch(statustype) {
-							case 'processed':
-							statusarea.removeClass('status-danger');
-							if (statusval == 0) {
-								statusarea.addClass('status-danger');
-								statusarea.find('.status').text('не обработан');
-								var now = new Date();
-								statusarea.find('.status-date').text(getDateSuperReadeble(now));
-							}else if(statusval == 1) {
-								statusarea.removeClass('status-danger');
-								statusarea.find('.status').text('В обработке');
-								var now = new Date();
-								statusarea.find('.status-date').text(getDateSuperReadeble(now));
-							}else{
-								statusarea.removeClass('status-danger');
-								statusarea.find('.status').text('Обработан');
-								var now = new Date();
-								statusarea.find('.status-date').text(getDateSuperReadeble(now));
-							}
-							break;
-							case 'ordered':
-							statusarea.removeClass('status-danger');
-							if (statusval == 0) {
-								statusarea.addClass('status-danger');
-								statusarea.find('.status').text('не Заказан');
-								var now = new Date();
-								statusarea.find('.status-date').text(getDateSuperReadeble(now));
-							}else{
-								statusarea.removeClass('status-danger');
-								statusarea.find('.status').text('Заказан');
-								var now = new Date();
-								statusarea.find('.status-date').text(getDateSuperReadeble(now));
-							}
-							break;
-							case 'spicifieddate':
-							statusarea.removeClass('status-danger');
-							if (statusval) {
-								var date = new Date(statusval);
-								statusarea.removeClass('status-danger');
-								statusarea.find('.status').text(getDateReadeble(date));
-								var now = new Date();
-								statusarea.find('.status-date').text(getDateSuperReadeble(now));
-							}else{
-								statusarea.addClass('status-danger');
-								statusarea.find('.status').text('--.--.--');
-								var now = new Date();
-								statusarea.find('.status-date').text(getDateSuperReadeble(now));
-							}
-							break;
-							case 'postponed':
-							statusarea.removeClass('status-danger');
-							if (statusval == 0) {
-								statusarea.addClass('status-danger');
-								statusarea.find('.status').text('Не отложен');
-								var now = new Date();
-								statusarea.find('.status-date').text(getDateSuperReadeble(now));
-							}else if(statusval == 1) {
-								statusarea.removeClass('status-danger');
-								statusarea.find('.status').text('Проверен и отложен');
-								var now = new Date();
-								statusarea.find('.status-date').text(getDateSuperReadeble(now));
-							}else{
-								statusarea.addClass('status-danger');
-								statusarea.find('.status').text('Есть деффект');
-								var now = new Date();
-								statusarea.find('.status-date').text(getDateSuperReadeble(now));
-							}
-							break;
-							case 'callstatus':
-							statusarea.removeClass('status-danger');
-							if (statusval == 0) {
-								statusarea.addClass('status-danger');
-								statusarea.find('.status').text('Не звонили');
-								var now = new Date();
-								statusarea.find('.status-date').text(getDateSuperReadeble(now));
-							}else if(statusval == 1) {
-								statusarea.addClass('status-danger');
-								statusarea.find('.status').text('Не дозвон');
-								var now = new Date();
-								statusarea.find('.status-date').text(getDateSuperReadeble(now));
-							}else{
-								statusarea.removeClass('status-danger');
-								statusarea.find('.status').text('Дозвон');
-								var now = new Date();
-								statusarea.find('.status-date').text(getDateSuperReadeble(now));
-							}
-							break;
-							case 'issued':
-							statusarea.removeClass('status-danger');
-							if (statusval == 0) {
-								statusarea.addClass('status-danger');
-								statusarea.find('.status').text('не выдан');
-								var now = new Date();
-								statusarea.find('.status-date').text(getDateSuperReadeble(now));
-							}else{
-								statusarea.removeClass('status-danger');
-								statusarea.find('.status').text('выдан');
-								var now = new Date();
-								statusarea.find('.status-date').text(getDateSuperReadeble(now));
-							}
-							break;
-						};
-					}
-				},
-				error: function (data, status, error) {
-					console.log(data, status, error);
-				}
-			});
-		}else{
-			alert('Введите ПИН');
-		}
-	})
+
 
 	//Удалить заказ из списка
 	$('body').on('click','[data-toggle=remove-order]',function(){
@@ -402,8 +380,32 @@ $(document).ready(function(){
 	})
 
 	//Открыть историю действий
-	$('body').on('click','[data-toggle=open-log]',function(){
-		$('.modal-layout').show();
+	$('body').on('click','.gethistory',function(e){
+		// $('.modal-layout').show();
+		e.preventDefault();
+		var goodid = $(this).attr('data-title');
+		$.ajax({
+			url: '/orders/getgoodhistiry',
+			type: 'POST',
+			data: {
+				goodid: goodid,
+			},
+			success: function (data, status, error) {
+				console.log(data.actions);
+				$('.history .table tbody').empty();
+				for (var i = 0; i < data.actions.length; i++) {
+					// data.actions[i]
+					$('.history .table tbody').append('<tr><td>'+getTimeReadeble(new Date(data.actions[i].createdAt)) +"</td><td>"+ data.actions[i].user.name +"</td><td>"+ data.actions[i].location.alias +"</td><td>"+ data.actions[i].alias+'</td></tr>');
+					// $('.history').append(data.good.processed);
+				}
+				// console.log(data.good.processed.createdAt +" "+ data.good.processed.user.name +" "+ data.good.processed.location.alias +" "+ data.good.processed.alias);
+				$(".close-layout").fadeIn();
+				$('.history').fadeIn();
+			},
+			error: function (data, status, error) {
+				console.log(data, status, error);
+			}
+		});
 	})
 
 	//Сохранить Log

@@ -47,6 +47,7 @@ $(document).ready(function () {
     $('from.addorder').fadeOut();
     $('.getuserinfo').fadeOut();
     $('.userinfo').fadeOut();
+    $('.action').fadeOut();
   });
   $(".adduser-cancel").click(function (e) {
     e.preventDefault();
@@ -181,7 +182,7 @@ $(document).ready(function () {
       if ($('.edituserform input[name="userpin"]').val()) {
         data.userpin = $('.edituserform input[name="userpin"]').val();
       }else{
-        data.userpin = false;
+        data.userpin = 0;
       }
       $.ajax({
         url: '/users/updateuser',

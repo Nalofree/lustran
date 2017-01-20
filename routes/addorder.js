@@ -54,7 +54,113 @@ router.post('/', function (req, res, nex) {
           models.goods.bulkCreate(goods, {
             individualHooks: true
           }).then(function (goods) {
-            res.send({order: order});
+            // res.send({order: order});
+            // var procarr = [];
+            var goodids = [];
+            var processed = {
+              userId: user.id,
+              // goodId:
+              locationId: req.body.order.locationid,
+              statusval: 0,
+              alias: 'Не обработан'
+            }
+            var spicdate = {
+              userId: user.id,
+              // goodId:
+              locationId: req.body.order.locationid,
+              statusval: null,
+              alias: ''
+            }
+            var ordered = {
+              userId: user.id,
+              // goodId:
+              locationId: req.body.order.locationid,
+              statusval: 0,
+              alias: 'Не заказан'
+            }
+            var postponed = {
+              userId: user.id,
+              // goodId:
+              locationId: req.body.order.locationid,
+              statusval: 0,
+              alias: 'Не отложен'
+            }
+            var callstatus = {
+              userId: user.id,
+              // goodId:
+              locationId: req.body.order.locationid,
+              statusval: 0,
+              alias: 'Не звонили'
+            }
+            var issued = {
+              userId: user.id,
+              // goodId:
+              locationId: req.body.order.locationid,
+              statusval: 0,
+              alias: 'Не выдан'
+            }
+            for (var i = 0; i < goods.length; i++) {
+              goodids.push(goods[i].id);
+              processed.goodId = goods[i].id;
+              spicdate.goodId = goods[i].id;
+              ordered.goodId = goods[i].id;
+              postponed.goodId = goods[i].id;
+              callstatus.goodId = goods[i].id;
+              issued.goodId = goods[i].id;
+            }
+            console.log('goodids: '+goodids);
+            processedids = [];
+            models.processed.create(processed).then(function (processed) {
+              models.spicdate.create(spicdate).then(function (spicdate) {
+                models.ordered.create(ordered).then(function (ordered) {
+                  models.postponed.create(postponed).then(function (postponed) {
+                    models.callstatus.create(callstatus).then(function (callstatus) {
+                      models.issued.create(issued).then(function (issued) {
+                        models.goods.update({
+                          processedId: processed.id,
+                          spicdateId: spicdate.id,
+                          orderedId: ordered.id,
+                          postponedId: postponed.id,
+                          callstatusId: callstatus.id,
+                          issuedId: issued.id
+                        },{
+                          where: {
+                            id: {
+                              $in: goodids
+                            }
+                          }
+                        }).then(function (goods) {
+                          res.send({goods: goods, order: order});
+                        }).catch(function (err) {
+                          res.send({err: err});
+                          console.log(err);
+                        })
+                      }).catch(function (err) {
+                        res.send({err: err});
+                        console.log(err);
+                      });
+                    }).catch(function (err) {
+                      res.send({err: err});
+                      console.log(err);
+                    });
+                  }).catch(function (err) {
+                    res.send({err: err});
+                    console.log(err);
+                  });
+                }).catch(function (err) {
+                  res.send({err: err});
+                  console.log(err);
+                });
+              }).catch(function (err) {
+                res.send({err: err});
+                console.log(err);
+              });
+            }).catch(function (err) {
+              res.send({err: err});
+              console.log(err);
+            });
+            // КАК ШЕСТЬ РАЗНЫХ НАБОРОВ ЗАПИСАТЬ В ШЕСТЬ ТАБЛИЦ РАЗОМ???
+
           }).catch(function (err) {
             res.send({err: err});
             console.log(err);

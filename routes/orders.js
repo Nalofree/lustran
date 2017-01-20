@@ -9,266 +9,241 @@ router.get('/', function(req, res, next) {
   }
   var now = new Date();
   models.orders.findAll({
-    include: [models.users, models.locations, models.goods]
+    include: [models.users, models.locations, /*models.goods,*/{
+      model: models.goods,
+      as: 'goods',
+      include: [{
+        model: models.processed,
+        as: 'processed',
+        include: [models.users,models.locations]
+      },{
+        model: models.spicdate,
+        as: 'spicdate',
+        include: [models.users,models.locations]
+      },{
+        model: models.ordered,
+        as: 'ordered',
+        include: [models.users,models.locations]
+      },{
+        model: models.postponed,
+        as: 'postponed',
+        include: [models.users,models.locations]
+      },{
+        model: models.callstatus,
+        as: 'callstatus',
+        include: [models.users,models.locations]
+      },{
+        model: models.issued,
+        as: 'issued',
+        include: [models.users,models.locations]
+      }]
+    }]
   }).then(function (forders) {
-    res.render('orders', {orders: forders});
+    // console.log(forders[0].goods[0]);
+    var orderscount = 0;
+    var ordersproc = 0;
+    var ordersissued = 0;
+    var ordersdef = 0;
+    for (var i = 0; i < forders.length; i++) {
+      orderscount++;
+      // orders[i]
+      for (var j = 0; j < forders[i].goods.length; j++) {
+        if (forders[i].goods[j].processed.statusval == 1) {
+          ordersproc++;
+        }
+        if (forders[i].goods[j].issued.statusval == 1) {
+          ordersissued++;
+        }
+        if (forders[i].goods[j].postponed.statusval == 2) {
+          ordersdef++;
+        }
+      }
+    }
+    res.render('orders', {title: 'Заказы', orders: forders, orderscount: orderscount, ordersproc: ordersproc, ordersissued: ordersissued, ordersdef: ordersdef});
+    // res.send(forders);
   }).catch(function (err) {
     res.send(err);
     console.log('order error: ' + err);
   });
 });
 
-// router.post('/', function(req, res, next) {
-//   if (!req.cookies.location) {
-//     res.redirect('/locations');
-//   }
-//   var now = new Date();
-//   sequelize.authenticate().then(function() {
-//     console.log('Connect to DB created!');
-//     var users = sequelize.define('users', {
-//       id: {
-//           type: Sequelize.INTEGER,
-//           primaryKey: true,
-//           autoIncrement: true
-//       },
-//       name: Sequelize.TEXT,
-//       pin: Sequelize.TEXT,
-//       status: Sequelize.TEXT,
-//       active: {
-//           type: Sequelize.INTEGER,
-//           defaultValue: 1
-//       }
-//     });
-//     var locations = sequelize.define('locations', {
-//       id: {
-//           type: Sequelize.INTEGER,
-//           primaryKey: true,
-//           autoIncrement: true
-//       },
-//       name: Sequelize.TEXT
-//     });
-//     var orders = sequelize.define('orders', {
-//       id: {
-//           type: Sequelize.INTEGER,
-//           primaryKey: true,
-//           autoIncrement: true
-//       },
-//       number: Sequelize.INTEGER,
-//       locationId: Sequelize.INTEGER,
-//       userId: Sequelize.INTEGER,
-//       customername: Sequelize.TEXT,
-//       customerphone: Sequelize.TEXT,
-//       comment: Sequelize.TEXT
-//     });
-//     var goods = sequelize.define('goods', {
-//       id: {
-//           type: Sequelize.INTEGER,
-//           primaryKey: true,
-//           autoIncrement: true
-//       },
-//       article: Sequelize.TEXT,
-//       name: Sequelize.TEXT,
-//       orderId: Sequelize.INTEGER,
-//       indicativedate: Sequelize.DATE,
-//       prepayment: Sequelize.TEXT,
-//       number: {
-//         type: Sequelize.INTEGER,
-//         defaultValue: 1
-//       },
-//       processed: {
-//         type: Sequelize.INTEGER,
-//         defaultValue: 0
-//       },
-//       spicifieddate: Sequelize.DATE,
-//       ordered:  {
-//         type: Sequelize.INTEGER,
-//         defaultValue: 0
-//       },
-//       postponed:  {
-//         type: Sequelize.INTEGER,
-//         defaultValue: 0
-//       },
-//       callstatus:  {
-//         type: Sequelize.INTEGER,
-//         defaultValue: 0
-//       },
-//       issued:  {
-//         type: Sequelize.INTEGER,
-//         defaultValue: 0
-//       },
-//     });
-//     var actions = sequelize.define('actions', {
-//       id: {
-//           type: Sequelize.INTEGER,
-//           primaryKey: true,
-//           autoIncrement: true
-//       },
-//       userId: Sequelize.INTEGER,
-//       locationId: Sequelize.INTEGER,
-//       goodId: Sequelize.INTEGER,
-//       startstatus: Sequelize.TEXT,
-//       endstatus: Sequelize.TEXT
-//     });
-//     orders.belongsTo(users);
-//     orders.belongsTo(locations);
-//     actions.belongsTo(users);
-//     actions.belongsTo(locations);
-//     actions.belongsTo(goods);
-//     // goods.belongsTo(orders);
-//     orders.hasMany(goods);
-//     sequelize.sync().then(function() {
-//       console.log('Success!');
-//       // res.send("123");
-//       goods.findOne({
-//         where: {
-//           id: req.body.goodid
-//         }
-//       }).then(function (good) {
-//         function getStatusNmae(statustype, statusval) {
-//           var statusname;
-//           switch (statustype) {
-//             case 'processed':
-//             if (statusval == 0) {
-//               statusname = "Не обработан";
-//             }else if(statusval == 1){
-//               statusname = "В обработке";
-//             }else{
-//               statusname = "Обработан";
-//             }
-//             break;
-//             case 'ordered':
-//             if (statusval == 0) {
-//               statusname = "Не заказан";
-//             }else{
-//               statusname = "Заказан";
-//             }
-//             break;
-//             case 'spicifieddate':
-//             statusname = new Date(statusval);
-//             break;
-//             case 'postponed':
-//             if (statusval == 0) {
-//               statusname = "Не отложен";
-//             }else if(statusval == 1){
-//               statusname = "Проверен и отложен";
-//             }else{
-//               statusname = "Есть деффект";
-//             }
-//             break;
-//             case 'callstatus':
-//             if (statusval == 0) {
-//               statusname = "Не звонили";
-//             }else if(statusval == 1){
-//               statusname = "Не дозвон";
-//             }else{
-//               statusname = "Дозвон";
-//             }
-//             break;
-//             case 'issued':
-//             if (statusval == 0) {
-//               statusname = "Не выдвн";
-//             }else{
-//               statusname = "Выдвн";
-//             }
-//             break;
-//           }
-//         }
-//         var goodupdatedata = {};
-//         var roles = [];
-//         var actiondata = {};
-//         switch (req.body.statustype) {
-//           case 'processed':
-//           googupdatedata = {
-//             processed: req.body.statusval
-//           };
-//           roles=['manager', 'supplier'];
-//           actiondata = {
-//
-//           }
-//           break;
-//           case 'ordered':
-//           googupdatedata = {
-//             ordered: req.body.statusval
-//           };
-//           roles=['supplier','supplier'];
-//           actiondata = {
-//
-//           }
-//           break;
-//           case 'spicifieddate':
-//           googupdatedata = {
-//             spicifieddate: req.body.statusval
-//           };
-//           roles=['supplier','supplier'];
-//           actiondata = {
-//
-//           }
-//           break;
-//           case 'postponed':
-//           googupdatedata = {
-//             postponed: req.body.statusval
-//           };
-//           roles=['saler','saler'];
-//           actiondata = {
-//
-//           }
-//           break;
-//           case 'callstatus':
-//           googupdatedata = {
-//             callstatus: req.body.statusval
-//           };
-//           roles=['saler','supplier'];
-//           actiondata = {
-//
-//           }
-//           break;
-//           case 'issued':
-//           googupdatedata = {
-//             issued: req.body.statusval
-//           };
-//           roles=['saler', 'saler'];
-//           actiondata = {
-//
-//           }
-//           break;
-//         };
-//         console.log(googupdatedata);
-//         users.findOne({
-//           where: {
-//             pin: req.body.yourpin,
-//             status: {
-//               $or: roles
-//             }
-//           }
-//         }).then(function (user) {
-//           if (user) {
-//             goods.update(googupdatedata, {
-//               where: {
-//                 id: req.body.goodid
-//               }
-//             }).then(function (goods) {
-//               res.send({err:false});
-//             }).catch(function (err) {
-//               res.send(err);
-//             });
-//           }else{
-//             res.send({err: 'Неверный ПИН'});
-//           }
-//         }).catch(function (err) {
-//           res.send({err: err});
-//         });
-//       }).catch(function (err) {
-//         res.send({err: err});
-//         console.log('Database error: ' + err);
-//       })
-//     }).catch(function(err) {
-//       res.send({err: err});
-//       console.log('Database error: ' + err);
-//     });
-//   }).catch(function(err) {
-//     res.send({err: err});
-//     console.log('Connection error: ' + err);
-//   });
-// });
+router.post('/getgoodhistiry', function (req,res,next) {
+  var whereobj = {
+    include: [models.users,models.locations],
+    where: {
+      goodId: req.body.goodid
+    }
+  };
+  models.processed.findAll(whereobj).then(function (processed) {
+    models.spicdate.findAll(whereobj).then(function (spicdate) {
+      models.ordered.findAll(whereobj).then(function (ordered) {
+        models.postponed.findAll(whereobj).then(function (postponed) {
+          models.callstatus.findAll(whereobj).then(function (callstatus) {
+            models.issued.findAll(whereobj).then(function (issued) {
+              var actions = [];
+              for (var i = 0; i < processed.length; i++) {
+                actions.push(processed[i]);
+              }
+              for (var i = 0; i < spicdate.length; i++) {
+                spicdate[i].alias = spicdate[i].statusval == 0 ? "УД: --.--.--" : "УД: "+spicdate[i].statusval;
+                actions.push(spicdate[i]);
+              }
+              for (var i = 0; i < ordered.length; i++) {
+                actions.push(ordered[i]);
+              }
+              for (var i = 0; i < postponed.length; i++) {
+                actions.push(postponed[i]);
+              }
+              for (var i = 0; i < callstatus.length; i++) {
+                actions.push(callstatus[i]);
+              }
+              for (var i = 0; i < issued.length; i++) {
+                actions.push(issued[i]);
+              }
+              function compareDate(actionA, actionB) {
+                return actionA.createdAt - actionB.createdAt;
+              };
+              actions.sort(compareDate);
+              res.send({actions: actions});
+            }).catch(function (err) {
+              res.send({err: err});
+              console.log(err);
+            });
+          }).catch(function (err) {
+            res.send({err: err});
+            console.log(err);
+          });
+        }).catch(function (err) {
+          res.send({err: err});
+          console.log(err);
+        });
+      }).catch(function (err) {
+        res.send({err: err});
+        console.log(err);
+      });
+    }).catch(function (err) {
+      res.send({err: err});
+      console.log(err);
+    });
+  }).catch(function (err) {
+    res.send({err: err});
+    console.log(err);
+  });
+});
+
+router.post('/setprocessed', function (req, res, next) {
+  // res.send('response');
+  models.users.findOne({
+    where: {
+      pin: req.body.yourpin
+    }
+  }).then(function (user) {
+    if (user) {
+      if (user.status == 'saler' || user.status == 'manager') {
+        models.goods.findOne({
+          include: [models.processed],
+          where: {
+            id: req.body.goodid
+          }
+        }).then(function (good) {
+          if (good.processed.statusval != 2) {
+            var alias = '';
+            if (req.body.statusval == 0) {
+              alias = 'Не обработан'
+            }else{
+              alias = 'В обработке'
+            }
+            models.processed.create({
+              statusval: req.body.statusval,
+              alias: alias,
+              locationId: req.cookies.location,
+              userId: user.id
+            }).then(function (processed) {
+              models.goods.update({
+                processedId: processed.id
+              },{
+                where: {
+                  id: req.body.goodid
+                }
+              }).then(function (goods) {
+                res.send({processed: processed, user: user})
+              }).catch(function (err) {
+                res.send({err: err});
+                console.log(err);
+              })
+            }).catch(function (err) {
+              res.send({err: err});
+              console.log(err);
+            })
+          }else{
+            res.send({err: 'Заказ уже обработан!'});
+          }
+        }).catch(function (err) {
+          res.send({err: err});
+          console.log(err);
+        })
+      }else{
+        res.send({err: 'Недостаточно прав'});
+      }
+    }else{
+      res.send({err: 'Неверный ПИН'});
+    }
+  }).catch(function (err) {
+    res.send({err: err});
+    console.log(err);
+  })
+});
+
+router.post('/setspicdate', function (req, res, next) {
+  // res.send('response');
+  models.users.findOne({
+    where: {
+      pin: req.body.yourpin
+    }
+  }).then(function (user) {
+    if (user) {
+      if (user.status == 'saler' || user.status == 'manager') {
+        models.goods.findOne({
+          include: [models.spicdate],
+          where: {
+            id: req.body.goodid
+          }
+        }).then(function (good) {
+          models.spicdate.create({
+            statusval: req.body.statusval,
+            locationId: req.cookies.location,
+            userId: user.id
+          }).then(function (spicdate) {
+            models.goods.update({
+              spicdateId: spicdate.id
+            },{
+              where: {
+                id: req.body.goodid
+              }
+            }).then(function (goods) {
+              res.send({spicdate: spicdate, user: user})
+            }).catch(function (err) {
+              res.send({err: err});
+              console.log(err);
+            })
+          }).catch(function (err) {
+            res.send({err: err});
+            console.log(err);
+          })
+        }).catch(function (err) {
+          res.send({err: err});
+          console.log(err);
+        })
+      }else{
+        res.send({err: 'Недостаточно прав'});
+      }
+    }else{
+      res.send({err: 'Неверный ПИН'});
+    }
+  }).catch(function (err) {
+    res.send({err: err});
+    console.log(err);
+  })
+});
 
 module.exports = router;

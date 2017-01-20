@@ -13565,6 +13565,22 @@ label.check {
   z-index: 500;
 }
 
+.history {
+  display: none;
+  position: absolute;
+  color: #000;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.4);
+  width: 800px;
+  padding: 10px;
+  text-align: center;
+  left: 50%;
+  margin-left: -400px;
+  top: 100px;
+  z-index: 9999;
+}
+
 .addlocform, .editlocpin {
   position: absolute;
 }

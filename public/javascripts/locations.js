@@ -10,6 +10,7 @@ $(document).ready(function () {
     $('.addlocform').fadeOut();
     $('.close-layout').fadeOut();
     $('.editlocpin').fadeOut();
+    $('.history').fadeOut();
   });
   $('.addloc-submit').click(function (e) {
     e.preventDefault();

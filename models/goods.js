@@ -13,12 +13,12 @@ module.exports = function(sequelize, DataTypes) {
     inddate: DataTypes.DATE,
     prepay: DataTypes.TEXT,
     orderId: DataTypes.INTEGER,
-    // processedId: DataTypes.INTEGER,
-    // spicdateId: DataTypes.INTEGER,
-    // orderedId: DataTypes.INTEGER,
-    // postponedId: DataTypes.INTEGER,
-    // callstatusId: DataTypes.INTEGER,
-    // issuedId: DataTypes.INTEGER
+    processedId: DataTypes.INTEGER,
+    spicdateId: DataTypes.INTEGER,
+    orderedId: DataTypes.INTEGER,
+    postponedId: DataTypes.INTEGER,
+    callstatusId: DataTypes.INTEGER,
+    issuedId: DataTypes.INTEGER
   },{
     classMethods: {
       associate: function(models) {
@@ -28,13 +28,12 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false
           }
         });
-        // goods.belongsTo(models.locations, {
-        //   onDelete: "CASCADE",
-        //   foreignKey: {
-        //     allowNull: false
-        //   }
-        // });
-        // goods.hasOne(models.actions, {as: 'procaction', foreignKey : 'processedId'});
+        goods.belongsTo(models.processed);
+        goods.belongsTo(models.spicdate);
+        goods.belongsTo(models.ordered);
+        goods.belongsTo(models.postponed);
+        goods.belongsTo(models.callstatus);
+        goods.belongsTo(models.issued);
       }
     }
   });

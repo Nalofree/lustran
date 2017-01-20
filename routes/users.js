@@ -79,7 +79,7 @@ router.post('/updateuser', function(req, res, next) {
         createObj = {};
         createObj.name = req.body.fio;
         createObj.status = req.body.status;
-        if (req.body.userpin != false) {
+        if (req.body.userpin != 0) {
           createObj.pin = req.body.userpin;
         }
         models.users.update(

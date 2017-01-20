@@ -20,6 +20,9 @@ function getTimeReadeble(date){
 };
 
 router.get('/', function(req, res) {
+	if (!req.cookies.location) {
+    res.redirect('/locations');
+  }
   var now = new Date();
   var prenow = new Date(new Date() - 24 * 60 * 60 * 1000);
   var startDate = prenow.setHours(0);
