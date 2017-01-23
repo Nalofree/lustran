@@ -19,10 +19,39 @@ router.get('/', function(req, res, next) {
   if (!req.cookies.location) {
     res.redirect('/locations');
   }
+	console.log(req.query.search);
+	var searchWhereGoods = {
+		$or: []
+	};
+	var searchWhereOrders = {
+		$or: []
+	};
+	if (req.query.search) {
+		var searchstring = req.query.search;
+	  searchstring = searchstring.replace(/[/.,!?;]*/g, '');
+	  searchstring = searchstring.replace(/[\s]+/g," ");
+		console.log(searchstring);
+		searchsarray = searchstring.split(' ');
+		console.log(searchsarray);
+		for (var i = 0; i < searchsarray.length; i++) {
+			// searchWhereGoods.$or.push({name: {$like: '%'+searchsarray[i]+'%'}});
+			// searchWhereGoods.$or.push({vencode: {$like: '%'+searchsarray[i]+'%'}});
+			searchWhereOrders.$or.push({'$goods.name$': {$like: '%'+searchsarray[i]+'%'}});
+			searchWhereOrders.$or.push({'$goods.vencode$': {$like: '%'+searchsarray[i]+'%'}});
+			searchWhereOrders.$or.push({number: {$like: '%'+searchsarray[i]+'%'}});
+			searchWhereOrders.$or.push({customerphone: {$like: '%'+searchsarray[i]+'%'}});
+			searchWhereOrders.$or.push({customername: {$like: '%'+searchsarray[i]+'%'}});
+		}
+		console.log(searchWhereGoods.$or);
+	}else{
+		searchWhereGoods = {};
+		searchWhereOrders = {};
+	}
   var now = new Date();
   models.orders.findAll({
     include: [models.users, models.locations, /*models.goods,*/{
       model: models.goods,
+			// where: searchWhereGoods,
       as: 'goods',
       include: [{
         model: models.processed,
@@ -49,7 +78,15 @@ router.get('/', function(req, res, next) {
         as: 'issued',
         include: [models.users,models.locations]
       }]
-    }]
+    }],
+		where: searchWhereOrders
+		// where: {
+		// 	$or: [{
+		// 		'$goods.name$': {
+		// 			$like: 'Товар'
+		// 		}
+		// 	}]
+		// }
   }).then(function (forders) {
     // console.log(forders[0].goods[0]);
     var orderscount = 0;

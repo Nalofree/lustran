@@ -77,7 +77,7 @@ block content
                       label Уточненная
               form.navbar-form.navbar-left.lustran-search-form
                 .form-group
-                  input.form-control(type='text', placeholder='Поиск...')
+                  input.form-control(type='text', placeholder='Поиск...', name='search')
               ul.nav.navbar-nav.navbar-right
                 li.navbar-text
                   | Заказов всего 
@@ -372,11 +372,11 @@ block content
                     - else
                       .container
                         .panel.panel-default
-                          .panel-body= "Товаров пока нет"
+                          .panel-body= "Товаров не найдено"
           - else
             .container
               .panel.panel-default
-                .panel-body= "Заказов пока нет"
+                .panel-body= "Заказов не найдено"
       .ayout-dark
       .modal-layout
       //- .modal-log

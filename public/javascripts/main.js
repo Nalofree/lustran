@@ -705,18 +705,27 @@ $(document).ready(function(){
 				console.log(data, status, error);
 			}
 		});
-	})
+	});
+
+	//Search
+
+	$('.lustran-search-form input[type=text]').keyup(function( event ) {
+	  if ( event.which == 13 ) {
+	    event.preventDefault();
+			// alert('Enter!');
+	  }
+	});
 
 	//Сохранить Log
 	$('body').on('click','[data-toggle=save-log]',function(){
 		$('.modal-layout').hide();
-	})
+	});
 
 	//Отмена log
 	$('body').on('click','[data-toggle=cancel-log]',function(){
 		$('.modal-layout').hide();
-	})
+	});
 
 	// $('.modal-layout').perfectScrollbar();
 	// $('.modal-log-body').perfectScrollbar();
-})
+});
