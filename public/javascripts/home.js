@@ -1,4 +1,56 @@
 $(document).ready(function () {
+  $('.check-pin input[name="yourpin"]').keyup(function (e) {
+    if ( e.which == 13 ) {
+	    e.preventDefault();
+      // alert('Enter!');
+      if ($('.check-pin input[name=yourpin]').val()) {
+        // alert('nice');
+        // var now = new Date();
+        var data = {
+          yourpin: $('.check-pin input[name=yourpin]').val(),
+          locid: getCookie("location")
+          // now: getDateReadeble(now)
+        };
+        // console.log(data.now);
+        $.ajax({
+          url: '/',
+          type: 'POST',
+          data: data,
+          success: function (data, status, error) {
+            console.log(data, status, error);
+            if (data.err) {
+              alert(data.err);
+            }else{
+              $('.checking-in-list p').remove();
+              // var datetime = new Date(data.check.createdAt)
+              // console.log(datetime.getFullYear());
+              var io = (data.check.io) ? "Ушёл" : "Пришёл";
+              if (data.check.late == 1) {
+                $(".checking-in-list").append('<li class="checking-in-list-item lateness"><span class="checking-in-date">'+getTimeReadeble(new Date(data.check.createdAt))+'</span><span class="checking-in-location sep-dot">'+data.location.alias+'</span><span class="checking-in-person">'+data.user.name+'</span><span>'+io+'</span></li>');
+              }else{
+                $(".checking-in-list").append('<li class="checking-in-list-item"><span class="checking-in-date">'+getTimeReadeble(new Date(data.check.createdAt))+'</span><span class="checking-in-location sep-dot">'+data.location.alias+'</span><span class="checking-in-person">'+data.user.name+'</span><span>'+io+'</span></li>');
+              }
+              if (data.check.io) {
+                $('.check-pin input[name=yourpin]').val('');
+              }else{
+                $('.pin-wrapper').fadeOut();
+                $('.wellcome-wrapper').fadeIn();
+                $('.wellcome-top .name').text(data.user.name);
+              }
+            }
+            $('.check-pin input[name=yourpin]').val('');
+            $('.check-pin input[name=yourpin]').focus();
+          },
+          error: function (data, status, error) {
+            console.log(data, status, error);
+            alert('Что-то пошло не так, обратитесь к администратору');
+          }
+        });
+      }else{
+        alert('Введите ПИН');
+      }
+	  }
+  });
   $('.check-pin .btn-pin').click(function (e) {
     e.preventDefault();
     if ($('.check-pin input[name=yourpin]').val()) {

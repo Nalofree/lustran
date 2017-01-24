@@ -15,25 +15,39 @@ $(document).ready(function () {
   var order = {};
   $('.setorder-button').click(function(e) {
     e.preventDefault();
-    if ($('input[name=customername]').val() && $('input[name=customerphone]').val()) {
-      $('.new-order-form-row.good-item').each(function() {
-        var good = {};
-        good.vencode = $(this).find('input[name=vencode]').val();
-        good.name = $(this).find('input[name=name]').val();
-        good.num = $(this).find('input[name=number]').val();
-        good.inddate = $(this).find('input[name=indicativedate]').val();
-        good.prepay = $(this).find('input[name=prepayment]').val();
-        goods.push(good);
-      });
-      order.customername = $('input[name=customername]').val();
-      order.customerphone = $('input[name=customerphone]').val();
-      order.comment = $('textarea[name=comment]').val();
-      order.locationid = getCookie('location');
-      order.number = $('.new-order-iter').text();
-      $('.close-layout').fadeIn();
-      $('.addorder').fadeIn();
-      $(".addorder input[name=yourpin]").val('');
-      $(".addorder input[name=yourpin]").focus();
+    var nowdate = new Date();
+    var nowtime = nowdate.getTime();
+    correctDate = true;
+    $('.new-order-form-row.good-item').each(function () {
+      indicativedate = new Date($(this).find('input[name=indicativedate]').val());
+      indicativetime = indicativedate.getTime();
+      if ((indicativetime < nowtime) || (!/[0-9]{4}\-[0-9]{2}\-[0-9]{2}/g.test($(this).find('input[name=indicativedate]').val()))) {
+        correctDate = false;
+      }
+    });
+    if ($('input[name=customername]').val() && $('input[name=customerphone]').val()) { //КАК ЖЕ МЕНЯ ЭТО БЕСИТ НАХУЙ
+      if (correctDate) {
+        $('.new-order-form-row.good-item').each(function() {
+          var good = {};
+          good.vencode = $(this).find('input[name=vencode]').val();
+          good.name = $(this).find('input[name=name]').val();
+          good.num = $(this).find('input[name=number]').val();
+          good.inddate = $(this).find('input[name=indicativedate]').val();
+          good.prepay = $(this).find('input[name=prepayment]').val() ? $(this).find('input[name=prepayment]').val() : 0;
+          goods.push(good);
+        });
+        order.customername = $('input[name=customername]').val();
+        order.customerphone = $('input[name=customerphone]').val();
+        order.comment = $('textarea[name=comment]').val();
+        order.locationid = getCookie('location');
+        order.number = $('.new-order-iter').text();
+        $('.close-layout').fadeIn();
+        $('.addorder').fadeIn();
+        $(".addorder input[name=yourpin]").val('');
+        $(".addorder input[name=yourpin]").focus();
+      }else{
+        alert('Некорректная дата!');
+      }
     }else{
       alert('Заполните поля имени заказчика и номера телефона заказчика!')
     }
@@ -63,6 +77,7 @@ $(document).ready(function () {
           document.getElementById("neworderform").reset();
           $(".new-order-id").text(parseInt($(".new-order-id").text())+1);
           $(".new-order-iter").text(parseInt($(".new-order-iter").text())+1);
+          window.location = '/orders';
           window.open(
             '/addorder/order-'+data.order.id,
             '_blank' // <- This is what makes it open in a new window.
