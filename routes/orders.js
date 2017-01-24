@@ -19,7 +19,7 @@ router.get('/', function(req, res, next) {
   if (!req.cookies.location) {
     res.redirect('/locations');
   }
-	console.log(req.query.search);
+	// console.log(req.query);
 	var searchWhereGoods = {
 		$or: []
 	};
@@ -30,12 +30,8 @@ router.get('/', function(req, res, next) {
 		var searchstring = req.query.search;
 	  searchstring = searchstring.replace(/[/.,!?;]*/g, '');
 	  searchstring = searchstring.replace(/[\s]+/g," ");
-		console.log(searchstring);
 		searchsarray = searchstring.split(' ');
-		console.log(searchsarray);
 		for (var i = 0; i < searchsarray.length; i++) {
-			// searchWhereGoods.$or.push({name: {$like: '%'+searchsarray[i]+'%'}});
-			// searchWhereGoods.$or.push({vencode: {$like: '%'+searchsarray[i]+'%'}});
 			searchWhereOrders.$or.push({'$goods.name$': {$like: '%'+searchsarray[i]+'%'}});
 			searchWhereOrders.$or.push({'$goods.vencode$': {$like: '%'+searchsarray[i]+'%'}});
 			searchWhereOrders.$or.push({number: {$like: '%'+searchsarray[i]+'%'}});
@@ -45,6 +41,33 @@ router.get('/', function(req, res, next) {
 		console.log(searchWhereGoods.$or);
 	}else{
 		searchWhereGoods = {};
+		searchWhereOrders = {};
+	}
+
+	if (req.query.processed || req.query.oredered || req.query.postponed || req.query.callstatus || req.query.issued || req.query.spicdate) { //processed=&oredered=&postponed=&callstatus=&issued=&spicdate=on
+		// console.log("PROCESSED: " + req.query.processed);
+		searchWhereOrders = {
+			$and: []
+		};
+		if (req.query.processed) {
+			searchWhereOrders.$and.push({'$goods.processed.statusval$': parseInt(req.query.processed)});
+		}
+		if (req.query.oredered) {
+			searchWhereOrders.$and.push({'$goods.oredered.statusval$': parseInt(req.query.oredered)});
+		}
+		if (req.query.postponed) {
+			searchWhereOrders.$and.push({'$goods.postponed.statusval$': parseInt(req.query.postponed)});
+		}
+		if (req.query.callstatus) {
+			searchWhereOrders.$and.push({'$goods.callstatus.statusval$': parseInt(req.query.callstatus)});
+		}
+		if (req.query.issued) {
+			searchWhereOrders.$and.push({'$goods.issued.statusval$': parseInt(req.query.issued)});
+		}
+		if (req.query.spicdate) {
+			searchWhereOrders.$and.push({'$goods.spicdate.statusval$': {$ne: null}});
+		}
+	}else{
 		searchWhereOrders = {};
 	}
   var now = new Date();
@@ -204,6 +227,7 @@ router.post('/setprocessed', function (req, res, next) {
             }
             models.processed.create({
               statusval: req.body.statusval,
+							comment: req.body.comment,
               alias: alias,
               locationId: req.cookies.location,
               userId: user.id,
@@ -262,6 +286,7 @@ router.post('/setspicdate', function (req, res, next) {
           if (good.processed.statusval == 1) {
             models.spicdate.create({
               statusval: req.body.statusval,
+							comment: req.body.comment,
               locationId: req.cookies.location,
               userId: user.id,
               goodId: req.body.goodid
@@ -331,7 +356,7 @@ router.post('/setordered', function (req, res, next) {
     }
   }).then(function (user) {
     if (user) {
-      if (user.status == 'supplier') {
+      if (user.status == 'supplier' || user.status == 'manager') {
         models.goods.findOne({
           include: [models.ordered, models.processed],
           where: {
@@ -347,6 +372,7 @@ router.post('/setordered', function (req, res, next) {
             }
             models.ordered.create({
               statusval: req.body.statusval,
+							comment: req.body.comment,
               alias: alias,
               locationId: req.cookies.location,
               userId: user.id,
@@ -395,7 +421,7 @@ router.post('/setpostponed', function (req, res, next) {
     }
   }).then(function (user) {
     if (user) {
-      if (user.status == 'saler') {
+      if (user.status == 'saler' || user.status == 'manager') {
         models.goods.findOne({
           include: [models.postponed, models.ordered],
           where: {
@@ -414,6 +440,7 @@ router.post('/setpostponed', function (req, res, next) {
           if (good.ordered.statusval == 1) {
             models.postponed.create({
               statusval: req.body.statusval,
+							comment: req.body.comment,
               alias: alias,
               locationId: req.cookies.location,
               userId: user.id,
@@ -462,7 +489,7 @@ router.post('/setcallstatus', function (req, res, next) {
     }
   }).then(function (user) {
     if (user) {
-      if (user.status == 'saler' || user.status == 'supplier') {
+      if (user.status == 'saler' || user.status == 'supplier' || user.status == 'manager') {
         models.goods.findOne({
           include: [models.callstatus, models.postponed],
           where: {
@@ -481,6 +508,7 @@ router.post('/setcallstatus', function (req, res, next) {
           if (good.postponed.statusval == 1) {
             models.callstatus.create({
               statusval: req.body.statusval,
+							comment: req.body.comment,
               alias: alias,
               locationId: req.cookies.location,
               userId: user.id,
@@ -529,7 +557,7 @@ router.post('/setissued', function (req, res, next) {
     }
   }).then(function (user) {
     if (user) {
-      if (user.status == 'saler') {
+      if (user.status == 'saler' || user.status == 'manager') {
         models.goods.findOne({
           include: [models.issued, models.callstatus],
           where: {
@@ -545,6 +573,7 @@ router.post('/setissued', function (req, res, next) {
           if (good.callstatus.statusval == 1) {
             models.issued.create({
               statusval: req.body.statusval,
+							comment: req.body.comment,
               alias: alias,
               locationId: req.cookies.location,
               userId: user.id,
@@ -583,6 +612,47 @@ router.post('/setissued', function (req, res, next) {
     res.send({err: err});
     console.log('user',err);
   })
+});
+
+router.get('/order-:orderid', function (req, res, next) {
+	models.orders.findOne({
+    include: [models.users, models.locations, /*models.goods,*/{
+      model: models.goods,
+			// where: searchWhereGoods,
+      as: 'goods',
+      include: [{
+        model: models.processed,
+        as: 'processed',
+        include: [models.users,models.locations]
+      },{
+        model: models.spicdate,
+        as: 'spicdate',
+        include: [models.users,models.locations]
+      },{
+        model: models.ordered,
+        as: 'ordered',
+        include: [models.users,models.locations]
+      },{
+        model: models.postponed,
+        as: 'postponed',
+        include: [models.users,models.locations]
+      },{
+        model: models.callstatus,
+        as: 'callstatus',
+        include: [models.users,models.locations]
+      },{
+        model: models.issued,
+        as: 'issued',
+        include: [models.users,models.locations]
+      }]
+    }]
+  }).then(function (order) {
+    res.render('overvieworder', {order: order});
+    // res.send(order);
+  }).catch(function (err) {
+    res.send(err);
+    console.log('order error: ' + err);
+  });
 });
 
 module.exports = router;

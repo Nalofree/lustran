@@ -11,7 +11,8 @@ module.exports = function(sequelize, DataTypes) {
     goodId: DataTypes.INTEGER,
     locationId: DataTypes.INTEGER,
     statusval: DataTypes.INTEGER,
-    alias: DataTypes.TEXT
+    alias: DataTypes.TEXT,
+    comment: DataTypes.TEXT
   },{
     classMethods: {
       associate: function(models) {

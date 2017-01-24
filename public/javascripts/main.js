@@ -167,6 +167,20 @@ $(document).ready(function(){
 	//Отмена стандартного действия ссылок
 	$('body').delegate('a[href*="#"]','click',function(e){
 		e.preventDefault();
+	});
+
+	$("li.status-menu a.lustran-dropdown").click(function () {
+		$(".status-menu-dropdown").toggleClass('show');
+	});
+
+	$('.status-menu-dropdown .dropdown select').change(function () {
+		// e.preventDefault();
+		$(this).val()
+		if ($(this).val()) {
+			$(this).addClass('changed');
+		}else{
+			$(this).removeClass('changed');
+		}
 	})
 
 
@@ -234,7 +248,7 @@ $(document).ready(function(){
 		$('.action.processed-action .action-row.choose-satus').empty();
 		$('.action.processed-action .action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не обработан</option><option value=1>В обработке</option></select></div>');
 		$('.action .btn-done').attr('data-title', goodid);
-		$('.action').css({'top':70, 'left':60});
+		// $('.action').css({'top':70, 'left':60});
 	});
 
 	$('.action.processed-action .btn-done').click(function (e) {
@@ -242,6 +256,7 @@ $(document).ready(function(){
 		if ($(this).closest('.action').find('input[name=yourpin]').val()){
 			var data = {
 				yourpin: $(this).closest('.action').find('input[name=yourpin]').val(),
+				comment: $(this).closest('.action').find('textarea[name=comment]').val(),
 				goodid: $(this).attr('data-title'),
 				statusval: $(this).closest('.action').find('select[name="status"]').val()
 			}
@@ -293,7 +308,7 @@ $(document).ready(function(){
 		$('.action-row.choose-satus').empty();
 		$('.action-row.choose-satus').append('<div class="form-group"><input name="status" type="date" class="form-control"></div>');
 		$('.action .btn-done').attr('data-title', goodid);
-		$('.action').css({'top':70, 'left':60});
+		// $('.action').css({'top':70, 'left':60});
 	});
 
 	$('.action.spicdate-action .btn-done').click(function (e) {
@@ -301,6 +316,7 @@ $(document).ready(function(){
 		if ($(this).closest('.action').find('input[name=yourpin]').val() && $(this).closest('.action').find('input[name=status]').val()){
 			var data = {
 				yourpin: $(this).closest('.action').find('input[name=yourpin]').val(),
+				comment: $(this).closest('.action').find('textarea[name=comment]').val(),
 				goodid: $(this).attr('data-title'),
 				statusval: $(this).closest('.action').find('input[name="status"]').val()
 			}
@@ -350,7 +366,7 @@ $(document).ready(function(){
 		$('.action.ordered-action .action-row.choose-satus').empty();
 		$('.action.ordered-action .action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не заказан</option><option value=1>Заказан</option></select></div>');
 		$('.action .btn-done').attr('data-title', goodid);
-		$('.action').css({'top':70, 'left':60});
+		// $('.action').css({'top':70, 'left':60});
 	});
 
 	$('.action.ordered-action .btn-done').click(function (e) {
@@ -358,6 +374,7 @@ $(document).ready(function(){
 		if ($(this).closest('.action').find('input[name=yourpin]').val()){
 			var data = {
 				yourpin: $(this).closest('.action').find('input[name=yourpin]').val(),
+				comment: $(this).closest('.action').find('textarea[name=comment]').val(),
 				goodid: $(this).attr('data-title'),
 				statusval: $(this).closest('.action').find('select[name="status"]').val()
 			}
@@ -418,7 +435,7 @@ $(document).ready(function(){
 		$('.action.postponed-action .action-row.choose-satus').empty();
 		$('.action.postponed-action .action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не отложен</option><option value=1>Проверен и отложен</option><option value=2>Есть деффект</option></select></div>');
 		$('.action .btn-done').attr('data-title', goodid);
-		$('.action').css({'top':70, 'left':60});
+		// $('.action').css({'top':70, 'left':60});
 	});
 
 	$('.action.postponed-action .btn-done').click(function (e) {
@@ -427,6 +444,7 @@ $(document).ready(function(){
 		if ($(this).closest('.action').find('input[name=yourpin]').val()){
 			var data = {
 				yourpin: $(this).closest('.action').find('input[name=yourpin]').val(),
+				comment: $(this).closest('.action').find('textarea[name=comment]').val(),
 				goodid: $(this).attr('data-title'),
 				statusval: $(this).closest('.action').find('select[name="status"]').val()
 			}
@@ -481,7 +499,7 @@ $(document).ready(function(){
 		$('.action.callstatus-action .action-row.choose-satus').empty();
 		$('.action.callstatus-action .action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не звонили</option><option value=1>Дозвон</option><option value=2>Не дозвон</option></select></div>');
 		$('.action .btn-done').attr('data-title', goodid);
-		$('.action').css({'top':70, 'left':60});
+		// $('.action').css({'top':70, 'left':60});
 	});
 
 	$('.action.callstatus-action .btn-done').click(function (e) {
@@ -489,6 +507,7 @@ $(document).ready(function(){
 		if ($(this).closest('.action').find('input[name=yourpin]').val()){
 			var data = {
 				yourpin: $(this).closest('.action').find('input[name=yourpin]').val(),
+				comment: $(this).closest('.action').find('textarea[name=comment]').val(),
 				goodid: $(this).attr('data-title'),
 				statusval: $(this).closest('.action').find('select[name="status"]').val()
 			}
@@ -545,7 +564,7 @@ $(document).ready(function(){
 		$('.action.issued-action .action-row.choose-satus').empty();
 		$('.action.issued-action .action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не выдан</option><option value=1>Выдан</option></select></div>');
 		$('.action .btn-done').attr('data-title', goodid);
-		$('.action').css({'top':70, 'left':60});
+		// $('.action').css({'top':70, 'left':60});
 	});
 
 	$('.action.issued-action .btn-done').click(function (e) {
@@ -553,6 +572,7 @@ $(document).ready(function(){
 		if ($(this).closest('.action').find('input[name=yourpin]').val()){
 			var data = {
 				yourpin: $(this).closest('.action').find('input[name=yourpin]').val(),
+				comment: $(this).closest('.action').find('textarea[name=comment]').val(),
 				goodid: $(this).attr('data-title'),
 				statusval: $(this).closest('.action').find('select[name="status"]').val()
 			}
@@ -694,7 +714,8 @@ $(document).ready(function(){
 				$('.history .table tbody').empty();
 				for (var i = 0; i < data.actions.length; i++) {
 					// data.actions[i]
-					$('.history .table tbody').append('<tr><td>'+getTimeReadeble(new Date(data.actions[i].createdAt)) +"</td><td>"+ data.actions[i].user.name +"</td><td>"+ data.actions[i].location.alias +"</td><td>"+ data.actions[i].alias+'</td></tr>');
+					var comment = data.actions[i].comment == null ? '' : data.actions[i].comment
+					$('.history .table tbody').append('<tr><td>'+getTimeReadeble(new Date(data.actions[i].createdAt)) +"</td><td>"+ data.actions[i].user.name +"</td><td>"+ data.actions[i].location.alias +'</td><td>'+ data.actions[i].alias+'</td><td>'+ comment +'</td></tr>');
 					// $('.history').append(data.good.processed);
 				}
 				// console.log(data.good.processed.createdAt +" "+ data.good.processed.user.name +" "+ data.good.processed.location.alias +" "+ data.good.processed.alias);

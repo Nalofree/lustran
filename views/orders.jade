@@ -15,66 +15,65 @@ block content
           .lustran-container-nav
             .collapse.navbar-collapse
               ul.nav.navbar-nav
-                li.filter-menu
-                  a.dropdown-toggle.lustran-dropdown(href='#', role='button', aria-haspopup='true', aria-expanded='false')
-                    | Фильтр&nbsp
-                    span.caret
-                  ul.dropdown-menu.lustran-dropdown-menu.filter-menu-dropdown
-                    li
-                      a(href='#') ID заказа
-                    li
-                      a(href='#') Наименование
-                    li
-                      a(href='#') Артикул
-                    li
-                      a(href='#') Ориентировочная дата
+                //- li.filter-menu
+                //-   a.dropdown-toggle.lustran-dropdown(href='#', role='button', aria-haspopup='true', aria-expanded='false')
+                //-     | Фильтр&nbsp
+                //-     span.caret
+                //-   ul.dropdown-menu.lustran-dropdown-menu.filter-menu-dropdown
+                //-     li
+                //-       a(href='#') ID заказа
+                //-     li
+                //-       a(href='#') Наименование
+                //-     li
+                //-       a(href='#') Артикул
+                //-     li
+                //-       a(href='#') Ориентировочная дата
                 li.status-menu
                   a.lustran-dropdown(href='#', role='button')
-                    | Выберите статус&nbsp
+                    | Фильтр&nbsp
                     span.caret
                   .status-menu-dropdown
-                    .dropdown
-                      button#dropdownMenu1.btn.btn-default.dropdown-toggle.lustran-drop(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true') Обработан
-                      ul.dropdown-menu(aria-labelledby='dropdownMenu1')
-                        li
-                          a(href='#') Обработан
-                        li
-                          a(href='#') Не обработан
-                    .dropdown
-                      button#dropdownMenu2.btn.btn-default.dropdown-toggle.lustran-drop(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true') Заказан
-                      ul.dropdown-menu(aria-labelledby='dropdownMenu2')
-                        li
-                          a(href='#') Заказан
-                        li
-                          a(href='#') Не заказан
-                    .dropdown
-                      button#dropdownMenu3.btn.btn-default.dropdown-toggle.lustran-drop(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true') Проверен и отложен
-                      ul.dropdown-menu(aria-labelledby='dropdownMenu3')
-                        li
-                          a(href='#') Проверен и отложен
-                        li
-                          a(href='#') Отсутствует
-                    .dropdown
-                      button#dropdownMenu4.btn.btn-default.dropdown-toggle.lustran-drop(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true') Звонили
-                      ul.dropdown-menu(aria-labelledby='dropdownMenu4')
-                        li
-                          a(href='#') Звонили
-                        li
-                          a(href='#') Не звонили
-                    .dropdown
-                      button#dropdownMenu5.btn.btn-default.dropdown-toggle.lustran-drop(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true') Выдан
-                      ul.dropdown-menu(aria-labelledby='dropdownMenu5')
-                        li
-                          a(href='#') Выдан
-                        li
-                          a(href='#') Не выдан
-                    .status-menu-check
-                      input(type='checkbox')
-                      label Уточнить дату
-                      input(type='checkbox')
-                      label Ориентировочная
-                      input(type='checkbox')
-                      label Уточненная
+                    form(name='filter', method="GET")
+                      .dropdown
+                        .form-group
+                          select.form-control(name='processed')
+                            option(value='') Обработка
+                            option(value='0') Не обработан
+                            option(value='1') В обработке
+                            option(value='2') Обработан
+                      .dropdown
+                        .form-group
+                          select.form-control(name='oredered')
+                            option(value='') Заказ
+                            option(value='0') Не заказан
+                            option(value='1') Заказан
+                      .dropdown
+                        .form-group
+                          select.form-control(name='postponed')
+                            option(value='') Отгрузка
+                            option(value='0') Не отложен
+                            option(value='1') Отложен
+                            option(value='2') Есть деффект
+                      .dropdown
+                        .form-group
+                          select.form-control(name='callstatus')
+                            option(value='') Дозвон
+                            option(value='0') Не звонили
+                            option(value='1') Звонили
+                            option(value='2') Не дозвонились
+                      .dropdown
+                        .form-group
+                          select.form-control(name='issued')
+                            option(value='') Выдача
+                            option(value='0') Не выдан
+                            option(value='1') Выдан
+                      .status-menu-check
+                        .checkbox
+                          label(for='spicdate')= "Уточненная дата"
+                          input(type='checkbox' id='spicdate', name='spicdate')
+                      .dropdown
+                        .form-group
+                          input.btn.btn-default(type="submit", value="Применить")
               form.navbar-form.navbar-left.lustran-search-form
                 .form-group
                   input.form-control(type='text', placeholder='Поиск...', name='search')
@@ -109,9 +108,11 @@ block content
                   .order-id
                     | заказ
                     span= orders[i].number
-                  //- .order-basket 13
-                  //- a.btn.btn-sm.order-add(href='/addorder')
-                    i.fa.fa-plus-circle(aria-hidden='true')
+                  //- a(href='/addorder/order-3').order-basket= orders[i].goods.length
+                  a.btn.btn-sm.btn-success(href='/orders/order-'+orders[i].id, target='_blanket')
+                    b= 'ОБЗОР'
+                    //- открыть
+                    //- i.fa.fa-plus-circle(aria-hidden='true')
                 section.order-body
                   ul.order-list
                     - if (orders[i].goods)
@@ -163,8 +164,12 @@ block content
                                         .row.action-row
                                           label.col-sm-12(for='') Введите ваш пин-код
                                           .col-sm-6
-                                            .input-group
+                                            .form-group
                                               input.form-control(type='password', name='yourpin')
+                                          .col-sm-12
+                                            label.col-sm-12(for='comment') Комментарий
+                                            .form-group
+                                              textarea.form-control(name='comment', id=comment)
                                         .row.action-row.choose-satus
                                         .row.action-row
                                           .col-sm-6
@@ -204,8 +209,12 @@ block content
                                         .row.action-row
                                           label.col-sm-12(for='') Введите ваш пин-код
                                           .col-sm-6
-                                            .input-group
+                                            .form-group
                                               input.form-control(type='password', name='yourpin')
+                                          .col-sm-12
+                                            label.col-sm-12(for='comment') Комментарий
+                                            .form-group
+                                              textarea.form-control(name='comment', id=comment)
                                         .row.action-row.choose-satus
                                         .row.action-row
                                           .col-sm-6
@@ -245,8 +254,12 @@ block content
                                         .row.action-row
                                           label.col-sm-12(for='') Введите ваш пин-код
                                           .col-sm-6
-                                            .input-group
+                                            .form-group
                                               input.form-control(type='password', name='yourpin')
+                                          .col-sm-12
+                                            label.col-sm-12(for='comment') Комментарий
+                                            .form-group
+                                              textarea.form-control(name='comment', id=comment)
                                         .row.action-row.choose-satus
                                         .row.action-row
                                           .col-sm-6
@@ -286,8 +299,12 @@ block content
                                         .row.action-row
                                           label.col-sm-12(for='') Введите ваш пин-код
                                           .col-sm-6
-                                            .input-group
+                                            .form-group
                                               input.form-control(type='password', name='yourpin')
+                                          .col-sm-12
+                                            label.col-sm-12(for='comment') Комментарий
+                                            .form-group
+                                              textarea.form-control(name='comment', id=comment)
                                         .row.action-row.choose-satus
                                         .row.action-row
                                           .col-sm-6
@@ -327,8 +344,12 @@ block content
                                         .row.action-row
                                           label.col-sm-12(for='') Введите ваш пин-код
                                           .col-sm-6
-                                            .input-group
+                                            .form-group
                                               input.form-control(type='password', name='yourpin')
+                                          .col-sm-12
+                                            label.col-sm-12(for='comment') Комментарий
+                                            .form-group
+                                              textarea.form-control(name='comment', id=comment)
                                         .row.action-row.choose-satus
                                         .row.action-row
                                           .col-sm-6
@@ -361,8 +382,12 @@ block content
                                         .row.action-row
                                           label.col-sm-12(for='') Введите ваш пин-код
                                           .col-sm-6
-                                            .input-group
+                                            .form-group
                                               input.form-control(type='password', name='yourpin')
+                                          .col-sm-12
+                                            label.col-sm-12(for='comment') Комментарий
+                                            .form-group
+                                              textarea.form-control(name='comment', id=comment)
                                         .row.action-row.choose-satus
                                         .row.action-row
                                           .col-sm-6

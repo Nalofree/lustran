@@ -12732,7 +12732,7 @@ h2 {
   position: relative;
 }
 /* line 87, ../sass/_components.sass */
-.status-menu:hover .status-menu-dropdown {
+.status-menu-dropdown.show form {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: -moz-flex;
@@ -13655,4 +13655,36 @@ a.location-name:hover {
   width: 300px;
   left: 50%;
   margin-left: -150px;
+}
+
+.action {
+  top: 70px;
+  left: 55px;
+}
+
+.order-status-list li:last-child .action::after {
+  right: 7%;
+}
+
+.order-status-list li:last-child .action{
+  left: -70px;
+}
+
+form[name='filter'] {
+  color: #444;
+}
+
+.status-menu-check {
+  color: #fff;
+}
+
+.status-menu-dropdown .dropdown select.changed {
+  background-color: #36C786;
+  border-color: #36C786;
+  color: #fff;
+}
+
+.status-menu-dropdown .dropdown select.changed option {
+  background-color: #fff;
+  color: #444;
 }
