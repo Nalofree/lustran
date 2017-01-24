@@ -13688,3 +13688,7 @@ form[name='filter'] {
   background-color: #fff;
   color: #444;
 }
+
+.order-header .btn + .btn {
+  margin-top: 5px;
+}
