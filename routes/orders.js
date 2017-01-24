@@ -53,7 +53,7 @@ router.get('/', function(req, res, next) {
 			searchWhereOrders.$and.push({'$goods.processed.statusval$': parseInt(req.query.processed)});
 		}
 		if (req.query.oredered) {
-			searchWhereOrders.$and.push({'$goods.oredered.statusval$': parseInt(req.query.oredered)});
+			searchWhereOrders.$and.push({'$goods.ordered.statusval$': parseInt(req.query.oredered)});
 		}
 		if (req.query.postponed) {
 			searchWhereOrders.$and.push({'$goods.postponed.statusval$': parseInt(req.query.postponed)});
