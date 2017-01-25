@@ -239,8 +239,18 @@ router.post('/setprocessed', function (req, res, next) {
                 where: {
                   id: req.body.goodid
                 }
-              }).then(function (goods) {
-                res.send({processed: processed, user: user})
+              }).then(function (good) {
+								models.goods.findAll({
+									include: [models.processed],
+									where: {
+				            '$processed.statusval$': 1
+				          }
+								}).then(function (goods) {
+									res.send({processed: processed, user: user, pcount: goods.length});
+								}).catch(function (err) {
+									res.send({err: err});
+	                console.log(err);
+								});
               }).catch(function (err) {
                 res.send({err: err});
                 console.log(err);
@@ -452,8 +462,19 @@ router.post('/setpostponed', function (req, res, next) {
                 where: {
                   id: req.body.goodid
                 }
-              }).then(function (goods) {
-                res.send({postponed: postponed, user: user})
+              }).then(function (good) {
+								models.goods.findAll({
+									include: [models.postponed],
+									where: {
+				            '$postponed.statusval$': 2
+				          }
+								}).then(function (goods) {
+									res.send({postponed: postponed, user: user, pcount: goods.length});
+								}).catch(function (err) {
+									res.send({err: err});
+	                console.log(err);
+								});
+                // res.send({postponed: postponed, user: user})
               }).catch(function (err) {
                 res.send({err: err});
                 console.log('update goods',err);
@@ -585,8 +606,19 @@ router.post('/setissued', function (req, res, next) {
                 where: {
                   id: req.body.goodid
                 }
-              }).then(function (goods) {
-                res.send({issued: issued, user: user})
+              }).then(function (good) {
+								models.goods.findAll({
+									include: [models.issued],
+									where: {
+				            '$issued.statusval$': 1
+				          }
+								}).then(function (goods) {
+									res.send({issued: issued, user: user, pcount: goods.length});
+								}).catch(function (err) {
+									res.send({err: err});
+	                console.log(err);
+								});
+                // res.send({issued: issued, user: user})
               }).catch(function (err) {
                 res.send({err: err});
                 console.log('update goods',err);

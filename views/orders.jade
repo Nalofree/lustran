@@ -75,22 +75,23 @@ block content
                         .form-group
                           input.btn.btn-default(type="submit", value="Применить")
                 li.resetfiltr
+                  a(href='/orders') Сбросить фильтр
               form.navbar-form.navbar-left.lustran-search-form
                 .form-group
                   input.form-control(type='text', placeholder='Поиск...', name='search')
               ul.nav.navbar-nav.navbar-right
                 li.navbar-text
                   | Заказов всего 
-                  span.badge.badge-pur-light= orderscount
+                  span.badge.badge-pur-light.orderscount= orderscount
                 li.navbar-text
                   | В обработке 
-                  span.badge.badge-pur-light= ordersproc
+                  span.badge.badge-pur-light.ordersproc= ordersproc
                 li.navbar-text
                   | Выдано 
-                  span.badge.badge-pur-light= ordersissued
+                  span.badge.badge-pur-light.ordersissued= ordersissued
                 li.navbar-text
                   | Дефект 
-                  span.badge.badge-pur-light= ordersdef
+                  span.badge.badge-pur-light.ordersdef= ordersdef
         .lustran-container
           .history
             table.table

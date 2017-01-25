@@ -41,7 +41,7 @@ link(rel='stylesheet', href='/stylesheets/printorder.css')
   p.right
     strong= "Сумма предоплаты: " + itog+"p"
   p.small.left= "Всего наименований "+order.goods.length+","
-  p.left= summ
+  p.left= summ ? summ : "Без предоплаты"
   hr
   .col-md-6.col-sm-6.col-lg-6.col-xs-6
     p= "Исполнитель  _____________________"

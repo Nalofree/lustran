@@ -281,9 +281,13 @@ $(document).ready(function(){
 						if (data.processed.statusval != 0) {
 							$(".processed[data-title="+data.processed.goodId+"]").closest('.order-status').removeClass('status-danger');
 							// $(".processed[data-title="+data.processed.goodId+"]").closest('.order-status').find('.status-top .status').text('В обработке');
+							// var orderscount = parseInt($(".ordersproc").text());
+							$(".ordersproc").text(data.pcount);
 						}else{
 							$(".processed[data-title="+data.processed.goodId+"]").closest('.order-status').addClass('status-danger');
 							// $(".processed[data-title="+data.processed.goodId+"]").closest('.order-status').find('.status-top .status').text('Не обработан');
+							// var orderscount = parseInt($(".ordersproc").text());
+							$(".ordersproc").text(data.pcount);
 						}
 					}
 				},
@@ -468,10 +472,13 @@ $(document).ready(function(){
 						$(".postponed[data-title="+data.postponed.goodId+"]").closest('.order-status').find('.status-top .status').text(data.postponed.alias);
 						if (data.postponed.statusval == 1) {
 							$(".postponed[data-title="+data.postponed.goodId+"]").closest('.order-status').removeClass('status-danger');
+							$(".ordersdef").text(data.pcount);
 						}else if(data.postponed.statusval == 0){
 							$(".postponed[data-title="+data.postponed.goodId+"]").closest('.order-status').addClass('status-danger');
+							$(".ordersdef").text(data.pcount);
 						}else if(data.postponed.statusval == 2){
 							$(".postponed[data-title="+data.postponed.goodId+"]").closest('.order-status').addClass('status-danger');
+							$(".ordersdef").text(data.pcount);
 						}
 					}
 				},
@@ -597,8 +604,10 @@ $(document).ready(function(){
 						$(".issued[data-title="+data.issued.goodId+"]").closest('.order-status').find('.status-top .status').text(data.issued.alias);
 						if (data.issued.statusval == 1) {
 							$(".issued[data-title="+data.issued.goodId+"]").closest('.order-status').removeClass('status-danger');
+							$(".ordersissued").text(data.pcount);
 						}else{
 							$(".issued[data-title="+data.issued.goodId+"]").closest('.order-status').addClass('status-danger');
+							$(".ordersissued").text(data.pcount);
 						}
 					}
 				},

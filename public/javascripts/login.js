@@ -11,7 +11,7 @@ $(document).ready(function () {
         success: function (data, status, error) {
           console.log(data, status, error);
           if (data.isauth) {
-            window.open('/');
+            window.location = '/';
           }else{
             alert('Неверный пароль!');
           }

@@ -13692,3 +13692,21 @@ form[name='filter'] {
 .order-header .btn + .btn {
   margin-top: 5px;
 }
+
+.resetfiltr a,
+.resetfiltr a:hover{
+  color: #fff;
+}
+
+/* line 58, ../sass/_components.sass */
+.nav > li.resetfiltr {
+  background-color: #5b4660;
+  color: #fff;
+  font-weight: 700;
+  transition: all 0.3s ease-in-out;
+}
+/* line 63, ../sass/_components.sass */
+.nav > li.resetfiltr a:hover, .nav > li.resetfiltr a:active, .nav > li.resetfiltr a:focus {
+  background-color: #614a66;
+  cursor: pointer;
+}
