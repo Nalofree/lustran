@@ -677,7 +677,10 @@ router.get('/order-:orderid', function (req, res, next) {
         as: 'issued',
         include: [models.users,models.locations]
       }]
-    }]
+    }],
+		where: {
+			id: req.params.orderid
+		}
   }).then(function (order) {
     res.render('overvieworder', {order: order});
     // res.send(order);
