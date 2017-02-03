@@ -28,48 +28,60 @@ router.get('/', function(req, res, next) {
 	};
 	if (req.query.search) {
 		var searchstring = req.query.search;
-	  searchstring = searchstring.replace(/[/.,!?;]*/g, '');
-	  searchstring = searchstring.replace(/[\s]+/g," ");
-		searchsarray = searchstring.split(' ');
-		for (var i = 0; i < searchsarray.length; i++) {
-			searchWhereOrders.$or.push({'$goods.name$': {$like: '%'+searchsarray[i]+'%'}});
-			searchWhereOrders.$or.push({'$goods.vencode$': {$like: '%'+searchsarray[i]+'%'}});
-			searchWhereOrders.$or.push({number: {$like: '%'+searchsarray[i]+'%'}});
-			searchWhereOrders.$or.push({customerphone: {$like: '%'+searchsarray[i]+'%'}});
-			searchWhereOrders.$or.push({customername: {$like: '%'+searchsarray[i]+'%'}});
-		}
+		console.log(searchstring);
+	  // searchstring = searchstring.replace(/[/.,!?;]*/g, '');
+	  // searchstring = searchstring.replace(/[\s]+/g," ");
+		// searchsarray = searchstring.split(' ');
+		// for (var i = 0; i < searchsarray.length; i++) {
+		searchWhereOrders.$or.push({'$goods.name$': {$like: '%'+searchstring+'%'}});
+		searchWhereOrders.$or.push({'$goods.vencode$': {$like: '%'+searchstring+'%'}});
+		searchWhereOrders.$or.push({number: {$like: '%'+searchstring+'%'}});
+		searchWhereOrders.$or.push({customerphone: {$like: '%'+searchstring+'%'}});
+		searchWhereOrders.$or.push({customername: {$like: '%'+searchstring+'%'}});
+		// }
 		console.log(searchWhereGoods.$or);
 	}else{
 		searchWhereGoods = {};
 		searchWhereOrders = {};
 	}
+	console.log(searchWhereGoods);
+
+	var lastStatus = false;
 
 	if (req.query.processed || req.query.oredered || req.query.postponed || req.query.callstatus || req.query.issued || req.query.spicdate) { //processed=&oredered=&postponed=&callstatus=&issued=&spicdate=on
 		// console.log("PROCESSED: " + req.query.processed);
+		lastStatus = true;
+		earchWhereOrders = {};
 		searchWhereOrders = {
 			$and: []
 		};
 		if (req.query.processed) {
 			searchWhereOrders.$and.push({'$goods.processed.statusval$': parseInt(req.query.processed)});
+			// searchWhereOrders.$and.push({'$goods.processed.statusval$': parseInt(req.query.processed)});
 		}
 		if (req.query.oredered) {
 			searchWhereOrders.$and.push({'$goods.ordered.statusval$': parseInt(req.query.oredered)});
+			// searchWhereOrders.$and.push({'$goods.ordered.statusval$': parseInt(req.query.oredered)});
 		}
 		if (req.query.postponed) {
 			searchWhereOrders.$and.push({'$goods.postponed.statusval$': parseInt(req.query.postponed)});
+			// searchWhereOrders.$and.push({'$goods.postponed.statusval$': parseInt(req.query.postponed)});
 		}
 		if (req.query.callstatus) {
 			searchWhereOrders.$and.push({'$goods.callstatus.statusval$': parseInt(req.query.callstatus)});
+			// searchWhereOrders.$and.push({'$goods.callstatus.statusval$': parseInt(req.query.callstatus)});
 		}
 		if (req.query.issued) {
 			searchWhereOrders.$and.push({'$goods.issued.statusval$': parseInt(req.query.issued)});
+			// searchWhereOrders.$and.push({'$goods.issued.statusval$': parseInt(req.query.issued)});
 		}
 		if (req.query.spicdate) {
 			searchWhereOrders.$and.push({'$goods.spicdate.statusval$': {$ne: null}});
 		}
-	}else{
-		searchWhereOrders = {};
 	}
+	//else{
+		//searchWhereOrders = {};
+	//}
   var now = new Date();
   models.orders.findAll({
     include: [models.users, models.locations, /*models.goods,*/{
@@ -131,6 +143,9 @@ router.get('/', function(req, res, next) {
         }
       }
     }
+		if (lastStatus) {
+			
+		}
     res.render('orders', {title: 'Заказы', orders: forders, orderscount: orderscount, ordersproc: ordersproc, ordersissued: ordersissued, ordersdef: ordersdef});
     // res.send(forders);
   }).catch(function (err) {

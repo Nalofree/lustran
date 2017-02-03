@@ -41,7 +41,8 @@ router.get('/', function(req, res) {
         $lt: new Date(endDate),
         $gt: new Date(startDate)
       }
-    }
+    },
+		order: 'createdAt DESC'
   }).then(function(checks) {
     res.render('index', { title: 'Главная', checks: checks });
   }).catch(function (err) {
@@ -108,7 +109,7 @@ router.post('/', function(req, res, next) {
             openhours = location.opentime.split(':')[0].slice(-1);
             // res.send(openhours);
             var late = 0;
-            if ((now.getUTCHours+8 > openhours) || (now.getUTCHours+8 == openhours && now.getUTCMinutes+8 > 15)) { /* Тут нужно для каждого магазина нужно установть timezone и её пробавлять к УТЦшным временам, но мы же торопимся */
+            if ((now.getUTCHours+8 > openhours) || (now.getUTCHours+8 == openhours && now.getUTCMinutes > 0)) { /* Тут нужно для каждого магазина нужно установть timezone и её пробавлять к УТЦшным временам, но мы же торопимся */
               late = 1;
             }else{
               late = 0;

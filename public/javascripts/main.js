@@ -246,7 +246,7 @@ $(document).ready(function(){
 		// var offsetTop = $(this).offset().top + $(this).height();
 		// var offsetLeft = $(this).offset().left - 150 + $(this).width()/2;
 		$('.action.processed-action .action-row.choose-satus').empty();
-		$('.action.processed-action .action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не обработан</option><option value=1>В обработке</option></select></div>');
+		$('.action.processed-action .action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=1>В обработке</option><option value=0>Не обработан</option></select></div>');
 		$('.action .btn-done').attr('data-title', goodid);
 		// $('.action').css({'top':70, 'left':60});
 	});
@@ -368,7 +368,7 @@ $(document).ready(function(){
 		// var offsetTop = $(this).offset().top + $(this).height();
 		// var offsetLeft = $(this).offset().left - 150 + $(this).width()/2;
 		$('.action.ordered-action .action-row.choose-satus').empty();
-		$('.action.ordered-action .action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не заказан</option><option value=1>Заказан</option></select></div>');
+		$('.action.ordered-action .action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option value=0>Не заказан</option><option selected value=1>Заказан</option></select></div>');
 		$('.action .btn-done').attr('data-title', goodid);
 		// $('.action').css({'top':70, 'left':60});
 	});
@@ -437,7 +437,7 @@ $(document).ready(function(){
 		// 		$('.action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не отложен</option><option value=1>Проверен и отложен</option><option value=2>Есть деффект</option></select></div>');
 
 		$('.action.postponed-action .action-row.choose-satus').empty();
-		$('.action.postponed-action .action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не отложен</option><option value=1>Проверен и отложен</option><option value=2>Есть деффект</option></select></div>');
+		$('.action.postponed-action .action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option  value=0>Не отложен</option><option selected value=1>Проверен и отложен</option><option value=2>Есть деффект</option></select></div>');
 		$('.action .btn-done').attr('data-title', goodid);
 		// $('.action').css({'top':70, 'left':60});
 	});
@@ -445,7 +445,7 @@ $(document).ready(function(){
 	$('.action.postponed-action .btn-done').click(function (e) {
 		e.preventDefault();
 		// alert($(this).closest('.action').find('select[name="status"]').val());
-		if ($(this).closest('.action').find('input[name=yourpin]').val()){
+		if ($(this).closest('.action').find('input[name=yourpin]').val() && $(this).closest('.action').find('textarea[name=comment]').val()){
 			var data = {
 				yourpin: $(this).closest('.action').find('input[name=yourpin]').val(),
 				comment: $(this).closest('.action').find('textarea[name=comment]').val(),
@@ -488,7 +488,7 @@ $(document).ready(function(){
 				}
 			});
 		}else{
-			alert('Введите ПИН');
+			alert('Заполните все поля!');
 		}
 	});
 
@@ -504,7 +504,7 @@ $(document).ready(function(){
 		// 		$('.action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не отложен</option><option value=1>Проверен и отложен</option><option value=2>Есть деффект</option></select></div>');
 
 		$('.action.callstatus-action .action-row.choose-satus').empty();
-		$('.action.callstatus-action .action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не звонили</option><option value=1>Дозвон</option><option value=2>Не дозвон</option></select></div>');
+		$('.action.callstatus-action .action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option  value=0>Не звонили</option><option selected value=1>Дозвон</option><option value=2>Не дозвон</option></select></div>');
 		$('.action .btn-done').attr('data-title', goodid);
 		// $('.action').css({'top':70, 'left':60});
 	});
@@ -569,7 +569,7 @@ $(document).ready(function(){
 		// 		$('.action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не отложен</option><option value=1>Проверен и отложен</option><option value=2>Есть деффект</option></select></div>');
 
 		$('.action.issued-action .action-row.choose-satus').empty();
-		$('.action.issued-action .action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не выдан</option><option value=1>Выдан</option></select></div>');
+		$('.action.issued-action .action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option  value=0>Не выдан</option><option selected value=1>Выдан</option></select></div>');
 		$('.action .btn-done').attr('data-title', goodid);
 		// $('.action').css({'top':70, 'left':60});
 	});

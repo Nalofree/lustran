@@ -12612,6 +12612,7 @@ h2 {
 .lustran-nav {
   width: 65px;
   background-color: #2f2032;
+  position: fixed;
 }
 /* line 10, ../sass/_components.sass */
 .lustran-nav .lustran-nav-item {
@@ -12637,12 +12638,14 @@ h2 {
 /* line 25, ../sass/_components.sass */
 .lustran-main {
   width: 100%;
+  margin-left: 65px;
 }
 
 /* line 28, ../sass/_components.sass */
 .lustran-navbar {
   background-color: #553f5a;
   color: #fff;
+  /*margin-left: 65px;*/
 }
 
 /* line 32, ../sass/_components.sass */
@@ -12730,6 +12733,10 @@ h2 {
 /* line 84, ../sass/_components.sass */
 .status-menu {
   position: relative;
+}
+
+.status-menu label {
+  color: #fff;
 }
 /* line 87, ../sass/_components.sass */
 .status-menu-dropdown.show form {
@@ -13709,4 +13716,30 @@ form[name='filter'] {
 .nav > li.resetfiltr a:hover, .nav > li.resetfiltr a:active, .nav > li.resetfiltr a:focus {
   background-color: #614a66;
   cursor: pointer;
+}
+
+.order-status-list{
+  background-color: #eee;
+  color: #aaa;
+}
+
+.order-status-edit {
+  opacity: 0.4;
+}
+
+.order-status-list:hover {
+  background: transparent;
+  color: #444;
+}
+
+.order-status-list:hover .order-status-edit {
+  opacity: 1;
+}
+
+.order-list-item-header {
+  font-size: 18px;
+}
+
+.red-text {
+  color: #f00;
 }

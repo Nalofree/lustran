@@ -36,37 +36,42 @@ block content
                     form(name='filter', method="GET")
                       .dropdown
                         .form-group
-                          select.form-control(name='processed')
-                            option(value='') Обработка
-                            option(value='0') Не обработан
+                          label(for='processed') Обработка 
+                          select.form-control(name='processed', id='processed')
+                            option(value='')
                             option(value='1') В обработке
+                            option(value='0') Не обработан                            
                             option(value='2') Обработан
                       .dropdown
                         .form-group
-                          select.form-control(name='oredered')
-                            option(value='') Заказ
-                            option(value='0') Не заказан
+                          label(for='oredered') Заказ 
+                          select.form-control(name='oredered', id='oredered')
+                            option(value='')
                             option(value='1') Заказан
+                            option(value='0') Не заказан
                       .dropdown
                         .form-group
-                          select.form-control(name='postponed')
-                            option(value='') Отгрузка
-                            option(value='0') Не отложен
+                          label(for='postponed') Отгрузка 
+                          select.form-control(name='postponed', id='postponed')
+                            option(value='')
                             option(value='1') Отложен
+                            option(value='0') Не отложен                            
                             option(value='2') Есть деффект
                       .dropdown
                         .form-group
-                          select.form-control(name='callstatus')
-                            option(value='') Дозвон
+                          label(for='callstatus') Дозвон 
+                          select.form-control(name='callstatus', id='callstatus')
+                            option(value='')
+                            option(value='1') Дозвонились
                             option(value='0') Не звонили
-                            option(value='1') Звонили
                             option(value='2') Не дозвонились
                       .dropdown
                         .form-group
-                          select.form-control(name='issued')
-                            option(value='') Выдача
-                            option(value='0') Не выдан
+                          label(for='issued') Выдача 
+                          select.form-control(name='issued', id='issued')
+                            option(value='')
                             option(value='1') Выдан
+                            option(value='0') Не выдан                            
                       .status-menu-check
                         .checkbox
                           label(for='spicdate')= "Уточненная дата"
@@ -130,7 +135,12 @@ block content
                             span.order-count.sep-dot
                               i= orders[i].goods[j].num
                               |  шт
-                            span.order-float-date= getDateReadeble(orders[i].goods[j].inddate)
+                            - var inddate = new Date(orders[i].goods[j].inddate)
+                            - var now = new Date()
+                            - if (now.getTime() > inddate.getTime() && orders[i].goods[j].postponed.statusval != 1)
+                              span.order-float-date.red-text= getDateReadeble(orders[i].goods[j].inddate)
+                            - else
+                              span.order-float-date= getDateReadeble(orders[i].goods[j].inddate)
                             .btn.btn-success.btn-xs.gethistory( data-title=orders[i].goods[j].id) История действий
                             a.remove-order-status(href='#', data-toggle='remove-order')
                           .container-fluid

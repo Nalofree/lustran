@@ -28,7 +28,7 @@ block content
                   span.name Иванов Иван Иванович
                 .wellcome-bottom Вы успешно отметились и можете приступать пользоваться системой.
                 br
-                .btn.btn-success.wellcome-ok Ок
+                button#wellcomeok.btn.btn-success.wellcome-ok OK
             // Отметившиеся
             .checking-in-wrapper
               h2 Отметившиеся
@@ -41,6 +41,7 @@ block content
                       - var dayAliasArr = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'] 
                       .period-top= nowdate + ', ' + dayAliasArr[nowDate.getDay()]
                       ul.checking-in-list
+                        li
                         - for (var i = 0; i < checks.length; i++)
                           - if (checks[i].late == 0)
                             li.checking-in-list-item
@@ -80,6 +81,7 @@ block content
                         //-   span.badge.lateness опоздание
                   - else
                     ul.checking-in-list
+                      li
                       p Отметок за вчера и сегодня пока нет
                   //- .checking-in-period
                   //-   .period-top 16 ноября, четверг

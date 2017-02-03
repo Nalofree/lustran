@@ -246,13 +246,17 @@ $(document).ready(function () {
         type: 'POST',
         data: data,
         success: function (data, status, error) {
+          if (data.err) {
+            alert(data.err);
+          }else{
+            $('.getuserinfo').fadeOut();
+            $('.userinfo').fadeIn();
+            $('.userinfo .username').text(data.name);
+            $('.userinfo .userpin').text(data.pin);
+            $('.userinfo .userstatus').text(statusToAlias(data.status));
+          }
           console.log(data, status, error);
           // $('.close-layout').fadeOut();
-          $('.getuserinfo').fadeOut();
-          $('.userinfo').fadeIn();
-          $('.userinfo .username').text(data.name);
-          $('.userinfo .userpin').text(data.pin);
-          $('.userinfo .userstatus').text(statusToAlias(data.status));
         },
         error: function (data, status, error) {
           console.log(data, status, error);
@@ -279,13 +283,17 @@ $('.getuserinfo input[name=yourpin]').keydown(function( event ) {
         type: 'POST',
         data: data,
         success: function (data, status, error) {
+          if (data.err) {
+            alert(data.err);
+          }else{
+            $('.getuserinfo').fadeOut();
+            $('.userinfo').fadeIn();
+            $('.userinfo .username').text(data.name);
+            $('.userinfo .userpin').text(data.pin);
+            $('.userinfo .userstatus').text(statusToAlias(data.status));
+          }
           console.log(data, status, error);
           // $('.close-layout').fadeOut();
-          $('.getuserinfo').fadeOut();
-          $('.userinfo').fadeIn();
-          $('.userinfo .username').text(data.name);
-          $('.userinfo .userpin').text(data.pin);
-          $('.userinfo .userstatus').text(statusToAlias(data.status));
         },
         error: function (data, status, error) {
           console.log(data, status, error);

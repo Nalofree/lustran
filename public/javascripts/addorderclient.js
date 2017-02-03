@@ -25,7 +25,13 @@ $(document).ready(function () {
         correctDate = false;
       }
     });
-    if ($('input[name=customername]').val() && $('input[name=customerphone]').val()) { //КАК ЖЕ МЕНЯ ЭТО БЕСИТ НАХУЙ
+    var namexist = true;
+    $('input[name=name]').each(function () {
+      if (!$(this).val()) {
+        namexist = false;
+      }
+    });
+    if ($('input[name=customername]').val() && $('input[name=customerphone]').val() && namexist) { //КАК ЖЕ МЕНЯ ЭТО БЕСИТ НАХУЙ
       if (correctDate) {
         $('.new-order-form-row.good-item').each(function() {
           var good = {};
@@ -49,7 +55,7 @@ $(document).ready(function () {
         alert('Некорректная дата!');
       }
     }else{
-      alert('Заполните поля имени заказчика и номера телефона заказчика!')
+      alert('Заполните поля наименование товара, имени заказчика и номера телефона заказчика!')
     }
   });
   $(".addorder-submit").click(function (e) {
@@ -72,18 +78,23 @@ $(document).ready(function () {
         data: data,
         success: function (data, status, error) {
           console.log(data, status, error);
+
           $('.close-layout').fadeOut();
           // $(".new-order-form").reset();
-          document.getElementById("neworderform").reset();
-          $(".new-order-id").text(parseInt($(".new-order-id").text())+1);
-          $(".new-order-iter").text(parseInt($(".new-order-iter").text())+1);
-          window.location = '/orders';
-          window.open(
-            '/addorder/order-'+data.order.id,
-            '_blank' // <- This is what makes it open in a new window.
-          );
-          goods = [];
-          order = {};
+          if (data.err) {
+            alert(data.err);
+          }else{
+            document.getElementById("neworderform").reset();
+            $(".new-order-id").text(parseInt($(".new-order-id").text())+1);
+            $(".new-order-iter").text(parseInt($(".new-order-iter").text())+1);
+            window.location = '/orders';
+            window.open(
+              '/addorder/order-'+data.order.id,
+              '_blank' // <- This is what makes it open in a new window.
+            );
+            goods = [];
+            order = {};
+          }          
         },
         error: function (data, status, error) {
           console.log(data, status, error);
