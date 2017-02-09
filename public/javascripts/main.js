@@ -254,6 +254,7 @@ $(document).ready(function(){
 	$('.action.processed-action .btn-done').click(function (e) {
 		e.preventDefault();
 		if ($(this).closest('.action').find('input[name=yourpin]').val()){
+			var goodid = $(this).attr('data-title');
 			var data = {
 				yourpin: $(this).closest('.action').find('input[name=yourpin]').val(),
 				comment: $(this).closest('.action').find('textarea[name=comment]').val(),
@@ -275,16 +276,16 @@ $(document).ready(function(){
 						$('.close-layout').fadeOut();
 						$('.action').fadeOut();
 						console.log(data.processed);
-						$(".processed[data-title="+data.processed.goodId+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.processed.createdAt)));
-						$(".processed[data-title="+data.processed.goodId+"]").closest('.order-status').find('.status-bottom span').text(data.user.name);
-						$(".processed[data-title="+data.processed.goodId+"]").closest('.order-status').find('.status-top .status').text(data.processed.alias);
+						$(".processed[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.processed.createdAt)));
+						$(".processed[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(data.user.name);
+						$(".processed[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text(data.processed.alias);
 						if (data.processed.statusval != 0) {
-							$(".processed[data-title="+data.processed.goodId+"]").closest('.order-status').removeClass('status-danger');
+							$(".processed[data-title="+goodid+"]").closest('.order-status').removeClass('status-danger');
 							// $(".processed[data-title="+data.processed.goodId+"]").closest('.order-status').find('.status-top .status').text('В обработке');
 							// var orderscount = parseInt($(".ordersproc").text());
 							$(".ordersproc").text(data.pcount);
 						}else{
-							$(".processed[data-title="+data.processed.goodId+"]").closest('.order-status').addClass('status-danger');
+							$(".processed[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
 							// $(".processed[data-title="+data.processed.goodId+"]").closest('.order-status').find('.status-top .status').text('Не обработан');
 							// var orderscount = parseInt($(".ordersproc").text());
 							$(".ordersproc").text(data.pcount);
@@ -317,7 +318,8 @@ $(document).ready(function(){
 
 	$('.action.spicdate-action .btn-done').click(function (e) {
 		e.preventDefault();
-		if ($(this).closest('.action').find('input[name=yourpin]').val() && $(this).closest('.action').find('input[name=status]').val()){
+		if ($(this).closest('.action').find('input[name=yourpin]').val() && $(this).closest('.action').find('input[name=status]').val() && $(this).closest('.action').find('textarea[name=comment]').val()){
+			var goodid = $(this).attr('data-title');
 			var data = {
 				yourpin: $(this).closest('.action').find('input[name=yourpin]').val(),
 				comment: $(this).closest('.action').find('textarea[name=comment]').val(),
@@ -341,12 +343,12 @@ $(document).ready(function(){
 						$('.action').fadeOut();
 						console.log(data.spicdate.statusval);
 						// console.log($(".spicdate[data-title="+data.goodid+"]").attr('data-title'));
-						$(".spicdate[data-title="+data.spicdate.goodId+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.spicdate.createdAt)));
-						$(".spicdate[data-title="+data.spicdate.goodId+"]").closest('.order-status').find('.status-bottom span').text(data.user.name);
-						$(".spicdate[data-title="+data.spicdate.goodId+"]").closest('.order-status').removeClass('status-danger');
-						$(".spicdate[data-title="+data.spicdate.goodId+"]").closest('.order-status').find('.status').text(getDateSuperReadeble(new Date(data.spicdate.statusval)));
+						$(".spicdate[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.spicdate.createdAt)));
+						$(".spicdate[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(data.user.name);
+						$(".spicdate[data-title="+goodid+"]").closest('.order-status').removeClass('status-danger');
+						$(".spicdate[data-title="+goodid+"]").closest('.order-status').find('.status').text(getDateSuperReadeble(new Date(data.spicdate.statusval)));
 						// $(".processed[data-title="+data.goodid+"]").closest('.order-status').addClass('status-danger');
-						$(".processed[data-title="+data.spicdate.goodId+"]").closest('.order-status').find('.status-top .status').text('Обработан');
+						$(".processed[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text('Обработан');
 					}
 				},
 				error: function (data, status, error) {
@@ -376,6 +378,7 @@ $(document).ready(function(){
 	$('.action.ordered-action .btn-done').click(function (e) {
 		e.preventDefault();
 		if ($(this).closest('.action').find('input[name=yourpin]').val()){
+			var goodid = $(this).attr('data-title');
 			var data = {
 				yourpin: $(this).closest('.action').find('input[name=yourpin]').val(),
 				comment: $(this).closest('.action').find('textarea[name=comment]').val(),
@@ -404,14 +407,14 @@ $(document).ready(function(){
 						$('.close-layout').fadeOut();
 						$('.action').fadeOut();
 						console.log(data.ordered);
-						$(".ordered[data-title="+data.ordered.goodId+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.ordered.createdAt)));
-						$(".ordered[data-title="+data.ordered.goodId+"]").closest('.order-status').find('.status-bottom span').text(data.user.name);
+						$(".ordered[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.ordered.createdAt)));
+						$(".ordered[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(data.user.name);
 						if ($(this).closest('.action').find('select[name="status"]').val() != 0) {
-							$(".ordered[data-title="+data.ordered.goodId+"]").closest('.order-status').removeClass('status-danger');
-							$(".ordered[data-title="+data.ordered.goodId+"]").closest('.order-status').find('.status-top .status').text('Заказан');
+							$(".ordered[data-title="+goodid+"]").closest('.order-status').removeClass('status-danger');
+							$(".ordered[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text('Заказан');
 						}else{
-							$(".ordered[data-title="+data.ordered.goodId+"]").closest('.order-status').addClass('status-danger');
-							$(".ordered[data-title="+data.ordered.goodId+"]").closest('.order-status').find('.status-top .status').text('Не заказан');
+							$(".ordered[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
+							$(".ordered[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text('Не заказан');
 						}
 					}
 				},
@@ -446,6 +449,7 @@ $(document).ready(function(){
 		e.preventDefault();
 		// alert($(this).closest('.action').find('select[name="status"]').val());
 		if ($(this).closest('.action').find('input[name=yourpin]').val() && $(this).closest('.action').find('textarea[name=comment]').val()){
+			var goodid = $(this).attr('data-title');
 			var data = {
 				yourpin: $(this).closest('.action').find('input[name=yourpin]').val(),
 				comment: $(this).closest('.action').find('textarea[name=comment]').val(),
@@ -467,17 +471,17 @@ $(document).ready(function(){
 						$('.close-layout').fadeOut();
 						$('.action').fadeOut();
 						console.log(data.postponed);
-						$(".postponed[data-title="+data.postponed.goodId+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.postponed.createdAt)));
-						$(".postponed[data-title="+data.postponed.goodId+"]").closest('.order-status').find('.status-bottom span').text(data.user.name);
-						$(".postponed[data-title="+data.postponed.goodId+"]").closest('.order-status').find('.status-top .status').text(data.postponed.alias);
+						$(".postponed[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.postponed.createdAt)));
+						$(".postponed[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(data.user.name);
+						$(".postponed[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text(data.postponed.alias);
 						if (data.postponed.statusval == 1) {
-							$(".postponed[data-title="+data.postponed.goodId+"]").closest('.order-status').removeClass('status-danger');
+							$(".postponed[data-title="+goodid+"]").closest('.order-status').removeClass('status-danger');
 							$(".ordersdef").text(data.pcount);
 						}else if(data.postponed.statusval == 0){
-							$(".postponed[data-title="+data.postponed.goodId+"]").closest('.order-status').addClass('status-danger');
+							$(".postponed[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
 							$(".ordersdef").text(data.pcount);
 						}else if(data.postponed.statusval == 2){
-							$(".postponed[data-title="+data.postponed.goodId+"]").closest('.order-status').addClass('status-danger');
+							$(".postponed[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
 							$(".ordersdef").text(data.pcount);
 						}
 					}
@@ -512,6 +516,7 @@ $(document).ready(function(){
 	$('.action.callstatus-action .btn-done').click(function (e) {
 		e.preventDefault();
 		if ($(this).closest('.action').find('input[name=yourpin]').val()){
+			var goodid = $(this).attr('data-title');
 			var data = {
 				yourpin: $(this).closest('.action').find('input[name=yourpin]').val(),
 				comment: $(this).closest('.action').find('textarea[name=comment]').val(),
@@ -533,17 +538,17 @@ $(document).ready(function(){
 						$('.close-layout').fadeOut();
 						$('.action').fadeOut();
 						console.log(data.callstatus);
-						$(".callstatus[data-title="+data.callstatus.goodId+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.callstatus.createdAt)));
-						$(".callstatus[data-title="+data.callstatus.goodId+"]").closest('.order-status').find('.status-bottom span').text(data.user.name);
+						$(".callstatus[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.callstatus.createdAt)));
+						$(".callstatus[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(data.user.name);
 						if (data.callstatus.statusval == 1) {
-							$(".callstatus[data-title="+data.callstatus.goodId+"]").closest('.order-status').removeClass('status-danger');
-							$(".callstatus[data-title="+data.callstatus.goodId+"]").closest('.order-status').find('.status-top .status').text('Дозвон');
+							$(".callstatus[data-title="+goodid+"]").closest('.order-status').removeClass('status-danger');
+							$(".callstatus[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text('Дозвон');
 						}else if(data.callstatus.statusval == 0){
-							$(".callstatus[data-title="+data.callstatus.goodId+"]").closest('.order-status').addClass('status-danger');
-							$(".callstatus[data-title="+data.callstatus.goodId+"]").closest('.order-status').find('.status-top .status').text('Не Звонили');
+							$(".callstatus[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
+							$(".callstatus[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text('Не Звонили');
 						}else{
-							$(".callstatus[data-title="+data.callstatus.goodId+"]").closest('.order-status').addClass('status-danger');
-							$(".callstatus[data-title="+data.callstatus.goodId+"]").closest('.order-status').find('.status-top .status').text('Не дозвон');
+							$(".callstatus[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
+							$(".callstatus[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text('Не дозвон');
 						}
 					}
 				},
@@ -577,6 +582,7 @@ $(document).ready(function(){
 	$('.action.issued-action .btn-done').click(function (e) {
 		e.preventDefault();
 		if ($(this).closest('.action').find('input[name=yourpin]').val()){
+			var goodid = $(this).attr('data-title');
 			var data = {
 				yourpin: $(this).closest('.action').find('input[name=yourpin]').val(),
 				comment: $(this).closest('.action').find('textarea[name=comment]').val(),
@@ -599,14 +605,14 @@ $(document).ready(function(){
 						$('.close-layout').fadeOut();
 						$('.action').fadeOut();
 						console.log(data.issued);
-						$(".issued[data-title="+data.issued.goodId+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.issued.createdAt)));
-						$(".issued[data-title="+data.issued.goodId+"]").closest('.order-status').find('.status-bottom span').text(data.user.name);
-						$(".issued[data-title="+data.issued.goodId+"]").closest('.order-status').find('.status-top .status').text(data.issued.alias);
+						$(".issued[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.issued.createdAt)));
+						$(".issued[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(data.user.name);
+						$(".issued[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text(data.issued.alias);
 						if (data.issued.statusval == 1) {
-							$(".issued[data-title="+data.issued.goodId+"]").closest('.order-status').removeClass('status-danger');
+							$(".issued[data-title="+goodid+"]").closest('.order-status').removeClass('status-danger');
 							$(".ordersissued").text(data.pcount);
 						}else{
-							$(".issued[data-title="+data.issued.goodId+"]").closest('.order-status').addClass('status-danger');
+							$(".issued[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
 							$(".ordersissued").text(data.pcount);
 						}
 					}
@@ -730,11 +736,87 @@ $(document).ready(function(){
 				// console.log(data.good.processed.createdAt +" "+ data.good.processed.user.name +" "+ data.good.processed.location.alias +" "+ data.good.processed.alias);
 				$(".close-layout").fadeIn();
 				$('.history').fadeIn();
+				$('input[name="goodid"]').val(goodid);
+				$(".addcomment input[name='yourpin']").val('');
+				$(".addcomment textarea[name='comment']").val('');
+				$(".addcomment input[name='yourpin']").focus();
 			},
 			error: function (data, status, error) {
 				console.log(data, status, error);
 			}
 		});
+	});
+
+	$(".history .addcomment-submit").click(function (e) {
+		e.preventDefault();
+		if ($(".addcomment input[name='yourpin']").val() && $(".addcomment textarea[name='comment']").val()) {
+			data = {
+				yourpin: $(".addcomment input[name='yourpin']").val(),
+				comment: $(".addcomment textarea[name='comment']").val(),
+				goodid: $(".addcomment input[name='goodid']").val()
+			}
+			$.ajax({
+				url: "/orders/addcomment",
+				type: "POST",
+				data: data,
+				success: function (data, status, error) {
+					console.log(data, status, error);
+					if (data.err) {
+						alert(data.err);
+						console.log(data.err);
+					}else{
+						var comment = data.action.comment == null ? '' : data.action.comment
+						$('.history .table tbody').append('<tr><td>'+getTimeReadeble(new Date(data.action.createdAt)) +"</td><td>"+ data.action.user.name +"</td><td>"+ data.action.location.alias +'</td><td>'+ data.action.alias+'</td><td>'+ comment +'</td></tr>');
+						$(".addcomment input[name='yourpin']").val('');
+						$(".addcomment textarea[name='comment']").val('');
+						$(".addcomment input[name='yourpin']").focus();
+					}
+				},
+				error: function (data, status, error) {
+					console.log(data, status, error);
+				}
+			});
+
+		}else{
+			alert("3аполните все поля");
+		}
+	});
+
+	$(".history").keyup(function (e) {
+		if ( e.which == 13 ) {
+	    e.preventDefault();
+			if ($(".addcomment input[name='yourpin']").val() && $(".addcomment textarea[name='comment']").val()) {
+				data = {
+					yourpin: $(".addcomment input[name='yourpin']").val(),
+					comment: $(".addcomment textarea[name='comment']").val(),
+					goodid: $(".addcomment input[name='goodid']").val()
+				}
+				$.ajax({
+					url: "/orders/addcomment",
+					type: "POST",
+					data: data,
+					success: function (data, status, error) {
+						console.log(data, status, error);
+						if (data.err) {
+							alert(data.err);
+							console.log(data.err);
+						}else{
+							var comment = data.action.comment == null ? '' : data.action.comment
+							$('.history .table tbody').append('<tr><td>'+getTimeReadeble(new Date(data.action.createdAt)) +"</td><td>"+ data.action.user.name +"</td><td>"+ data.action.location.alias +'</td><td>'+ data.action.alias+'</td><td>'+ comment +'</td></tr>');
+							$(".addcomment input[name='yourpin']").val('');
+							$(".addcomment textarea[name='comment']").val('');
+							$(".addcomment input[name='yourpin']").focus();
+						}
+					},
+					error: function (data, status, error) {
+						console.log(data, status, error);
+					}
+				});
+
+			}else{
+				alert("3аполните все поля");
+			}
+	  }
 	});
 
 	//Search

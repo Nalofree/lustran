@@ -12,6 +12,10 @@ module.exports = function(sequelize, DataTypes) {
     num: DataTypes.INTEGER,
     inddate: DataTypes.DATE,
     prepay: DataTypes.TEXT,
+    active: {
+        type: DataTypes.INTEGER,
+        defaultValue: 1
+    },
     orderId: DataTypes.INTEGER,
     processedId: DataTypes.INTEGER,
     spicdateId: DataTypes.INTEGER,

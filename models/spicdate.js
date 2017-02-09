@@ -8,7 +8,7 @@ module.exports = function(sequelize, DataTypes) {
         autoIncrement: true
     },
     userId: DataTypes.INTEGER,
-    goodId: DataTypes.INTEGER,
+    // goodId: DataTypes.INTEGER,
     locationId: DataTypes.INTEGER,
     statusval: DataTypes.DATE,
     alias: DataTypes.TEXT,

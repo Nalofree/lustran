@@ -44,7 +44,10 @@ $(document).ready(function () {
     $('.setlocpin').fadeOut();
     $(".dellocpin").fadeOut();
     $(".banuserpin").fadeOut();
-    $('from.addorder').fadeOut();
+    // $('from.addorder').fadeOut();
+    $('from.addorder').fadeOut(100,function () {
+      $(".new-order input[name='name']:first").focus();
+    });
     $('.getuserinfo').fadeOut();
     $('.userinfo').fadeOut();
     $('.action').fadeOut();
@@ -179,11 +182,11 @@ $(document).ready(function () {
         yourpin: $('.edituserform input[name="yourpin"]').val(),
         userid: $(this).attr('data-title')
       };
-      if ($('.edituserform input[name="userpin"]').val()) {
-        data.userpin = $('.edituserform input[name="userpin"]').val();
-      }else{
-        data.userpin = 0;
-      }
+      // if ($('.edituserform input[name="userpin"]').val()) {
+      //   data.userpin = $('.edituserform input[name="userpin"]').val();
+      // }else{
+      //   data.userpin = 0;
+      // }
       $.ajax({
         url: '/users/updateuser',
         type: 'POST',

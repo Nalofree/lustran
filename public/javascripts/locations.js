@@ -148,8 +148,24 @@ $(document).ready(function () {
         data: data,
         success: function (data, status, error) {
           console.log(data, status, error);
-          // $('.locations-table tbody').append('<tr id="'+data.location.id+'"><td>'+data.location.fullname+'</td><td> c ' + data.location.opentime + ' по ' + data.location.closetime+'</td><td><div data-title="'+data.location.id+'" class="btn btn-success choose-location">Выбрать</div></td><td><div data-title="'+data.location.id+'" class="btn btn-default edit-location">Редактировать</div></td></tr>');
-          $('tr#'+data.location.id).html('<td>'+data.location.fullname+'</td><td> c ' + data.location.opentime + ' по ' + data.location.closetime+'</td><td><div data-title="'+data.location.id+'" class="btn btn-success choose-location">Выбрать</div></td><td><div data-title="'+data.location.id+'" class="btn btn-default edit-location">Редактировать</div></td>');
+          if (data.err) {
+            alert(data.err);
+          }else{
+            // $('.locations-table tbody').append('<tr id="'+data.location.id+'"><td>'+data.location.fullname+'</td><td> c ' + data.location.opentime + ' по ' + data.location.closetime+'</td><td><div data-title="'+data.location.id+'" class="btn btn-success choose-location">Выбрать</div></td><td><div data-title="'+data.location.id+'" class="btn btn-default edit-location">Редактировать</div></td></tr>');
+            $('tr#'+data.location.id).html('<td>'+data.location.fullname+'</td><td> c ' + data.location.opentime + ' по ' + data.location.closetime+'</td><td><div data-title="'+data.location.id+'" class="btn btn-success choose-location">Выбрать</div></td><td><div data-title="'+data.location.id+'" class="btn btn-default edit-location">Редактировать</div></td>');
+            $(".editlocpin input[name='fullname']").val('');
+            $(".editlocpin input[name='alias']").val('');
+            $(".editlocpin input[name='adres']").val('');
+            $(".editlocpin input[name='opentime']").val('');
+            $(".editlocpin input[name='closetime']").val('');
+            $(".editlocpin input[name='yourpin']").val('');
+            $(".editlocpin").fadeOut();
+            $(".close-layout").fadeOut();
+          }
+        },
+        error: function (data, status, error) {
+          console.log(data, status, error);
+          alert('Что-то пошло не так, обратитесь к администратору');
           $(".editlocpin input[name='fullname']").val('');
           $(".editlocpin input[name='alias']").val('');
           $(".editlocpin input[name='adres']").val('');
@@ -158,9 +174,6 @@ $(document).ready(function () {
           $(".editlocpin input[name='yourpin']").val('');
           $(".editlocpin").fadeOut();
           $(".close-layout").fadeOut();
-        },
-        error: function (data, status, error) {
-          console.log(data, status, error);
         }
       });
     }else{

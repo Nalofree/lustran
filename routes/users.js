@@ -33,7 +33,7 @@ router.post('/', function(req, res, next) {
       }
     }).then(function (fuser) {
       if (fuser) {
-        if (fuser.status == "manager") {
+        if (fuser.status == "manager" && fuser.active == 1) {
           var randomUserPin = randomPin(0,9);
           models.users.findAll().then(function (fusers) {
             var pins = [];
@@ -78,13 +78,13 @@ router.post('/updateuser', function(req, res, next) {
     }
   }).then(function (fuser) {
     if (fuser) {
-      if (fuser.status == "manager") {
+      if (fuser.status == "manager" && fuser.active == 1) {
         createObj = {};
         createObj.name = req.body.fio;
         createObj.status = req.body.status;
-        if (req.body.userpin != 0) {
-          createObj.pin = req.body.userpin;
-        }
+        // if (req.body.userpin != 0) {
+        //   createObj.pin = req.body.userpin;
+        // }
         models.users.update(
           createObj,
           {

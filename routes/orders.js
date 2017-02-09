@@ -128,6 +128,7 @@ router.get('/', function(req, res, next) {
     var ordersproc = 0;
     var ordersissued = 0;
     var ordersdef = 0;
+		var goodcount = 0;
     for (var i = 0; i < forders.length; i++) {
       orderscount++;
       // orders[i]
@@ -142,11 +143,19 @@ router.get('/', function(req, res, next) {
           ordersdef++;
         }
       }
+			// goodcount++;
+			// var goodcount = 0;
+			// for (var i = 0; i < forders.length; i++) {
+			// 	// forders[i]
+				for (var j = 0; j < forders[i].goods.length; j++) {
+					goodcount++;
+				}
+			// }
     }
-		if (lastStatus) {
-			
-		}
-    res.render('orders', {title: 'Заказы', orders: forders, orderscount: orderscount, ordersproc: ordersproc, ordersissued: ordersissued, ordersdef: ordersdef});
+		// if (lastStatus) {
+		//
+		// }
+    res.render('orders', {title: 'Заказы', goodcount: goodcount, orders: forders, orderscount: orderscount, ordersproc: ordersproc, ordersissued: ordersissued, ordersdef: ordersdef});
     // res.send(forders);
   }).catch(function (err) {
     res.send(err);
@@ -161,58 +170,9 @@ router.post('/getgoodhistiry', function (req,res,next) {
       goodId: req.body.goodid
     }
   };
-  models.processed.findAll(whereobj).then(function (processed) {
-    models.spicdate.findAll(whereobj).then(function (spicdate) {
-      models.ordered.findAll(whereobj).then(function (ordered) {
-        models.postponed.findAll(whereobj).then(function (postponed) {
-          models.callstatus.findAll(whereobj).then(function (callstatus) {
-            models.issued.findAll(whereobj).then(function (issued) {
-              var actions = [];
-              for (var i = 0; i < processed.length; i++) {
-                actions.push(processed[i]);
-              }
-              for (var i = 0; i < spicdate.length; i++) {
-                spicdate[i].alias = spicdate[i].statusval == null ? "УД: --.--.--" : "УД: "+getDateSuperReadeble(spicdate[i].statusval);
-                actions.push(spicdate[i]);
-              }
-              for (var i = 0; i < ordered.length; i++) {
-                actions.push(ordered[i]);
-              }
-              for (var i = 0; i < postponed.length; i++) {
-                actions.push(postponed[i]);
-              }
-              for (var i = 0; i < callstatus.length; i++) {
-                actions.push(callstatus[i]);
-              }
-              for (var i = 0; i < issued.length; i++) {
-                actions.push(issued[i]);
-              }
-              function compareDate(actionA, actionB) {
-                return actionA.createdAt - actionB.createdAt;
-              };
-              actions.sort(compareDate);
-              res.send({actions: actions});
-            }).catch(function (err) {
-              res.send({err: err});
-              console.log(err);
-            });
-          }).catch(function (err) {
-            res.send({err: err});
-            console.log(err);
-          });
-        }).catch(function (err) {
-          res.send({err: err});
-          console.log(err);
-        });
-      }).catch(function (err) {
-        res.send({err: err});
-        console.log(err);
-      });
-    }).catch(function (err) {
-      res.send({err: err});
-      console.log(err);
-    });
-  }).catch(function (err) {
+	models.actions.findAll(whereobj).then(function (actions) {
+		res.send({actions: actions});
+	}).catch(function (err) {
     res.send({err: err});
     console.log(err);
   });
@@ -226,7 +186,7 @@ router.post('/setprocessed', function (req, res, next) {
     }
   }).then(function (user) {
     if (user) {
-      if (user.status == 'supplier' || user.status == 'manager') {
+      if ((user.status == 'supplier' || user.status == 'manager') && user.active == 1) {
         models.goods.findOne({
           include: [models.processed],
           where: {
@@ -261,7 +221,19 @@ router.post('/setprocessed', function (req, res, next) {
 				            '$processed.statusval$': 1
 				          }
 								}).then(function (goods) {
-									res.send({processed: processed, user: user, pcount: goods.length});
+									models.actions.create({
+										locationId: req.cookies.location,
+	                  userId: user.id,
+	                  goodId: req.body.goodid,
+	                  statusval: req.body.statusval,
+	                  alias: alias,
+	                  comment: req.body.comment
+									}).then(function (action) {
+										res.send({processed: processed, user: user, pcount: goods.length});
+									}).catch(function (err) {
+										res.send({err: err});
+		                console.log(err);
+									});
 								}).catch(function (err) {
 									res.send({err: err});
 	                console.log(err);
@@ -301,14 +273,14 @@ router.post('/setspicdate', function (req, res, next) {
     }
   }).then(function (user) {
     if (user) {
-      if (user.status == 'supplier' || user.status == 'manager') {
+      if ((user.status == 'supplier' || user.status == 'manager') && user.active == 1) {
         models.goods.findOne({
           include: [models.spicdate, models.processed],
           where: {
             id: req.body.goodid
           }
         }).then(function (good) {
-          if (good.processed.statusval == 1) {
+          if (good.processed.statusval == 1 || good.processed.statusval == 2) {
             models.spicdate.create({
               statusval: req.body.statusval,
 							comment: req.body.comment,
@@ -337,7 +309,32 @@ router.post('/setspicdate', function (req, res, next) {
                       id: req.body.goodid
                     }
                   }).then(function (goods) {
-                    res.send({spicdate: spicdate, user: user});
+										models.actions.create({
+											locationId: req.cookies.location,
+		                  userId: user.id,
+		                  goodId: req.body.goodid,
+		                  statusval: req.body.statusval,
+		                  alias: 'Ут. дата: '+req.body.statusval,
+		                  comment: req.body.comment
+										}).then(function (action) {
+											models.actions.create({
+												locationId: req.cookies.location,
+			                  userId: user.id,
+			                  goodId: req.body.goodid,
+			                  statusval: 2,
+			                  alias: 'Обработан',
+			                  comment: ' '
+											}).then(function (action) {
+												res.send({spicdate: spicdate, user: user});
+											}).catch(function (err) {
+												res.send({err: err});
+				                console.log(err);
+											});
+										}).catch(function (err) {
+											res.send({err: err});
+			                console.log(err);
+										});
+                    // res.send({spicdate: spicdate, user: user});
                   }).catch(function (err) {
                     res.send({err: err});
                     console.log(err);
@@ -381,7 +378,7 @@ router.post('/setordered', function (req, res, next) {
     }
   }).then(function (user) {
     if (user) {
-      if (user.status == 'supplier' || user.status == 'manager') {
+      if ((user.status == 'supplier' || user.status == 'manager') && user.active == 1) {
         models.goods.findOne({
           include: [models.ordered, models.processed],
           where: {
@@ -410,7 +407,20 @@ router.post('/setordered', function (req, res, next) {
                   id: req.body.goodid
                 }
               }).then(function (goods) {
-                res.send({ordered: ordered, user: user})
+								models.actions.create({
+									locationId: req.cookies.location,
+									userId: user.id,
+									goodId: req.body.goodid,
+									statusval: req.body.statusval,
+									alias: alias,
+									comment: req.body.comment
+								}).then(function (action) {
+									res.send({ordered: ordered, user: user});
+								}).catch(function (err) {
+									res.send({err: err});
+									console.log(err);
+								});
+                // res.send({ordered: ordered, user: user});
               }).catch(function (err) {
                 res.send({err: err});
                 console.log('update goods',err);
@@ -446,7 +456,7 @@ router.post('/setpostponed', function (req, res, next) {
     }
   }).then(function (user) {
     if (user) {
-      if (user.status == 'saler' || user.status == 'manager') {
+      if ((user.status == 'saler' || user.status == 'manager') && user.active == 1) {
         models.goods.findOne({
           include: [models.postponed, models.ordered],
           where: {
@@ -484,7 +494,20 @@ router.post('/setpostponed', function (req, res, next) {
 				            '$postponed.statusval$': 2
 				          }
 								}).then(function (goods) {
-									res.send({postponed: postponed, user: user, pcount: goods.length});
+									models.actions.create({
+										locationId: req.cookies.location,
+										userId: user.id,
+										goodId: req.body.goodid,
+										statusval: req.body.statusval,
+										alias: alias,
+										comment: req.body.comment
+									}).then(function (action) {
+										res.send({postponed: postponed, user: user, pcount: goods.length});
+									}).catch(function (err) {
+										res.send({err: err});
+										console.log(err);
+									});
+									// res.send({postponed: postponed, user: user, pcount: goods.length});
 								}).catch(function (err) {
 									res.send({err: err});
 	                console.log(err);
@@ -525,7 +548,7 @@ router.post('/setcallstatus', function (req, res, next) {
     }
   }).then(function (user) {
     if (user) {
-      if (user.status == 'saler' || user.status == 'supplier' || user.status == 'manager') {
+      if ((user.status == 'saler' || user.status == 'supplier' || user.status == 'manager') && user.active == 1) {
         models.goods.findOne({
           include: [models.callstatus, models.postponed],
           where: {
@@ -557,7 +580,20 @@ router.post('/setcallstatus', function (req, res, next) {
                   id: req.body.goodid
                 }
               }).then(function (goods) {
-                res.send({callstatus: callstatus, user: user})
+								models.actions.create({
+									locationId: req.cookies.location,
+									userId: user.id,
+									goodId: req.body.goodid,
+									statusval: req.body.statusval,
+									alias: alias,
+									comment: req.body.comment
+								}).then(function (action) {
+									res.send({callstatus: callstatus, user: user});
+								}).catch(function (err) {
+									res.send({err: err});
+									console.log(err);
+								});
+                // res.send({callstatus: callstatus, user: user});
               }).catch(function (err) {
                 res.send({err: err});
                 console.log('update goods',err);
@@ -593,7 +629,7 @@ router.post('/setissued', function (req, res, next) {
     }
   }).then(function (user) {
     if (user) {
-      if (user.status == 'saler' || user.status == 'manager') {
+      if ((user.status == 'saler' || user.status == 'manager') && user.active == 1) {
         models.goods.findOne({
           include: [models.issued, models.callstatus],
           where: {
@@ -628,7 +664,20 @@ router.post('/setissued', function (req, res, next) {
 				            '$issued.statusval$': 1
 				          }
 								}).then(function (goods) {
-									res.send({issued: issued, user: user, pcount: goods.length});
+									models.actions.create({
+										locationId: req.cookies.location,
+										userId: user.id,
+										goodId: req.body.goodid,
+										statusval: req.body.statusval,
+										alias: alias,
+										comment: req.body.comment
+									}).then(function (action) {
+										res.send({issued: issued, user: user, pcount: goods.length});
+									}).catch(function (err) {
+										res.send({err: err});
+										console.log(err);
+									});
+									// res.send({issued: issued, user: user, pcount: goods.length});
 								}).catch(function (err) {
 									res.send({err: err});
 	                console.log(err);
@@ -652,6 +701,50 @@ router.post('/setissued', function (req, res, next) {
       }else{
         res.send({err: 'Недостаточно прав'});
       }
+    }else{
+      res.send({err: 'Неверный ПИН'});
+    }
+  }).catch(function (err) {
+    res.send({err: err});
+    console.log('user',err);
+  })
+});
+
+router.post('/addcomment', function (req, res, next) {
+  // res.send('response');
+	console.log(req.body);
+  models.users.findOne({
+    where: {
+      pin: req.body.yourpin
+    }
+  }).then(function (user) {
+    if (user) {
+			models.actions.create({
+				locationId: req.cookies.location,
+				userId: user.id,
+				goodId: req.body.goodid,
+				statusval: ' ',
+				alias: 'Комментарий',
+				comment: req.body.comment
+			}).then(function (action) {
+				models.actions.findOne({
+					include: [models.users,models.locations],
+					where: {
+						id: action.id
+					}
+				}).then(function (action) {
+					res.send({
+						err: false,
+						action: action
+					});
+				}).catch(function (err) {
+					res.send({err: err});
+					console.log(err);
+				});				
+			}).catch(function (err) {
+				res.send({err: err});
+				console.log(err);
+			});
     }else{
       res.send({err: 'Неверный ПИН'});
     }

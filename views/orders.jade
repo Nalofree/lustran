@@ -86,7 +86,10 @@ block content
                   input.form-control(type='text', placeholder='Поиск...', name='search')
               ul.nav.navbar-nav.navbar-right
                 li.navbar-text
-                  | Заказов всего 
+                  | Товаров 
+                  span.badge.badge-pur-light.goodcount= goodcount
+                li.navbar-text
+                  | Заказов 
                   span.badge.badge-pur-light.orderscount= orderscount
                 li.navbar-text
                   | В обработке 
@@ -106,7 +109,18 @@ block content
                   th Пользователь
                   th Место
                   th Присвоеный статус
+                  th Комментарий
               tbody
+            form.addcomment.col-sm-6.col-sm-offset-3(action="/orders/addcomment" method="POST")
+              .form-group
+                label(for='yourpin') Пин
+                input.form-control(type='password', name='yourpin', placeholder='ПИН', autofocus)
+              .form-group
+                label(for='comment') Комментарий
+                textarea.form-control(name='comment', placeholder='Комментарий')
+              input(type='hidden',name='goodid')
+              .form-group
+                input.btn.btn-success.form-control.addcomment-submit(type='submit')
           // Заказ
           - if (orders.length > 0)
             -for (var i=0;i<orders.length;i++)

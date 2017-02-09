@@ -18,7 +18,7 @@ router.post('/', function(req, res, next) {
     }
   }).then(function(user) {
     if (user) {
-      if (user.status == 'manager') {
+      if (user.status == 'manager' && user.active == 1) {
         models.locations.create({
           fullname: req.body.fullname,
           opentime: req.body.opentime,
@@ -181,7 +181,7 @@ router.post('/updatelocinfo', function(req, res, next) {
     }
   }).then(function (user) {
     if (user) {
-      if (user.status == "manager") {
+      if (user.status == "manager" && user.active == 1) {
         models.locations.update(
           {
             fullname: req.body.fullname,

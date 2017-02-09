@@ -5456,8 +5456,8 @@ tbody.collapse.in {
 }
 /* line 46, ../vendor/bootstrap/assets/stylesheets/bootstrap/_navs.scss */
 .nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
-  background-color: #eeeeee;
-  border-color: #337ab7;
+  background-color: #2F2032;
+  border-color: #2F2032;
 }
 /* line 59, ../vendor/bootstrap/assets/stylesheets/bootstrap/_navs.scss */
 .nav .nav-divider {
@@ -5610,7 +5610,7 @@ tbody.collapse.in {
 /* line 11, ../vendor/bootstrap/assets/stylesheets/bootstrap/_navbar.scss */
 .navbar {
   position: relative;
-  min-height: 81px;
+  /*min-height: 81px;*/
   margin-bottom: 20px;
   border: 1px solid transparent;
 }
@@ -5727,7 +5727,7 @@ tbody.collapse.in {
 
 /* line 128, ../vendor/bootstrap/assets/stylesheets/bootstrap/_navbar.scss */
 .navbar-static-top {
-  z-index: 1000;
+  /*z-index: 1000;*/
   border-width: 0 0 1px;
 }
 @media (min-width: 768px) {
@@ -5871,8 +5871,8 @@ tbody.collapse.in {
   }
   /* line 272, ../vendor/bootstrap/assets/stylesheets/bootstrap/_navbar.scss */
   .navbar-nav > li > a {
-    padding-top: 30.5px;
-    padding-bottom: 30.5px;
+    /*padding-top: 30.5px;
+    padding-bottom: 30.5px;*/
   }
 }
 
@@ -6007,8 +6007,10 @@ tbody.collapse.in {
 
 /* line 359, ../vendor/bootstrap/assets/stylesheets/bootstrap/_navbar.scss */
 .navbar-text {
-  margin-top: 30.5px;
-  margin-bottom: 30.5px;
+  /*margin-top: 30.5px;
+  margin-bottom: 30.5px;*/
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 @media (min-width: 768px) {
   /* line 359, ../vendor/bootstrap/assets/stylesheets/bootstrap/_navbar.scss */
@@ -12646,6 +12648,7 @@ h2 {
   background-color: #553f5a;
   color: #fff;
   /*margin-left: 65px;*/
+  z-index: 50;
 }
 
 /* line 32, ../sass/_components.sass */
@@ -12678,7 +12681,7 @@ h2 {
 /* line 45, ../sass/_components.sass */
 .lustran-search-form .form-group {
   width: 100%;
-  height: 81px;
+  height: 40px;
 }
 /* line 48, ../sass/_components.sass */
 .lustran-search-form .form-group input {
@@ -12909,7 +12912,7 @@ h2 {
 }
 /* line 199, ../sass/_components.sass */
 .order-list-item .order-list-item-header .order-count::before {
-  content: "Количество: ";
+  content: "Кол-во: ";
   font-weight: 300;
 }
 /* line 202, ../sass/_components.sass */
@@ -12981,6 +12984,7 @@ h2 {
   display: flex;
   justify-content: space-between;
   border-radius: 5px;
+  min-height: 50px;
 }
 /* line 249, ../sass/_components.sass */
 .order-status .order-status-body {
@@ -13085,7 +13089,7 @@ h2 {
   -webkit-flex-wrap: wrap;
   flex-wrap: wrap;
   white-space: normal;
-  padding: 80px 0;
+  /*padding: 80px 0;*/
 }
 
 /* line 314, ../sass/_components.sass */
@@ -13206,7 +13210,7 @@ h2 {
   display: -moz-flex;
   display: -webkit-box;
   display: flex;
-  min-height: 100vh;
+  /*min-height: 100vh;*/
 }
 /* line 388, ../sass/_components.sass */
 .check-in-wrapper .check-in-inner {
@@ -13647,7 +13651,8 @@ label.check {
 .location-name:link,
 .location-name:visited {
   color: #000;
-  line-height: 30px;
+  /*line-height: 30px;*/
+  background-color: #fff;
 }
 
 a.location-name:hover {
@@ -13743,3 +13748,7 @@ form[name='filter'] {
 .red-text {
   color: #f00;
 }
+
+/*.main-nav > .nav > li > a {
+  padding: 1px 15px;
+}*/

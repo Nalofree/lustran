@@ -36,7 +36,7 @@ router.post('/', function(req, res, next) {
           }
         }).then(function (fuser) {
           if (fuser) {
-            if (fuser.status == req.body.status) {
+            if (fuser.status == req.body.status && fuser.active == 1) {
               res.send({
                 err: false,
                 user: fuser

@@ -7,12 +7,13 @@ module.exports = function(sequelize, DataTypes) {
         primaryKey: true,
         autoIncrement: true
     },
-    number: DataTypes.INTEGER,
+    // number: DataTypes.INTEGER,
     locationId: DataTypes.INTEGER,
     userId: DataTypes.INTEGER,
     goodId: DataTypes.INTEGER,
     statusval: DataTypes.TEXT,
-    alias: DataTypes.TEXT
+    alias: DataTypes.TEXT,
+    comment: DataTypes.TEXT,
   },{
     classMethods: {
       associate: function(models) {

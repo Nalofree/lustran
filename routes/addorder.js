@@ -40,107 +40,139 @@ router.post('/', function (req, res, nex) {
     }
   }).then(function (user) {
     if (user) {
-      if (user.status == "manager" || user.status == "saler") {
-        models.orders.create({
-          customername: req.body.order.customername,
-          customerphone: req.body.order.customerphone,
-          comment: req.body.order.comment,
-          userId: user.id,
-          locationId: req.body.order.locationid,
-          number: req.body.order.number
-        }).then(function (order) {
-          // res.send({order: order});
-          var goods = req.body.goods;
-          for (var i = 0; i < goods.length; i++) {
-            goods[i].orderId = order.id;
+      if ((user.status == "manager" || user.status == "saler") && (user.active == 1)) {
+        models.users.findOne({
+          where: {
+            status: 'starter'
           }
-          models.goods.bulkCreate(goods, {
-            individualHooks: true
-          }).then(function (goods) {
+        }).then(function (starter) {
+          models.orders.create({
+            customername: req.body.order.customername,
+            customerphone: req.body.order.customerphone,
+            comment: req.body.order.comment,
+            userId: user.id,
+            locationId: req.body.order.locationid,
+            number: req.body.order.number
+          }).then(function (order) {
             // res.send({order: order});
-            // var procarr = [];
-            var goodids = [];
-            var processed = {
-              userId: user.id,
-              // goodId:
-              locationId: req.body.order.locationid,
-              statusval: 0,
-              alias: 'Не обработан'
-            }
-            var spicdate = {
-              userId: user.id,
-              // goodId:
-              locationId: req.body.order.locationid,
-              statusval: null,
-              alias: ''
-            }
-            var ordered = {
-              userId: user.id,
-              // goodId:
-              locationId: req.body.order.locationid,
-              statusval: 0,
-              alias: 'Не заказан'
-            }
-            var postponed = {
-              userId: user.id,
-              // goodId:
-              locationId: req.body.order.locationid,
-              statusval: 0,
-              alias: 'Не отложен'
-            }
-            var callstatus = {
-              userId: user.id,
-              // goodId:
-              locationId: req.body.order.locationid,
-              statusval: 0,
-              alias: 'Не звонили'
-            }
-            var issued = {
-              userId: user.id,
-              // goodId:
-              locationId: req.body.order.locationid,
-              statusval: 0,
-              alias: 'Не выдан'
-            }
-            // console.log(' : ');
-            // console.log(goods);
-            // console.log(' : ');
+            var goods = req.body.goods;
             for (var i = 0; i < goods.length; i++) {
-              goodids.push(goods[i].id);
-              processed.goodId = goods[i].id;
-              spicdate.goodId = goods[i].id;
-              ordered.goodId = goods[i].id;
-              postponed.goodId = goods[i].id;
-              callstatus.goodId = goods[i].id;
-              issued.goodId = goods[i].id;
+              goods[i].orderId = order.id;
             }
-            console.log('goodids: '+goodids);
-            processedids = [];
-            models.processed.create(processed).then(function (processed) {
-              models.spicdate.create(spicdate).then(function (spicdate) {
-                models.ordered.create(ordered).then(function (ordered) {
-                  models.postponed.create(postponed).then(function (postponed) {
-                    models.callstatus.create(callstatus).then(function (callstatus) {
-                      models.issued.create(issued).then(function (issued) {
-                        models.goods.update({
-                          processedId: processed.id,
-                          spicdateId: spicdate.id,
-                          orderedId: ordered.id,
-                          postponedId: postponed.id,
-                          callstatusId: callstatus.id,
-                          issuedId: issued.id
-                        },{
-                          where: {
-                            id: {
-                              $in: goodids
+            models.goods.bulkCreate(goods, {
+              individualHooks: true
+            }).then(function (goods) {
+              // res.send({order: order});
+              // var procarr = [];
+              var goodids = [];
+              var setprocessed = {
+                userId: starter.id,
+                // goodId:
+                locationId: req.body.order.locationid,
+                statusval: 0,
+                alias: 'Не обработан'
+              }
+              var setspicdate = {
+                userId: starter.id,
+                // goodId:
+                locationId: req.body.order.locationid,
+                statusval: null,
+                alias: ''
+              }
+              var setordered = {
+                userId: starter.id,
+                // goodId:
+                locationId: req.body.order.locationid,
+                statusval: 0,
+                alias: 'Не заказан'
+              }
+              var setpostponed = {
+                userId: starter.id,
+                // goodId:
+                locationId: req.body.order.locationid,
+                statusval: 0,
+                alias: 'Не отложен'
+              }
+              var setcallstatus = {
+                userId: starter.id,
+                // goodId:
+                locationId: req.body.order.locationid,
+                statusval: 0,
+                alias: 'Не звонили'
+              }
+              var setissued = {
+                userId: starter.id,
+                // goodId:
+                locationId: req.body.order.locationid,
+                statusval: 0,
+                alias: 'Не выдан'
+              }
+              // console.log(' : ');
+              // console.log(goods);
+              // console.log(' : ');
+              var actions = [];
+              for (var i = 0; i < goods.length; i++) {
+                goodids.push(goods[i].id);
+                // processed.goodId = goods[i].id;
+                // spicdate.goodId = goods[i].id;
+                // ordered.goodId = goods[i].id;
+                // postponed.goodId = goods[i].id;
+                // callstatus.goodId = goods[i].id;
+                // issued.goodId = goods[i].id;
+                actions.push({
+                  // number: DataTypes.INTEGER,
+                  locationId: req.body.order.locationid,
+                  userId: user.id,
+                  goodId: goods[i].id,
+                  statusval: ' ',
+                  alias: 'Создан товар',
+                  comment: ' '
+                });
+              }
+              console.log(actions);
+              processedids = [];
+              models.processed.create(setprocessed).then(function (processed) {
+                models.spicdate.create(setspicdate).then(function (spicdate) {
+                  models.ordered.create(setordered).then(function (ordered) {
+                    models.postponed.create(setpostponed).then(function (postponed) {
+                      models.callstatus.create(setcallstatus).then(function (callstatus) {
+                        models.issued.create(setissued).then(function (issued) {
+                          // console.log("processedId: " + processed.id);
+                          // console.log("spicdateId: " + spicdate.id);
+                          // console.log("orderedId: " + ordered.id);
+                          // console.log("postponedId: " + postponed.id);
+                          // console.log("callstatusId: " + callstatus.id);
+                          // console.log("issuedId: " + issued.id);
+                          models.goods.update({
+                            processedId: processed.id,
+                            spicdateId: spicdate.id,
+                            orderedId: ordered.id,
+                            postponedId: postponed.id,
+                            callstatusId: callstatus.id,
+                            issuedId: issued.id
+                          },{
+                            where: {
+                              id: {
+                                $in: goodids
+                              }
                             }
-                          }
-                        }).then(function (goods) {
-                          res.send({goods: goods, order: order});
+                          }).then(function (goods) {
+                            models.actions.bulkCreate(actions, {
+                              individualHooks: true
+                            }).then(function (actions) {
+                              res.send({goods: goods, order: order});
+                            }).catch(function (err) {
+                              res.send({err: err});
+                              console.log(err);
+                            })
+                          }).catch(function (err) {
+                            res.send({err: err});
+                            console.log(err);
+                          })
                         }).catch(function (err) {
                           res.send({err: err});
                           console.log(err);
-                        })
+                        });
                       }).catch(function (err) {
                         res.send({err: err});
                         console.log(err);
@@ -161,12 +193,12 @@ router.post('/', function (req, res, nex) {
                 res.send({err: err});
                 console.log(err);
               });
+              // КАК ШЕСТЬ РАЗНЫХ НАБОРОВ ЗАПИСАТЬ В ШЕСТЬ ТАБЛИЦ РАЗОМ???
+
             }).catch(function (err) {
               res.send({err: err});
               console.log(err);
             });
-            // КАК ШЕСТЬ РАЗНЫХ НАБОРОВ ЗАПИСАТЬ В ШЕСТЬ ТАБЛИЦ РАЗОМ???
-
           }).catch(function (err) {
             res.send({err: err});
             console.log(err);

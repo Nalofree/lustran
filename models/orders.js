@@ -10,6 +10,10 @@ module.exports = function(sequelize, DataTypes) {
     number: DataTypes.INTEGER,
     locationId: DataTypes.INTEGER,
     userId: DataTypes.INTEGER,
+    active: {
+        type: DataTypes.INTEGER,
+        defaultValue: 1
+    },
     customername: DataTypes.TEXT,
     customerphone: DataTypes.TEXT,
     comment: DataTypes.TEXT
