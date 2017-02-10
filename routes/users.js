@@ -8,6 +8,11 @@ router.get('/', function (req,res,next) {
 		res.redirect('/login');
 	}
   models.users.findAll({
+    where: {
+      status: {
+        $ne: 'starter'
+      }
+    },
     order: 'name ASC'
   }).then(function (users) {
     res.render('users', {users: users, title: "Пользователи"});
