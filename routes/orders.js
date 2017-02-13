@@ -234,7 +234,7 @@ router.post('/setprocessed', function (req, res, next) {
 	                  alias: alias,
 	                  comment: req.body.comment
 									}).then(function (action) {
-										res.send({processed: processed, user: user, pcount: goods.length});
+										res.send({processed: processed, user: user, pcount: goods.length}); 
 									}).catch(function (err) {
 										res.send({err: err});
 		                console.log(err);
