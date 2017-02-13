@@ -13,24 +13,25 @@ html
     -   return readebleDate;
     - }
     .close-layout
-    ul.nav.nav-pills.main-nav
-      li(role="presentation")
-        a(href="/") Главная
-      li(role="presentation")
-        a(href="/orders") Заказы
-      li(role="presentation").dropdown
-        a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
-          | Настройки 
-          span.caret
-        ul.dropdown-menu
-          li(role="presentation")
-            a(href="/locations") Места
-          li(role="presentation")
-            a(href="/users") Пользователи
-      li.navbar-right
-        ul.nav.nav-pills.main-nav
-          li
-            a.location-name(href="/locations") location-name
+    .container
+      ul.nav.nav-pills.main-nav
+        li(role="presentation")
+          a(href="/") Главная
+        li(role="presentation")
+          a(href="/orders") Заказы
+        li(role="presentation").dropdown
+          a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
+            | Настройки 
+            span.caret
+          ul.dropdown-menu
+            li(role="presentation")
+              a(href="/locations") Места
+            li(role="presentation")
+              a(href="/users") Пользователи
+        li.navbar-right
+          ul.nav.nav-pills.main-nav
+            li
+              a.location-name(href="/locations") location-name
     //- .container
     //-   .col-md-3.col-md-offset-9.panel.panel-default
     //-     | Место: 

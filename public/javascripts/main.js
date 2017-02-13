@@ -1,3 +1,9 @@
+//убъем автокомплит на пинах
+
+$(document).ready(function () {
+	$("[name='yourpin']").attr('autocomplete','off')
+});
+
 //Работа с куки
 
 function setCookie(cname, cvalue, exdays) {
@@ -127,10 +133,9 @@ function getTimeReadebleYesterday(date){
 				('00' + date.getDate()).slice(-2) + ' ' +
 				('00' + date.getHours()).slice(-2) + ':' +
 				('00' + date.getMinutes()).slice(-2);
-				// ('00' + date.getSeconds()).slice(-2);
-			// console.log(now);
 			return readebleTime;
 };
+
 
 $(document).ready(function(){
 
@@ -153,21 +158,17 @@ $(document).ready(function(){
 		$(this).attr('data-toggle','remove-row');
 		$(this).html('<i class="fa fa-times-circle" aria-hidden="true"></i>&nbspУдалить товар');
 		$(this).parents('.new-order-form-row').after('<div class="new-order-form-row good-item row">'+row+'</div>');
-		// $('[data-input=number]').inputmask({mask:'9{*}',greedy: false});
-		// $('[data-input=date]').inputmask('dd/mm/yyyy',{ "placeholder": "дд/мм/гггг" });
 	})
 
 	// Валидация инпутов
 	$('[data-input=time]').inputmask('hh:mm',{ "placeholder": "чч.мм" });
-	$('[type=time]').inputmask('99:99');//,{ "placeholder": "99.99" });
-	// $('[data-input=date]').inputmask('dd/mm/yyyy',{ "placeholder": "дд/мм/гггг" });
+	$('[type=time]').inputmask('99:99');
 	$('[data-input=phone]').inputmask('+7 (999) 999-99-99');
-	// $('[data-input=number]').inputmask({mask:'9{*}',greedy: false});
 
 	//Отмена стандартного действия ссылок
-	$('body').delegate('a[href*="#"]','click',function(e){
-		e.preventDefault();
-	});
+	// $('body').delegate('a[href*="#"]','click',function(e){
+	// 	e.preventDefault();
+	// });
 
 	$("li.status-menu a.lustran-dropdown").click(function () {
 		$(".status-menu-dropdown").toggleClass('show');
@@ -181,85 +182,74 @@ $(document).ready(function(){
 		}else{
 			$(this).removeClass('changed');
 		}
-	})
-
-
-	//Изменить статус заказа
-	// var statusarea, statustype, goodid;
-	// $('body').delegate('.order-list-item:not(.status-removed) .order-status:not(.status-null) .order-status-edit','click',function(){
-	// 	var offsetTop = $(this).offset().top + $(this).height();
-	// 	var offsetLeft = $(this).offset().left - 150 + $(this).width()/2;
-	// 	statusarea = $(this).closest('.order-status');
-	// 	console.log(statusarea);
-	// 	$('.layout-dark').height($('body').height());
-	//
-	// 	$('.close-layout').fadeIn();
-	//
-	// 	var datatitle = $(this).attr('data-title');
-	// 	var gooddata = {
-	// 		ordernumber: $(this).closest('.order').find('.order-id span').text(),
-	// 		goodname: $(this).closest('.order-list-item').find('.order-name').text(),
-	// 		goodid: datatitle.split(',')[1]
-	// 	}
-	// 	goodid = gooddata.goodid;
-	// 	console.log(gooddata);
-	// 	$('.action .action-order').text(gooddata.ordernumber);
-	// 	$('.action .action-shop').text(gooddata.goodname);
-	// 	statustype = datatitle.split(',')[0];
-	// 	$('.action-row.choose-satus').empty();
-	// 	switch(statustype) {
-	// 		case 'processed':
-	// 		$('.action-row.choose-satus').empty();
-	// 		$('.action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не обработан</option><option value=1>В обработке</option><option value=2>Обработан</option></select></div>');
-	// 		break;
-	// 		case 'ordered':
-	// 		$('.action-row.choose-satus').empty();
-	// 		$('.action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не заказан</option><option value=1>Заказан</option></select></div>');
-	// 		break;
-	// 		case 'spicifieddate':
-	// 		$('.action-row.choose-satus').empty();
-	// 		$('.action-row.choose-satus').append('<div class="form-group"><input name="status" type="date" class="form-control"></div>');
-	// 		break;
-	// 		case 'postponed':
-	// 		$('.action-row.choose-satus').empty();
-	// 		$('.action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не отложен</option><option value=1>Проверен и отложен</option><option value=2>Есть деффект</option></select></div>');
-	// 		break;
-	// 		case 'callstatus':
-	// 		$('.action-row.choose-satus').empty();
-	// 		$('.action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не звонили</option><option value=1>Не дозвон</option><option value=2>Дозвон</option></select></div>');
-	// 		break;
-	// 		case 'issued':
-	// 		$('.action-row.choose-satus').empty();
-	// 		$('.action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не выдан</option><option value=1>Выдан</option></select></div>');
-	// 		break;
-	// 	}
-	// 	$('.action').fadeIn();
-	// 	$('.action').css({'top':offsetTop, 'left':offsetLeft});
-	// });
-
-	$(".order-status-edit.processed").click(function (e) {
-		e.preventDefault();
-		$('.close-layout').fadeIn();
-		$(this).next('.action.processed-action').fadeIn();
-		var goodid = $(this).attr('data-title');
-		$('.action [name=yourpin]').val('');
-		// var offsetTop = $(this).offset().top + $(this).height();
-		// var offsetLeft = $(this).offset().left - 150 + $(this).width()/2;
-		$('.action.processed-action .action-row.choose-satus').empty();
-		$('.action.processed-action .action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=1>В обработке</option><option value=0>Не обработан</option></select></div>');
-		$('.action .btn-done').attr('data-title', goodid);
-		// $('.action').css({'top':70, 'left':60});
 	});
 
-	$('.action.processed-action .btn-done').click(function (e) {
+	var thisAction = $(".action");
+
+	$(".order-status-edit").click(function (e) {
 		e.preventDefault();
-		if ($(this).closest('.action').find('input[name=yourpin]').val()){
-			var goodid = $(this).attr('data-title');
+		thisAction = $(this).next(".action");
+		$(".action").fadeOut();
+		$(".close-layout").fadeIn();
+		thisAction.fadeIn();
+		thisAction.find("input[name='yourpin']").val('');
+		thisAction.find("input[name='yourpin']").focus();
+	});
+
+	thisAction.keyup(function (e) {
+		if (e.keyCode == 13) {
+			e.preventDefault();
+			if (thisAction.hasClass('processed-action')) {
+				setProcessed(thisAction);
+			}
+			if (thisAction.hasClass('spicdate-action')) {
+				setSpicdate(thisAction);
+			}
+			if (thisAction.hasClass('ordered-action')) {
+				setOrdered(thisAction);
+			}
+			if (thisAction.hasClass('postponed-action')) {
+				setPostponed(thisAction);
+			}
+			if (thisAction.hasClass('callstatus-action')) {
+				setCallstatus(thisAction);
+			}
+			if (thisAction.hasClass('issued-action')) {
+				setIssued(thisAction);
+			}
+		}
+	});
+
+	thisAction.find('.btn-done').click(function (e) {
+			e.preventDefault();
+			if (thisAction.hasClass('processed-action')) {
+				setProcessed(thisAction);
+			}
+			if (thisAction.hasClass('spicdate-action')) {
+				setSpicdate(thisAction);
+			}
+			if (thisAction.hasClass('ordered-action')) {
+				setOrdered(thisAction);
+			}
+			if (thisAction.hasClass('postponed-action')) {
+				setPostponed(thisAction);
+			}
+			if (thisAction.hasClass('callstatus-action')) {
+				setCallstatus(thisAction);
+			}
+			if (thisAction.hasClass('issued-action')) {
+				setIssued(thisAction);
+			}
+	});
+
+	function setProcessed(action) {
+		if (action.find('input[name=yourpin]').val()){
+			var goodid = action.find('.btn-done').attr('data-title');
 			var data = {
-				yourpin: $(this).closest('.action').find('input[name=yourpin]').val(),
-				comment: $(this).closest('.action').find('textarea[name=comment]').val(),
-				goodid: $(this).attr('data-title'),
-				statusval: $(this).closest('.action').find('select[name="status"]').val()
+				yourpin: action.find('input[name=yourpin]').val(),
+				comment: action.find('textarea[name=comment]').val(),
+				goodid: action.find('.btn-done').attr('data-title'),
+				statusval: action.find('select[name="status"]').val()
 			}
 			console.log(data);
 			$.ajax({
@@ -267,27 +257,23 @@ $(document).ready(function(){
 				type: 'POST',
 				data: data,
 				success: function (data, status, error) {
-					// console.log(data, status, error);
 					if (data.err) {
 						alert(data.err);
+						console.log(data.err);
 						$('.close-layout').fadeOut();
-						$('.action').fadeOut();
+						action.fadeOut();
 					}else{
 						$('.close-layout').fadeOut();
-						$('.action').fadeOut();
+						action.fadeOut();
 						console.log(data.processed);
 						$(".processed[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.processed.createdAt)));
 						$(".processed[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(data.user.name);
 						$(".processed[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text(data.processed.alias);
 						if (data.processed.statusval != 0) {
 							$(".processed[data-title="+goodid+"]").closest('.order-status').removeClass('status-danger');
-							// $(".processed[data-title="+data.processed.goodId+"]").closest('.order-status').find('.status-top .status').text('В обработке');
-							// var orderscount = parseInt($(".ordersproc").text());
 							$(".ordersproc").text(data.pcount);
 						}else{
 							$(".processed[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
-							// $(".processed[data-title="+data.processed.goodId+"]").closest('.order-status').find('.status-top .status').text('Не обработан');
-							// var orderscount = parseInt($(".ordersproc").text());
 							$(".ordersproc").text(data.pcount);
 						}
 					}
@@ -295,117 +281,109 @@ $(document).ready(function(){
 				error: function (data, status, error) {
 					console.log(data, status, error);
 					alert(error);
+					$('.close-layout').fadeOut();
+					action.fadeOut();
 				}
 			});
 		}else{
 			alert('Введите ПИН');
-		}
-	});
+		};
+	};
 
-	$(".order-status-edit.spicdate").click(function (e) {
-		e.preventDefault();
-		$('.close-layout').fadeIn();
-		$(this).next('.action.spicdate-action').fadeIn();
-		var goodid = $(this).attr('data-title');
-		$('.action [name=yourpin]').val('');
-		// var offsetTop = $(this).offset().top + $(this).height();
-		// var offsetLeft = $(this).offset().left - 150 + $(this).width()/2;
-		$('.action-row.choose-satus').empty();
-		$('.action-row.choose-satus').append('<div class="form-group"><input name="status" type="date" class="form-control"></div>');
-		$('.action .btn-done').attr('data-title', goodid);
-		// $('.action').css({'top':70, 'left':60});
-	});
-
-	$('.action.spicdate-action .btn-done').click(function (e) {
-		e.preventDefault();
-		if ($(this).closest('.action').find('input[name=yourpin]').val() && $(this).closest('.action').find('input[name=status]').val() && $(this).closest('.action').find('textarea[name=comment]').val()){
-			var goodid = $(this).attr('data-title');
-			var data = {
-				yourpin: $(this).closest('.action').find('input[name=yourpin]').val(),
-				comment: $(this).closest('.action').find('textarea[name=comment]').val(),
-				goodid: $(this).attr('data-title'),
-				statusval: $(this).closest('.action').find('input[name="status"]').val()
-			}
-			// $(".processed[data-title="+data.goodid+"]").closest('.order-status').find('.status-top .status').text('Обработан');
-			console.log(data);
-			$.ajax({
-				url: '/orders/setspicdate',
-				type: 'POST',
-				data: data,
-				success: function (data, status, error) {
-					// console.log(data, status, error);
-					if (data.err) {
-						alert(data.err);
-						$('.close-layout').fadeOut();
-						$('.action').fadeOut();
-					}else{
-						$('.close-layout').fadeOut();
-						$('.action').fadeOut();
-						console.log(data.spicdate.statusval);
-						// console.log($(".spicdate[data-title="+data.goodid+"]").attr('data-title'));
-						$(".spicdate[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.spicdate.createdAt)));
-						$(".spicdate[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(data.user.name);
-						$(".spicdate[data-title="+goodid+"]").closest('.order-status').removeClass('status-danger');
-						$(".spicdate[data-title="+goodid+"]").closest('.order-status').find('.status').text(getDateSuperReadeble(new Date(data.spicdate.statusval)));
-						// $(".processed[data-title="+data.goodid+"]").closest('.order-status').addClass('status-danger');
-						$(".processed[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text('Обработан');
-					}
-				},
-				error: function (data, status, error) {
-					console.log(data, status, error);
-					alert(error);
+	function setSpicdate(action) {
+		var today = new Date();
+	  var dd = today.getDate();
+	  var mm = today.getMonth()+1; //January is 0!
+	  var yyyy = today.getFullYear();
+		var nowtime = today.getTime();
+	   if(dd<10){
+	          dd='0'+dd
+	      }
+	      if(mm<10){
+	          mm='0'+mm
+	      }
+	  today = yyyy+'-'+mm+'-'+dd;
+	  action.find("input[type=date]").attr("min", today);
+		var correctDate = true;
+    // action.find('.new-order-form-row.good-item').each(function () {
+    indicativedate = new Date(action.find('input[name="status"]').val());
+		// console.log(indicativedate);
+    indicativetime = indicativedate.getTime();
+		console.log(indicativetime);
+		console.log(nowtime);
+    if ((indicativetime < nowtime) || (!/[0-9]{4}\-[0-9]{2}\-[0-9]{2}/g.test(action.find('input[name=status]').val()))) {
+      correctDate = false;
+    }
+		if (correctDate) {
+			if (action.find('input[name=yourpin]').val() && action.find('input[name=status]').val() && action.find('textarea[name=comment]').val()){
+				var goodid = action.find('.btn-done').attr('data-title');
+				var data = {
+					yourpin: action.find('input[name=yourpin]').val(),
+					comment: action.find('textarea[name=comment]').val(),
+					goodid: action.find('.btn-done').attr('data-title'),
+					statusval: action.find('input[name="status"]').val()
 				}
-			});
+				console.log(data);
+				$.ajax({
+					url: '/orders/setspicdate',
+					type: 'POST',
+					data: data,
+					success: function (data, status, error) {
+						// console.log(data, status, error);
+						if (data.err) {
+							alert(data.err);
+							$('.close-layout').fadeOut();
+							action.fadeOut();
+						}else{
+							$('.close-layout').fadeOut();
+							action.fadeOut();
+							console.log(data.spicdate.statusval);
+							$(".spicdate[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.spicdate.createdAt)));
+							$(".spicdate[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(data.user.name);
+							$(".spicdate[data-title="+goodid+"]").closest('.order-status').removeClass('status-danger');
+							$(".spicdate[data-title="+goodid+"]").closest('.order-status').find('.status').text(getDateSuperReadeble(new Date(data.spicdate.statusval)));
+							$(".processed[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text('Обработан');
+						}
+					},
+					error: function (data, status, error) {
+						console.log(data, status, error);
+						alert(error);
+						$('.close-layout').fadeOut();
+						action.fadeOut();
+					}
+				});
+			}else{
+				alert('Заполните все поля');
+			}
 		}else{
-			alert('Заполните все поля');
+			alert('Не корректная дата!');
 		}
-	});
+    // });
 
-	$(".order-status-edit.ordered").click(function (e) {
-		e.preventDefault();
-		$('.close-layout').fadeIn();
-		$(this).next('.action.ordered-action').fadeIn();
-		var goodid = $(this).attr('data-title');
-		$('.action [name=yourpin]').val('');
-		// var offsetTop = $(this).offset().top + $(this).height();
-		// var offsetLeft = $(this).offset().left - 150 + $(this).width()/2;
-		$('.action.ordered-action .action-row.choose-satus').empty();
-		$('.action.ordered-action .action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option value=0>Не заказан</option><option selected value=1>Заказан</option></select></div>');
-		$('.action .btn-done').attr('data-title', goodid);
-		// $('.action').css({'top':70, 'left':60});
-	});
+	}
 
-	$('.action.ordered-action .btn-done').click(function (e) {
-		e.preventDefault();
-		if ($(this).closest('.action').find('input[name=yourpin]').val()){
-			var goodid = $(this).attr('data-title');
+	function setOrdered(action) {
+		if (action.find('input[name=yourpin]').val()){
+			var goodid = action.find('.btn-done').attr('data-title');
 			var data = {
-				yourpin: $(this).closest('.action').find('input[name=yourpin]').val(),
-				comment: $(this).closest('.action').find('textarea[name=comment]').val(),
-				goodid: $(this).attr('data-title'),
-				statusval: $(this).closest('.action').find('select[name="status"]').val()
+				yourpin: action.find('input[name=yourpin]').val(),
+				comment: action.find('textarea[name=comment]').val(),
+				goodid: action.find('.btn-done').attr('data-title'),
+				statusval: action.find('select[name="status"]').val()
 			}
 			console.log(data);
-			// if ($(this).closest('.action').find('select[name="status"]').val() != 0) {
-			// 	$(".ordered[data-title="+data.goodid+"]").closest('.order-status').removeClass('status-danger');
-			// 	$(".ordered[data-title="+data.goodid+"]").closest('.order-status').find('.status-top .status').text('Заказан');
-			// }else{
-			// 	$(".ordered[data-title="+data.goodid+"]").closest('.order-status').addClass('status-danger');
-			// 	$(".ordered[data-title="+data.goodid+"]").closest('.order-status').find('.status-top .status').text('Не заказан');
-			// }
 			$.ajax({
 				url: '/orders/setordered',
 				type: 'POST',
 				data: data,
 				success: function (data, status, error) {
-					// console.log(data, status, error);
 					if (data.err) {
 						alert(data.err);
 						$('.close-layout').fadeOut();
-						$('.action').fadeOut();
+						action.fadeOut();
 					}else{
 						$('.close-layout').fadeOut();
-						$('.action').fadeOut();
+						action.fadeOut();
 						console.log(data.ordered);
 						$(".ordered[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.ordered.createdAt)));
 						$(".ordered[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(data.user.name);
@@ -421,40 +399,23 @@ $(document).ready(function(){
 				error: function (data, status, error) {
 					console.log(data, status, error);
 					alert(error);
+					$('.close-layout').fadeOut();
+					action.fadeOut();
 				}
 			});
 		}else{
 			alert('Введите ПИН');
 		}
-	});
+	}
 
-	$(".order-status-edit.postponed").click(function (e) {
-		e.preventDefault();
-		$('.close-layout').fadeIn();
-		$(this).next('.action.postponed-action').fadeIn();
-		var goodid = $(this).attr('data-title');
-		$('.action [name=yourpin]').val('');
-		// var offsetTop = $(this).offset().top + $(this).height();
-		// var offsetLeft = $(this).offset().left - 150 + $(this).width()/2;
-		// 		$('.action-row.choose-satus').empty();
-		// 		$('.action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не отложен</option><option value=1>Проверен и отложен</option><option value=2>Есть деффект</option></select></div>');
-
-		$('.action.postponed-action .action-row.choose-satus').empty();
-		$('.action.postponed-action .action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option  value=0>Не отложен</option><option selected value=1>Проверен и отложен</option><option value=2>Есть деффект</option></select></div>');
-		$('.action .btn-done').attr('data-title', goodid);
-		// $('.action').css({'top':70, 'left':60});
-	});
-
-	$('.action.postponed-action .btn-done').click(function (e) {
-		e.preventDefault();
-		// alert($(this).closest('.action').find('select[name="status"]').val());
-		if ($(this).closest('.action').find('input[name=yourpin]').val() && $(this).closest('.action').find('textarea[name=comment]').val()){
-			var goodid = $(this).attr('data-title');
+	function setPostponed(action) {
+		if (action.find('input[name=yourpin]').val() && action.find('textarea[name=comment]').val()){
+			var goodid = action.find('.btn-done').attr('data-title');
 			var data = {
-				yourpin: $(this).closest('.action').find('input[name=yourpin]').val(),
-				comment: $(this).closest('.action').find('textarea[name=comment]').val(),
-				goodid: $(this).attr('data-title'),
-				statusval: $(this).closest('.action').find('select[name="status"]').val()
+				yourpin: action.find('input[name=yourpin]').val(),
+				comment: action.find('textarea[name=comment]').val(),
+				goodid: action.find('.btn-done').attr('data-title'),
+				statusval: action.find('select[name="status"]').val()
 			}
 			console.log(data);
 			$.ajax({
@@ -466,10 +427,10 @@ $(document).ready(function(){
 					if (data.err) {
 						alert(data.err);
 						$('.close-layout').fadeOut();
-						$('.action').fadeOut();
+						action.fadeOut();
 					}else{
 						$('.close-layout').fadeOut();
-						$('.action').fadeOut();
+						action.fadeOut();
 						console.log(data.postponed);
 						$(".postponed[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.postponed.createdAt)));
 						$(".postponed[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(data.user.name);
@@ -489,39 +450,23 @@ $(document).ready(function(){
 				error: function (data, status, error) {
 					console.log(data, status, error);
 					alert(error);
+					$('.close-layout').fadeOut();
+					action.fadeOut();
 				}
 			});
 		}else{
 			alert('Заполните все поля!');
 		}
-	});
+	}
 
-	$(".order-status-edit.callstatus").click(function (e) {
-		e.preventDefault();
-		$('.close-layout').fadeIn();
-		$(this).next('.action.callstatus-action').fadeIn();
-		var goodid = $(this).attr('data-title');
-		$('.action [name=yourpin]').val('');
-		// var offsetTop = $(this).offset().top + $(this).height();
-		// var offsetLeft = $(this).offset().left - 150 + $(this).width()/2;
-		// 		$('.action-row.choose-satus').empty();
-		// 		$('.action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не отложен</option><option value=1>Проверен и отложен</option><option value=2>Есть деффект</option></select></div>');
-
-		$('.action.callstatus-action .action-row.choose-satus').empty();
-		$('.action.callstatus-action .action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option  value=0>Не звонили</option><option selected value=1>Дозвон</option><option value=2>Не дозвон</option></select></div>');
-		$('.action .btn-done').attr('data-title', goodid);
-		// $('.action').css({'top':70, 'left':60});
-	});
-
-	$('.action.callstatus-action .btn-done').click(function (e) {
-		e.preventDefault();
-		if ($(this).closest('.action').find('input[name=yourpin]').val()){
-			var goodid = $(this).attr('data-title');
+	function setCallstatus(action) {
+		if (action.find('input[name=yourpin]').val()){
+			var goodid = action.find('.btn-done').attr('data-title');
 			var data = {
-				yourpin: $(this).closest('.action').find('input[name=yourpin]').val(),
-				comment: $(this).closest('.action').find('textarea[name=comment]').val(),
-				goodid: $(this).attr('data-title'),
-				statusval: $(this).closest('.action').find('select[name="status"]').val()
+				yourpin: action.find('input[name=yourpin]').val(),
+				comment: action.find('textarea[name=comment]').val(),
+				goodid: action.find('.btn-done').attr('data-title'),
+				statusval: action.find('select[name="status"]').val()
 			}
 			console.log(data);
 			$.ajax({
@@ -533,10 +478,10 @@ $(document).ready(function(){
 					if (data.err) {
 						alert(data.err);
 						$('.close-layout').fadeOut();
-						$('.action').fadeOut();
+						action.fadeOut();
 					}else{
 						$('.close-layout').fadeOut();
-						$('.action').fadeOut();
+						action.fadeOut();
 						console.log(data.callstatus);
 						$(".callstatus[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.callstatus.createdAt)));
 						$(".callstatus[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(data.user.name);
@@ -555,39 +500,23 @@ $(document).ready(function(){
 				error: function (data, status, error) {
 					console.log(data, status, error);
 					alert(error);
+					$('.close-layout').fadeOut();
+					action.fadeOut();
 				}
 			});
 		}else{
 			alert('Введите ПИН');
 		}
-	});
+	}
 
-	$(".order-status-edit.issued").click(function (e) {
-		e.preventDefault();
-		$('.close-layout').fadeIn();
-		$(this).next('.action.issued-action').fadeIn();
-		var goodid = $(this).attr('data-title');
-		$('.action [name=yourpin]').val('');
-		// var offsetTop = $(this).offset().top + $(this).height();
-		// var offsetLeft = $(this).offset().left - 150 + $(this).width()/2;
-		// 		$('.action-row.choose-satus').empty();
-		// 		$('.action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option selected value=0>Не отложен</option><option value=1>Проверен и отложен</option><option value=2>Есть деффект</option></select></div>');
-
-		$('.action.issued-action .action-row.choose-satus').empty();
-		$('.action.issued-action .action-row.choose-satus').append('<div class="form-group"><select name="status" class="form-control"><option  value=0>Не выдан</option><option selected value=1>Выдан</option></select></div>');
-		$('.action .btn-done').attr('data-title', goodid);
-		// $('.action').css({'top':70, 'left':60});
-	});
-
-	$('.action.issued-action .btn-done').click(function (e) {
-		e.preventDefault();
-		if ($(this).closest('.action').find('input[name=yourpin]').val()){
-			var goodid = $(this).attr('data-title');
+	function setIssued(action) {
+		if (action.find('input[name=yourpin]').val()){
+			var goodid = action.find('.btn-done').attr('data-title');
 			var data = {
-				yourpin: $(this).closest('.action').find('input[name=yourpin]').val(),
-				comment: $(this).closest('.action').find('textarea[name=comment]').val(),
-				goodid: $(this).attr('data-title'),
-				statusval: $(this).closest('.action').find('select[name="status"]').val()
+				yourpin: action.find('input[name=yourpin]').val(),
+				comment: action.find('textarea[name=comment]').val(),
+				goodid: action.find('.btn-done').attr('data-title'),
+				statusval: action.find('select[name="status"]').val()
 			}
 			console.log(data);
 
@@ -596,14 +525,13 @@ $(document).ready(function(){
 				type: 'POST',
 				data: data,
 				success: function (data, status, error) {
-					// console.log(data, status, error);
 					if (data.err) {
 						alert(data.err);
 						$('.close-layout').fadeOut();
-						$('.action').fadeOut();
+						action.fadeOut();
 					}else{
 						$('.close-layout').fadeOut();
-						$('.action').fadeOut();
+						action.fadeOut();
 						console.log(data.issued);
 						$(".issued[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.issued.createdAt)));
 						$(".issued[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(data.user.name);
@@ -620,75 +548,14 @@ $(document).ready(function(){
 				error: function (data, status, error) {
 					console.log(data, status, error);
 					alert(error);
+					$('.close-layout').fadeOut();
+					action.fadeOut();
 				}
 			});
 		}else{
 			alert('Введите ПИН');
 		}
-	});
-
-	// $('.action').on('click','.spicdate [data-toggle=save-action]', function (e) {
-	// 	e.preventDefault();
-	// 	if ($('.action [name=yourpin]').val() && $('input[name="status"]')){
-	// 		var data = {
-	// 			yourpin: $('.action [name=yourpin]').val(),
-	// 			goodid: $(this).attr('data-title'),
-	// 			statusval: $('input[name="status"]').val()
-	// 		}
-	// 		console.log(data);
-	// 		if ($('select[name="status"]').val() != 0) {
-	// 			$(".spicdate[data-title="+data.goodid+"]").closest('.order-status').removeClass('status-danger');
-	// 			// $(".processed[data-title="+data.goodid+"]").closest('.order-status').find('.status-top .status').text('В обработке');
-	// 		}else{
-	// 			$(".spicdate[data-title="+data.goodid+"]").closest('.order-status').addClass('status-danger');
-	// 			// $(".processed[data-title="+data.goodid+"]").closest('.order-status').find('.status-top .status').text('Не обработан');
-	// 		}
-	// 		$.ajax({
-	// 			url: '/orders/setspicdate',
-	// 			type: 'POST',
-	// 			data: data,
-	// 			success: function (data, status, error) {
-	// 				// console.log(data, status, error);
-	// 				if (data.err) {
-	// 					alert(data.err);
-	// 				}else{
-	// 					$('.close-layout').fadeOut();
-	// 					$('.action').fadeOut();
-	// 					console.log(data.spicdate);
-	// 					$(".spicdate[data-title="+data.goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.spicdate.createdAt)));
-	// 					$(".spicdate[data-title="+data.goodid+"]").closest('.order-status').find('.status-bottom span').text(data.user.name);
-	// 					$(".spicdate[data-title="+data.goodid+"]").closest('.order-status').find('.status-top .status').text(getDateSuperReadeble(new Date(data.spicdate.statusval)));
-	// 				}
-	// 			},
-	// 			error: function (data, status, error) {
-	// 				console.log(data, status, error);
-	// 				alert(error);
-	// 			}
-	// 		});
-	// 	}else{
-	// 		alert('Заполните поля');
-	// 	}
-	// });
-
-	// $('body').on('click','[data-toggle=save-action]',function(){
-	// 	if ($('[name=yourpin]').val()){
-	// 		$('.layout-dark').hide();
-	// 		$('.action').fadeOut();
-	// 	}else{
-	// 		alert('Введите ПИН');
-	// 	}
-	// });
-
-
-	//Изменить статус заказа
-	// $('body').delegate('.order-list-item:not(.status-removed) .order-status:not(.status-null) .status-bottom .edit','click',function(){
-	// 	var offsetTop = $(this).offset().top + $(this).height() + 20;
-	// 	var offsetLeft = $(this).offset().left - 150 + $(this).width()/2;
-	// 	$('.layout-dark').height($('body').height());
-	// 	$('.layout-dark').show();
-	// 	$('.action').fadeIn();
-	// 	$('.action').css({'top':offsetTop, 'left':offsetLeft});
-	// })
+	}
 
 	//Закрыть Action
 	$('body').on('click','[data-toggle=close-action]',function(){

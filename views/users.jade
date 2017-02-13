@@ -17,7 +17,7 @@ block content
       p 
         span= 'Статус пользователя: '
         span.userstatus= ''
-      .btn.btn-default.userinfo-close Закрыть
+      button.btn.btn-default.userinfo-close Закрыть
     
     from.banuserpin(method='post', name='requirepin', enctype="multipart/form-data")
       h3= "Подтвердите действие"
@@ -44,7 +44,7 @@ block content
         label(for='status') Статус
         select(name='status', required).form-control
           option(name='status', value='') Выберите статус
-          option(name='status', value='saler') Продавец
+          option(name='status', value='saler' selected) Продавец
           option(name='status', value='supplier') Снабженец
           option(name='status', value='manager') Руководитель
       .form-group

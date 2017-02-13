@@ -81,16 +81,18 @@ block content
                           input.btn.btn-default(type="submit", value="Применить")
                 li.resetfiltr
                   a(href='/orders') Сбросить фильтр
+                //- li
+                //-   a(href="#down") trd
               form.navbar-form.navbar-left.lustran-search-form
                 .form-group
                   input.form-control(type='text', placeholder='Поиск...', name='search')
               ul.nav.navbar-nav.navbar-right
                 li.navbar-text
-                  | Товаров 
-                  span.badge.badge-pur-light.goodcount= goodcount
-                li.navbar-text
                   | Заказов 
                   span.badge.badge-pur-light.orderscount= orderscount
+                li.navbar-text
+                  | Товаров 
+                  span.badge.badge-pur-light.goodcount= goodcount                
                 li.navbar-text
                   | В обработке 
                   span.badge.badge-pur-light.ordersproc= ordersproc
@@ -150,8 +152,9 @@ block content
                               i= orders[i].goods[j].num
                               |  шт
                             - var inddate = new Date(orders[i].goods[j].inddate)
+                            - var spicdate = new Date(orders[i].goods[j].spicdate.statusval)
                             - var now = new Date()
-                            - if (now.getTime() > inddate.getTime() && orders[i].goods[j].postponed.statusval != 1)
+                            - if ((spicdate.getTime() > inddate.getTime() || now.getTime() > inddate.getTime()) && orders[i].goods[j].postponed.statusval != 1)
                               span.order-float-date.red-text= getDateReadeble(orders[i].goods[j].inddate)
                             - else
                               span.order-float-date= getDateReadeble(orders[i].goods[j].inddate)
@@ -177,7 +180,7 @@ block content
                                       .action-info
                                         .new-order-info-row
                                           - 
-                                          span.action-date= getDateReadeble(now)
+                                          span.action-date= getDateReadeble(new Date(orders[i].goods[j].processed.createdAt))
                                           | &nbsp
                                           //- span.action-time 12.12.16
                                         //- .new-order-info-row
@@ -199,11 +202,16 @@ block content
                                             .form-group
                                               textarea.form-control(name='comment', id=comment)
                                         .row.action-row.choose-satus
+                                          .col-sm-12
+                                            .form-group
+                                              select.form-control(name='status')
+                                                option(selected='', value='1') В обработке
+                                                option(value='0') Не обработан
                                         .row.action-row
                                           .col-sm-6
                                             button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-action') Отмена
                                           .col-sm-6
-                                            button.btn.btn-done.btn-block(type='button', data-toggle='save-action') Сохранить
+                                            button.btn.btn-done.btn-block(type='button', data-toggle='save-action', data-title= orders[i].goods[j].id) Сохранить
                               li.col-sm-2
                                 - if (orders[i].goods[j].spicdate.statusval == null)
                                   - goodstatus = 'status-danger'
@@ -244,11 +252,14 @@ block content
                                             .form-group
                                               textarea.form-control(name='comment', id=comment)
                                         .row.action-row.choose-satus
+                                          .col-sm-12
+                                            .form-group
+                                              input.form-control(name='status', type='date')
                                         .row.action-row
                                           .col-sm-6
                                             button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-action') Отмена
                                           .col-sm-6
-                                            button.btn.btn-done.btn-block(type='button', data-toggle='save-action') Сохранить
+                                            button.btn.btn-done.btn-block(type='button', data-toggle='save-action', data-title= orders[i].goods[j].id) Сохранить
                               li.col-sm-2
                                 - if (orders[i].goods[j].ordered.statusval == 0)
                                   - goodstatus = 'status-danger'
@@ -289,11 +300,16 @@ block content
                                             .form-group
                                               textarea.form-control(name='comment', id=comment)
                                         .row.action-row.choose-satus
+                                          .col-sm-12
+                                            .form-group
+                                              select.form-control(name='status')
+                                                option(value='0') Не заказан
+                                                option(selected='', value='1') Заказан
                                         .row.action-row
                                           .col-sm-6
                                             button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-action') Отмена
                                           .col-sm-6
-                                            button.btn.btn-done.btn-block(type='button', data-toggle='save-action') Сохранить
+                                            button.btn.btn-done.btn-block(type='button', data-toggle='save-action', data-title= orders[i].goods[j].id) Сохранить
                               li.col-sm-2
                                 - if (orders[i].goods[j].postponed.statusval == 0 || orders[i].goods[j].postponed.statusval == 2)
                                   - goodstatus = 'status-danger'
@@ -334,11 +350,17 @@ block content
                                             .form-group
                                               textarea.form-control(name='comment', id=comment)
                                         .row.action-row.choose-satus
+                                          .col-sm-12
+                                            .form-group
+                                              select.form-control(name='status')
+                                                option(value='0') Не отложен
+                                                option(selected='', value='1') Проверен и отложен
+                                                option(value='2') Есть деффект
                                         .row.action-row
                                           .col-sm-6
                                             button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-action') Отмена
                                           .col-sm-6
-                                            button.btn.btn-done.btn-block(type='button', data-toggle='save-action') Сохранить
+                                            button.btn.btn-done.btn-block(type='button', data-toggle='save-action', data-title= orders[i].goods[j].id) Сохранить
                               li.col-sm-2
                                 - if (orders[i].goods[j].callstatus.statusval == 0 || orders[i].goods[j].callstatus.statusval == 2)
                                   - goodstatus = 'status-danger'
@@ -379,11 +401,17 @@ block content
                                             .form-group
                                               textarea.form-control(name='comment', id=comment)
                                         .row.action-row.choose-satus
+                                          .col-sm-12
+                                            .form-group
+                                              select.form-control(name='status')
+                                                option(value='0') Не звонили
+                                                option(selected='', value='1') Дозвон
+                                                option(value='2') Не дозвон
                                         .row.action-row
                                           .col-sm-6
                                             button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-action') Отмена
                                           .col-sm-6
-                                            button.btn.btn-done.btn-block(type='button', data-toggle='save-action') Сохранить
+                                            button.btn.btn-done.btn-block(type='button', data-toggle='save-action', data-title= orders[i].goods[j].id) Сохранить
                               li.col-sm-2
                                 - if (orders[i].goods[j].issued.statusval == 0)
                                   - goodstatus = 'status-danger'
@@ -417,19 +445,25 @@ block content
                                             .form-group
                                               textarea.form-control(name='comment', id=comment)
                                         .row.action-row.choose-satus
+                                          .col-sm-12
+                                            .form-group
+                                              select.form-control(name='status')
+                                                option(value='0') Не выдан
+                                                option(selected='', value='1') Выдан
                                         .row.action-row
                                           .col-sm-6
                                             button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-action') Отмена
                                           .col-sm-6
-                                            button.btn.btn-done.btn-block(type='button', data-toggle='save-action') Сохранить
+                                            button.btn.btn-done.btn-block(type='button', data-toggle='save-action', data-title= orders[i].goods[j].id) Сохранить
                     - else
                       .container
                         .panel.panel-default
-                          .panel-body= "Товаров не найдено"
+                          .panel-body= "Товаров не найдено"            
           - else
             .container
               .panel.panel-default
                 .panel-body= "Заказов не найдено"
+        //- a(name="down")
       .ayout-dark
       .modal-layout
       //- .modal-log

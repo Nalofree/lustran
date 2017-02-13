@@ -16,6 +16,10 @@ module.exports = function(sequelize, DataTypes) {
         type: DataTypes.INTEGER,
         defaultValue: 1
     },
+    reject: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+    },
     orderId: DataTypes.INTEGER,
     processedId: DataTypes.INTEGER,
     spicdateId: DataTypes.INTEGER,

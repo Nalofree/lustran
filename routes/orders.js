@@ -24,7 +24,8 @@ router.get('/', function(req, res, next) {
 		$or: []
 	};
 	var searchWhereOrders = {
-		$or: []
+		$or: [],
+		locationId: req.cookies.location
 	};
 	if (req.query.search) {
 		var searchstring = req.query.search;
@@ -42,7 +43,9 @@ router.get('/', function(req, res, next) {
 		console.log(searchWhereGoods.$or);
 	}else{
 		searchWhereGoods = {};
-		searchWhereOrders = {};
+		searchWhereOrders = {
+			locationId: req.cookies.location
+		};
 	}
 	console.log(searchWhereGoods);
 
@@ -53,7 +56,8 @@ router.get('/', function(req, res, next) {
 		lastStatus = true;
 		earchWhereOrders = {};
 		searchWhereOrders = {
-			$and: []
+			$and: [],
+			locationId: req.cookies.location
 		};
 		if (req.query.processed) {
 			searchWhereOrders.$and.push({'$goods.processed.statusval$': parseInt(req.query.processed)});
@@ -78,10 +82,11 @@ router.get('/', function(req, res, next) {
 		if (req.query.spicdate) {
 			searchWhereOrders.$and.push({'$goods.spicdate.statusval$': {$ne: null}});
 		}
+	}else{
+		searchWhereOrders = {
+			locationId: req.cookies.location
+		};
 	}
-	//else{
-		//searchWhereOrders = {};
-	//}
   var now = new Date();
   models.orders.findAll({
     include: [models.users, models.locations, /*models.goods,*/{
@@ -740,7 +745,7 @@ router.post('/addcomment', function (req, res, next) {
 				}).catch(function (err) {
 					res.send({err: err});
 					console.log(err);
-				});				
+				});
 			}).catch(function (err) {
 				res.send({err: err});
 				console.log(err);

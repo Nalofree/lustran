@@ -13386,7 +13386,7 @@ label.check {
   width: 300px;
   background-color: #fff;
   border-radius: 5px;
-  transition: all 0.3s ease-in-out 0.3s;
+  /*transition: all 0.3s ease-in-out 0.3s;*/
 }
 /* line 505, ../sass/_components.sass */
 .action.show {

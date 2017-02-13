@@ -69,20 +69,30 @@ block content
     br
     - if (locations.length > 0)
       table.table.locations-table
-        tr
-          th Название
-          th Часы работы
-          th
-          th
-        - for (var i = 0; i < locations.length; i++)
-          tr(id= locations[i].id)
-            td= locations[i].fullname
-            td= 'c ' + locations[i].opentime + ' по ' + locations[i].closetime
-            td 
-              .btn.btn-success.choose-location(data-title=  locations[i].id) Выбрать
-            td 
-              //- .btn.btn-danger.delete-location(data-title=  locations[i].id) Удалить
-              .btn.btn-default.edit-location(data-title=  locations[i].id) Редактировать
+        thead
+          tr
+            th Название
+            th Часы работы
+            th
+            th
+        tbody
+          - for (var i = 0; i < locations.length; i++)
+            tr(id= locations[i].id)
+              td= locations[i].fullname
+              td= 'c ' + locations[i].opentime + ' по ' + locations[i].closetime
+              td 
+                .btn.btn-success.choose-location(data-title=  locations[i].id) Выбрать
+              td 
+                //- .btn.btn-danger.delete-location(data-title=  locations[i].id) Удалить
+                .btn.btn-default.edit-location(data-title=  locations[i].id) Редактировать
     - else
+      table.table.locations-table
+        thead
+          tr
+            th Название
+            th Часы работы
+            th
+            th
+        tbody
       .panel.panel-default
         .panel-body Мест пока нет, но вы можете их добавить

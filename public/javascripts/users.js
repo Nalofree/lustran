@@ -36,6 +36,9 @@ $(document).ready(function () {
     e.preventDefault();
     $(".close-layout").fadeIn();
     $(".adduserform").fadeIn();
+    $(".adduserform input[name='fio']").val('');
+    $(".adduserform input[name='yourpin']").val('');
+    $(".adduserform input[name='fio']").focus();
   });
   $(".close-layout").click(function () {
     $(".adduserform").fadeOut();
@@ -59,6 +62,14 @@ $(document).ready(function () {
   });
 
 
+
+  $(".adduserform input[name='fio']").keyup(function (e) {
+    if (e.keyCode == 13) {
+      e.preventDefault();
+      $(this).next('input').focus();
+    }
+  });
+  $(".adduserform input[name='yourpin']").val('');
 
   $(".adduser-submit").click(function (e) {
     e.preventDefault();
@@ -272,7 +283,7 @@ $(document).ready(function () {
     }
   });
 
-$('.getuserinfo input[name=yourpin]').keydown(function( event ) {
+$('.getuserinfo input[name=yourpin]').keyup(function( event ) {
   if ( event.which == 13 ) {
     event.preventDefault();
     if ($('.getuserinfo input[name=yourpin]').val()) {
@@ -290,10 +301,13 @@ $('.getuserinfo input[name=yourpin]').keydown(function( event ) {
             alert(data.err);
           }else{
             $('.getuserinfo').fadeOut();
-            $('.userinfo').fadeIn();
+            $('.userinfo').fadeIn(200, function () {
+              $('.userinfo-close').focus();
+            });
             $('.userinfo .username').text(data.name);
             $('.userinfo .userpin').text(data.pin);
             $('.userinfo .userstatus').text(statusToAlias(data.status));
+
           }
           console.log(data, status, error);
           // $('.close-layout').fadeOut();
@@ -316,5 +330,15 @@ $('.getuserinfo input[name=yourpin]').keydown(function( event ) {
     $('.userinfo .username').text('');
     $('.userinfo .userpin').text('');
     $('.userinfo .userstatus').text('');
+  });
+
+  $('.userinfo-close').keyup(function (e) {
+    if (e.keyCode == 13) {
+      $('.userinfo').fadeOut();
+      $('.close-layout').fadeOut();
+      $('.userinfo .username').text('');
+      $('.userinfo .userpin').text('');
+      $('.userinfo .userstatus').text('');
+    }
   });
 });

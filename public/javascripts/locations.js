@@ -4,7 +4,8 @@ $(document).ready(function () {
     e.preventDefault();
     $(".close-layout").fadeIn();
     $(".addlocform").fadeIn();
-    $(".setlocpin input[name=fullname]").focus();
+    $(".addlocform input[name=fullname]").focus();
+    $('.addlocform input').val('');
   });
   $('.close-layout').click(function () {
     $('.addlocform').fadeOut();
@@ -12,40 +13,50 @@ $(document).ready(function () {
     $('.editlocpin').fadeOut();
     $('.history').fadeOut();
   });
-  $('.addloc-submit').click(function (e) {
+
+  $('.addlocform').submit(function (e) {
     e.preventDefault();
-    var data = {
-      name: $(".addlocform input[name='name']").val(),
-      fullname: $(".addlocform input[name='fullname']").val(),
-      opentime: $(".addlocform input[name='opentime']").val(),
-      closetime: $(".addlocform input[name='closetime']").val(),
-      password: $(".addlocform input[name='password']").val(),
-      alias: $(".addlocform input[name='alias']").val(),
-      adres: $(".addlocform input[name='adres']").val(),
-      yourpin: $(".addlocform input[name='yourpin']").val(),
-    }
-    console.log(data);
-    $.ajax({
-      url: '/locations',
-      type: 'POST',
-      data: data,
-      success: function (data, status, error) {
-        console.log(data, status, error);
-        if (data.err) {
-          alert(data.err);
-        }else{
-          $('.locations-table tbody').append('<tr id="'+data.location.id+'"><td>'+data.location.fullname+'</td><td> c ' + data.location.opentime + ' по ' + data.location.closetime+'</td><td><div data-title="'+data.location.id+'" class="btn btn-success choose-location">Выбрать</div></td><td><div data-title="'+data.location.id+'" class="btn btn-default edit-location">Редактировать</div></td></tr>');
-          $('.addlocform').fadeOut();
-          $('.close-layout').fadeOut();
-          $('.addlocform input').val('');
-        }
-      },
-      error: function (data, status, error) {
-        console.log(data, status, error);
+    if ($(".addlocform input[name='fullname']").val() && $(".addlocform input[name='opentime']").val() && $(".addlocform input[name='closetime']").val() && $(".addlocform input[name='alias']").val() && $(".addlocform input[name='adres']").val() && $(".addlocform input[name='yourpin']").val()) {
+      var data = {
+        name: $(".addlocform input[name='name']").val(),
+        fullname: $(".addlocform input[name='fullname']").val(),
+        opentime: $(".addlocform input[name='opentime']").val(),
+        closetime: $(".addlocform input[name='closetime']").val(),
+        password: $(".addlocform input[name='password']").val(),
+        alias: $(".addlocform input[name='alias']").val(),
+        adres: $(".addlocform input[name='adres']").val(),
+        yourpin: $(".addlocform input[name='yourpin']").val(),
       }
-    });
-    // $('.addlocform').fadeOut();
-    // $('.close-layout').fadeOut();
+      console.log(data);
+      $.ajax({
+        url: '/locations',
+        type: 'POST',
+        data: data,
+        success: function (data, status, error) {
+          console.log(data, status, error);
+          if (data.err) {
+            alert(data.err);
+          }else{
+            $('.locations-table tbody').append('<tr id="'+data.location.id+'"><td>'+data.location.fullname+'</td><td> c ' + data.location.opentime + ' по ' + data.location.closetime+'</td><td><div data-title="'+data.location.id+'" class="btn btn-success choose-location">Выбрать</div></td><td><div data-title="'+data.location.id+'" class="btn btn-default edit-location">Редактировать</div></td></tr>');
+            $('.addlocform').fadeOut();
+            $('.close-layout').fadeOut();
+            // $('.addlocform input').val('');
+          }
+        },
+        error: function (data, status, error) {
+          console.log(data, status, error);
+        }
+      });
+    }else{
+      alert('Заполните все поля');
+    }
+  });
+
+  $('.addlocform').keyup(function (e) {
+    if (e.keyCode == 13) {
+      e.preventDefault();
+      $('.addlocform').submit();
+    }
   });
 
   $( ".locations-table" ).on( "click", "div.choose-location", function() {
@@ -116,6 +127,7 @@ $(document).ready(function () {
       success: function (data, status, error) {
         console.log(data, status, error);
         $(".editlocpin").fadeIn();
+        $(".editlocpin input[name='yourpin']").focus();
         $(".editlocpin input[name='fullname']").val(data.location.fullname);
         $(".editlocpin input[name='alias']").val(data.location.alias);
         $(".editlocpin input[name='adres']").val(data.location.adres);
@@ -129,7 +141,7 @@ $(document).ready(function () {
     });
   });
 
-  $(".editlocpin-submit").click(function (e) {
+  $(".editlocpin").submit(function (e) {
     e.preventDefault();
     if ($(".editlocpin input[name='fullname']").val() && $(".editlocpin input[name='alias']").val() && $(".editlocpin input[name='adres']").val() && $(".editlocpin input[name='opentime']").val() && $(".editlocpin input[name='closetime']").val() && $(".editlocpin input[name='yourpin']").val()) {
       // alert('ok');
@@ -140,7 +152,7 @@ $(document).ready(function () {
       data.opentime = $(".editlocpin input[name='opentime']").val();
       data.closetime = $(".editlocpin input[name='closetime']").val();
       data.yourpin = $(".editlocpin input[name='yourpin']").val();
-      data.locid = $(this).attr('data-title');
+      data.locid = $(".editlocpin-submit").attr('data-title');
       console.log(data);
       $.ajax({
         url: '/locations/updatelocinfo',
@@ -153,12 +165,12 @@ $(document).ready(function () {
           }else{
             // $('.locations-table tbody').append('<tr id="'+data.location.id+'"><td>'+data.location.fullname+'</td><td> c ' + data.location.opentime + ' по ' + data.location.closetime+'</td><td><div data-title="'+data.location.id+'" class="btn btn-success choose-location">Выбрать</div></td><td><div data-title="'+data.location.id+'" class="btn btn-default edit-location">Редактировать</div></td></tr>');
             $('tr#'+data.location.id).html('<td>'+data.location.fullname+'</td><td> c ' + data.location.opentime + ' по ' + data.location.closetime+'</td><td><div data-title="'+data.location.id+'" class="btn btn-success choose-location">Выбрать</div></td><td><div data-title="'+data.location.id+'" class="btn btn-default edit-location">Редактировать</div></td>');
-            $(".editlocpin input[name='fullname']").val('');
-            $(".editlocpin input[name='alias']").val('');
-            $(".editlocpin input[name='adres']").val('');
-            $(".editlocpin input[name='opentime']").val('');
-            $(".editlocpin input[name='closetime']").val('');
-            $(".editlocpin input[name='yourpin']").val('');
+            // $(".editlocpin input[name='fullname']").val('');
+            // $(".editlocpin input[name='alias']").val('');
+            // $(".editlocpin input[name='adres']").val('');
+            // $(".editlocpin input[name='opentime']").val('');
+            // $(".editlocpin input[name='closetime']").val('');
+            // $(".editlocpin input[name='yourpin']").val('');
             $(".editlocpin").fadeOut();
             $(".close-layout").fadeOut();
           }
@@ -182,6 +194,13 @@ $(document).ready(function () {
     // alert($(this).attr('data-title'));
     // input(type='time',name='opentime',required).form-control
     // $(".editlocpin input[name='opentime']").value = "22:53:05";
+  });
+
+  $('.editlocpin').keyup(function (e) {
+    if (e.keyCode == 13) {
+      e.preventDefault();
+      $('.editlocpin').submit();
+    }
   });
 
   $('.addloc-cancel').click(function (e) {
