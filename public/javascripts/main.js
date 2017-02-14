@@ -196,6 +196,89 @@ $(document).ready(function(){
 		thisAction.find("input[name='yourpin']").focus();
 	});
 
+	var removeGoodId;
+	$(".remove-order-status").click(function (e) {
+		e.preventDefault();
+		// alert($(this).closest('.order-list-item').attr('data-title'));
+		// if (!$(this).closest('.order-list-item').hasClass('close-good')) {
+			removeGoodId = $(this).attr('data-title');
+			$(".remove-good").fadeIn();
+			$(".remove-good input[name=goodid]").val(removeGoodId);
+			$(".close-layout").fadeIn();
+			$(".remove-order-status").fadeOut();
+			$(".remove-good input[name='yourpin']").focus();
+			$(".remove-good input[name='yourpin']").val('');
+		// }
+		// $(this).closest('li.order-list-item').addClass('close-good');
+	});
+
+	$(".remove-good").submit(function (e) {
+		e.preventDefault();
+		if ($(".remove-good input[name='yourpin']").val()) {
+			var data = {
+				goodid: removeGoodId,
+				yourpin: $(".remove-good input[name='yourpin']").val()
+			}
+			if ($('.remove-order-status[data-title='+removeGoodId+']').closest('li.order-list-item').hasClass('close-good')) {
+				$(".remove-good").fadeOut();
+				$(".close-layout").fadeOut();
+				$(".remove-order-status").fadeIn();
+				data.reject = 0;
+			}else{
+				$(".remove-good").fadeOut();
+				$(".close-layout").fadeOut();
+
+				$(".remove-order-status").fadeIn();
+				data.reject = 1;
+			}
+			console.log(data);
+			$.ajax({
+				url: "/orders/rejectgood",
+				type: "POST",
+				data: data,
+				success: function (data, status, error) {
+					// console.log(data, status, error);
+					if (data.err) {
+						alert(data.err);
+					}else{
+						console.log(data);
+						if (data.good.reject == 1) {
+							$('.remove-order-status[data-title='+removeGoodId+']').closest('li.order-list-item').addClass('close-good');
+							if (data.activeorder == 0) {
+								$('.remove-order-status[data-title='+removeGoodId+']').closest('.order').fadeOut();
+							}
+						}else{
+							$('.remove-order-status[data-title='+removeGoodId+']').closest('li.order-list-item').removeClass('close-good');
+						}
+					}
+				},
+				error: function (data, status, error) {
+					console.log(data, status, error);
+					alert(data.err);
+				}
+			});
+		}else{
+			alert("Введите пин!");
+		}
+	});
+
+	// $(".order-list-item").click(function () {
+	// 	// e.preventDefault();
+	// 	if ($('.order-list-item').hasClass('close-good')) {
+	// 		// alert($(this).attr('data-title'));
+	// 		$(".remove-good").fadeIn();
+	// 		$(".close-layout").fadeIn();
+	// 		removeGoodId = $(this).attr('data-title');
+	// 		$(".remove-good input[name='yourpin']").focus();
+	// 		$(".remove-good input[name='yourpin']").val('');
+	// 	}
+	// });
+
+	$(".close-layout").click(function () {
+		$(".remove-good").fadeOut();
+		$(".close-layout").fadeOut();
+	});
+
 	thisAction.keyup(function (e) {
 		if (e.keyCode == 13) {
 			e.preventDefault();
@@ -437,13 +520,46 @@ $(document).ready(function(){
 						$(".postponed[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text(data.postponed.alias);
 						if (data.postponed.statusval == 1) {
 							$(".postponed[data-title="+goodid+"]").closest('.order-status').removeClass('status-danger');
-							$(".ordersdef").text(data.pcount);
+							$(".postponed[data-title="+goodid+"]").closest('.order-list-item').removeClass('status-danger');
+							// $(".ordersdef").text(data.pcount);
 						}else if(data.postponed.statusval == 0){
 							$(".postponed[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
-							$(".ordersdef").text(data.pcount);
+							$(".callstatus[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
+							$(".callstatus[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.callstatus.createdAt)));
+							$(".callstatus[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(' ');
+							$(".callstatus[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text(data.callstatus.alias);
+							$(".issued[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
+							$(".issued[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.issued.createdAt)));
+							$(".issued[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(' ');
+							$(".issued[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text(data.issued.alias);
+							$(".postponed[data-title="+goodid+"]").closest('.order-list-item').removeClass('status-danger');
 						}else if(data.postponed.statusval == 2){
 							$(".postponed[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
-							$(".ordersdef").text(data.pcount);
+							$(".postponed[data-title="+goodid+"]").closest('.order-list-item').addClass('status-danger');
+							$(".callstatus[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
+							$(".callstatus[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.callstatus.createdAt)));
+							$(".callstatus[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(' ');
+							$(".callstatus[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text(data.callstatus.alias);
+							$(".issued[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
+							$(".issued[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.issued.createdAt)));
+							$(".issued[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(' ');
+							$(".issued[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text(data.issued.alias);
+
+							$(".processed[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
+							$(".processed[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.processed.createdAt)));
+							$(".processed[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(' ');
+							$(".processed[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text(data.processed.alias);
+
+							$(".spicdate[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
+							$(".spicdate[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.spicdate.createdAt)));
+							$(".spicdate[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(' ');
+							$(".spicdate[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text("--.--.--");
+
+							$(".ordered[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
+							$(".ordered[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.ordered.createdAt)));
+							$(".ordered[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(' ');
+							$(".ordered[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text(data.ordered.alias);
+							// $(".ordersdef").text(data.pcount);
 						}
 					}
 				},

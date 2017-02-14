@@ -11,6 +11,13 @@ block content
           - readebleTime = ('00' + thisdate.getDate()).slice(-2) +'.'+ ('00' + (thisdate.getMonth()+1)).slice(-2) +'.'+ year
           - return readebleTime;
           - }
+        form.remove-good(action="#" method="method")
+          .form-group
+            label(for='yourpin') Подтвердите действие
+            input.form-control(type='password', name='yourpin' placeholder='ПИН')
+          input(type="hidden", name='goodid')
+          .form-group
+            input.btn.btn-success(type='submit', name='name' placeholder='holder')
         nav.navbar.lustran-navbar.navbar-static-top
           .lustran-container-nav
             .collapse.navbar-collapse
@@ -142,7 +149,14 @@ block content
                   ul.order-list
                     - if (orders[i].goods)
                       - for (var j=0;j<orders[i].goods.length;j++)
-                        li.order-list-item
+                        - var danger
+                        - if (orders[i].goods[j].postponed.statusval == 2)
+                          - danger = 'status-danger'
+                        - else
+                          - danger = ''
+                        - if (orders[i].goods[j].reject == 1)
+                          - danger += " close-good"
+                        li.order-list-item(class=danger, data-title=orders[i].goods[j].id)
                           // удаленный заказ staus-removed 
                           header.order-list-item-header
                             span.badge.badge-pur= j+1
@@ -159,7 +173,7 @@ block content
                             - else
                               span.order-float-date= getDateReadeble(orders[i].goods[j].inddate)
                             .btn.btn-success.btn-xs.gethistory( data-title=orders[i].goods[j].id) История действий
-                            a.remove-order-status(href='#', data-toggle='remove-order')
+                            a.remove-order-status(href='#', data-title=orders[i].goods[j].id)                            
                           .container-fluid
                             ul.order-status-list.row
                               li.col-sm-2

@@ -12887,6 +12887,10 @@ h2 {
 .order-list-item.status-removed {
   opacity: 0.3;
 }
+
+.order-list-item.status-danger {
+  background-color: #FFA513;
+}
 /* line 184, ../sass/_components.sass */
 .order-list-item .order-list-item-header {
   position: relative;
@@ -13561,7 +13565,7 @@ label.check {
   margin: 20px;
 }
 
-.adduserform, .edituserform, .banuserpin, .addlocform, .setlocpin, .dellocpin, .addorder, .getuserinfo, .userinfo, .editlocpin {
+.adduserform, .edituserform, .banuserpin, .addlocform, .setlocpin, .dellocpin, .addorder, .getuserinfo, .userinfo, .editlocpin, .remove-good {
   display: none;
   position: fixed;
   color: #000;
@@ -13749,6 +13753,24 @@ form[name='filter'] {
   color: #f00;
 }
 
+.close-good {
+  /*position: absolute;*/
+  /*display: block;*/
+  /*height: 100%;*/
+  /*width: 100%;*/
+  background-color: #000;
+  opacity: 0.4;
+  /*z-index: 99;*/
+}
+
+.close-good .order-status-list {
+  display: none;
+}
 /*.main-nav > .nav > li > a {
   padding: 1px 15px;
 }*/
+
+.gethistory {
+  float: right;
+  margin-right: 30px;
+}

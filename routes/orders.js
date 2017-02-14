@@ -44,7 +44,8 @@ router.get('/', function(req, res, next) {
 	}else{
 		searchWhereGoods = {};
 		searchWhereOrders = {
-			locationId: req.cookies.location
+			locationId: req.cookies.location,
+			active: 1
 		};
 	}
 	console.log(searchWhereGoods);
@@ -57,7 +58,8 @@ router.get('/', function(req, res, next) {
 		earchWhereOrders = {};
 		searchWhereOrders = {
 			$and: [],
-			locationId: req.cookies.location
+			locationId: req.cookies.location,
+			active: 1
 		};
 		if (req.query.processed) {
 			searchWhereOrders.$and.push({'$goods.processed.statusval$': parseInt(req.query.processed)});
@@ -84,7 +86,8 @@ router.get('/', function(req, res, next) {
 		}
 	}else{
 		searchWhereOrders = {
-			locationId: req.cookies.location
+			locationId: req.cookies.location,
+			active: 1
 		};
 	}
   var now = new Date();
@@ -183,6 +186,80 @@ router.post('/getgoodhistiry', function (req,res,next) {
   });
 });
 
+router.post('/rejectgood', function (req, res, next) {
+	// res.send(req.body);
+	models.users.findOne({
+		where: {
+			pin: req.body.yourpin,
+			status: 'manager'
+		}
+	}).then(function (user) {
+		if (user) {
+
+			models.goods.update({
+				reject: req.body.reject,
+			},{
+				where: {
+					id: req.body.goodid
+				}
+			}).then(function (goods) {
+				models.goods.findOne({
+					where: {
+						id: req.body.goodid
+					}
+				}).then(function (good) {
+					models.orders.findOne({
+						include: [models.goods],
+						where: {
+							id: good.orderId
+						}
+					}).then(function (order) {
+						var activeorder = 1;
+						for (var i = 0; i < order.goods.length; i++) {
+							if (order.goods[i].reject == 0) {
+								activeorder = 1;
+								break;
+							}else{
+								activeorder = 0;
+							}
+						}
+						if (activeorder == 1) {
+							res.send({good: good, order: order, err: false, activeorder: activeorder});
+						}else{
+							models.orders.update({
+								active: 0
+							},{
+								where:{
+									id: order.id
+								}
+							}).then(function (updorder) {
+								res.send({good: good, order: order, err: false, activeorder: activeorder});
+							}).catch(function (err) {
+								res.send({err: err});
+					    	console.log(err);
+							});
+						}
+					}).catch(function (err) {
+						res.send({err: err});
+			    	console.log(err);
+					});
+				}).catch(function (err) {
+					res.send({err: err});
+			    console.log(err);
+				});
+			}).catch(function (err) {
+				res.send({err: err});
+		    console.log(err);
+			});
+		}else{
+			res.send({err: 'Неверный пин!'});
+		}
+	}).catch(function (err) {
+    res.send({err: err});
+    console.log(err);
+  });
+});
+
 router.post('/setprocessed', function (req, res, next) {
   // res.send('response');
   models.users.findOne({
@@ -234,7 +311,7 @@ router.post('/setprocessed', function (req, res, next) {
 	                  alias: alias,
 	                  comment: req.body.comment
 									}).then(function (action) {
-										res.send({processed: processed, user: user, pcount: goods.length}); 
+										res.send({processed: processed, user: user, pcount: goods.length});
 									}).catch(function (err) {
 										res.send({err: err});
 		                console.log(err);
@@ -471,34 +548,99 @@ router.post('/setpostponed', function (req, res, next) {
           var alias;
           if (req.body.statusval == 0) {
             alias = 'Не отложен';
+	          models.postponed.create({
+	            statusval: req.body.statusval,
+							comment: req.body.comment,
+	            alias: alias,
+	            locationId: req.cookies.location,
+	            userId: user.id,
+	            goodId: req.body.goodid
+	          }).then(function (postponed) {
+							models.users.findOne({
+								where: {
+									status: "starter"
+								}
+							}).then(function (starter) {
+								if (starter) {
+									models.callstatus.create({
+										statusval: 0,
+										comment: ' ',
+										alias: 'Не звонили',
+										locationId: req.cookies.location,
+										userId: starter.id,
+										goodId: req.body.goodid
+									}).then(function (callstatus) {
+										models.issued.create({
+											statusval: 0,
+											comment: ' ',
+											alias: 'Не выдан',
+											locationId: req.cookies.location,
+											userId: starter.id,
+											goodId: req.body.goodid
+										}).then(function (issued) {
+											models.goods.update({
+					              postponedId: postponed.id,
+												callstatusId: callstatus.id,
+												issuedId: issued.id
+					            },{
+					              where: {
+					                id: req.body.goodid
+					              }
+					            }).then(function (good) {
+												models.actions.create({
+													locationId: req.cookies.location,
+													userId: user.id,
+													goodId: req.body.goodid,
+													statusval: req.body.statusval,
+													alias: alias,
+													comment: req.body.comment
+												}).then(function (action) {
+													res.send({postponed: postponed, callstatus: callstatus, issued: issued, user: user});
+												}).catch(function (err) {
+													res.send({err: err});
+													console.log(err);
+												});
+					            }).catch(function (err) {
+					              res.send({err: err});
+					              console.log('update goods',err);
+				            	});
+										}).catch(function (err) {
+											res.send({err: err});
+											console.log(err);
+										});
+									}).catch(function (err) {
+										res.send({err: err});
+										console.log(err);
+									});
+								}else{
+									res.send({err: 'Что-то пошло не так, обратитесь к администратору! / starter is not exist'});
+								}
+							}).catch(function (err) {
+								res.send({err: err});
+								console.log(err);
+							});
+	          }).catch(function (err) {
+	            res.send({err: err});
+	            console.log('postponed',err);
+	          });
           }else if(req.body.statusval == 1){
             alias = 'Отложен';
-          }else{
-            alias = 'Есть деффект';
-          }
-					// console.log("models.ordered.statusval: "+goods.ordered.statusval);
-          if (good.ordered.statusval == 1) {
-            models.postponed.create({
-              statusval: req.body.statusval,
-							comment: req.body.comment,
-              alias: alias,
-              locationId: req.cookies.location,
-              userId: user.id,
-              goodId: req.body.goodid
-            }).then(function (postponed) {
-              models.goods.update({
-                postponedId: postponed.id
-              },{
-                where: {
-                  id: req.body.goodid
-                }
-              }).then(function (good) {
-								models.goods.findAll({
-									include: [models.postponed],
-									where: {
-				            '$postponed.statusval$': 2
-				          }
-								}).then(function (goods) {
+						if (good.ordered.statusval == 1) {
+	            models.postponed.create({
+	              statusval: req.body.statusval,
+								comment: req.body.comment,
+	              alias: alias,
+	              locationId: req.cookies.location,
+	              userId: user.id,
+	              goodId: req.body.goodid
+	            }).then(function (postponed) {
+	              models.goods.update({
+	                postponedId: postponed.id
+	              },{
+	                where: {
+	                  id: req.body.goodid
+	                }
+	              }).then(function (good) {
 									models.actions.create({
 										locationId: req.cookies.location,
 										userId: user.id,
@@ -507,28 +649,146 @@ router.post('/setpostponed', function (req, res, next) {
 										alias: alias,
 										comment: req.body.comment
 									}).then(function (action) {
-										res.send({postponed: postponed, user: user, pcount: goods.length});
+										res.send({postponed: postponed, user: user});
 									}).catch(function (err) {
 										res.send({err: err});
 										console.log(err);
 									});
-									// res.send({postponed: postponed, user: user, pcount: goods.length});
+	              }).catch(function (err) {
+	                res.send({err: err});
+	                console.log('update goods',err);
+	              })
+	            }).catch(function (err) {
+	              res.send({err: err});
+	              console.log('postponed',err);
+	            });
+	          }else{
+	            res.send({err: 'Незаказыннй товар отложить нельзя!'});
+	          }
+          }else if(req.body.statusval == 2){
+            alias = 'Есть деффект';
+						////////////////////////////////////////////////////////////////////
+						if (good.ordered.statusval == 1) {
+							models.postponed.create({
+		            statusval: req.body.statusval,
+								comment: req.body.comment,
+		            alias: alias,
+		            locationId: req.cookies.location,
+		            userId: user.id,
+		            goodId: req.body.goodid
+		          }).then(function (postponed) {
+								models.users.findOne({
+									where: {
+										status: "starter"
+									}
+								}).then(function (starter) {
+									if (starter) {
+										models.callstatus.create({
+											statusval: 0,
+											comment: ' ',
+											alias: 'Не звонили',
+											locationId: req.cookies.location,
+											userId: starter.id,
+											goodId: req.body.goodid
+										}).then(function (callstatus) {
+											models.issued.create({
+												statusval: 0,
+												comment: ' ',
+												alias: 'Не выдан',
+												locationId: req.cookies.location,
+												userId: starter.id,
+												goodId: req.body.goodid
+											}).then(function (issued) {
+												models.processed.create({
+													statusval: 0,
+													comment: ' ',
+													alias: 'Не обработан',
+													locationId: req.cookies.location,
+													userId: starter.id,
+													goodId: req.body.goodid
+												}).then(function (processed) {
+													models.spicdate.create({
+														// statusval: 0,
+														comment: ' ',
+														// alias: 'Не выдан',
+														locationId: req.cookies.location,
+														userId: starter.id,
+														goodId: req.body.goodid
+													}).then(function (spicdate) {
+														models.ordered.create({
+															statusval: 0,
+															comment: ' ',
+															alias: 'Не заказан',
+															locationId: req.cookies.location,
+															userId: starter.id,
+															goodId: req.body.goodid
+														}).then(function (ordered) {
+															models.goods.update({
+									              postponedId: postponed.id,
+																callstatusId: callstatus.id,
+																processedId: processed.id,
+																spicdateId: spicdate.id,
+																orderedId: ordered.id,
+																issuedId: issued.id
+									            },{
+									              where: {
+									                id: req.body.goodid
+									              }
+									            }).then(function (good) {
+																models.actions.create({
+																	locationId: req.cookies.location,
+																	userId: user.id,
+																	goodId: req.body.goodid,
+																	statusval: req.body.statusval,
+																	alias: alias,
+																	comment: req.body.comment
+																}).then(function (action) {
+																	res.send({postponed: postponed, callstatus: callstatus, issued: issued, processed: processed, spicdate: spicdate, ordered: ordered, user: user});
+																}).catch(function (err) {
+																	res.send({err: err});
+																	console.log(err);
+																});
+									            }).catch(function (err) {
+									              res.send({err: err});
+									              console.log('update goods',err);
+								            	});
+														}).catch(function (err) {
+															res.send({err: err});
+															console.log('update goods',err);
+														});
+													}).catch(function (err) {
+														res.send({err: err});
+														console.log('update goods',err);
+													});
+												}).catch(function (err) {
+													res.send({err: err});
+													console.log('update goods',err);
+												});
+											}).catch(function (err) {
+												res.send({err: err});
+												console.log(err);
+											});
+										}).catch(function (err) {
+											res.send({err: err});
+											console.log(err);
+										});
+									}else{
+										res.send({err: 'Что-то пошло не так, обратитесь к администратору! / starter is not exist'});
+									}
 								}).catch(function (err) {
 									res.send({err: err});
-	                console.log(err);
+									console.log(err);
 								});
-                // res.send({postponed: postponed, user: user})
-              }).catch(function (err) {
-                res.send({err: err});
-                console.log('update goods',err);
-              })
-            }).catch(function (err) {
-              res.send({err: err});
-              console.log('postponed',err);
-            });
-          }else{
-            res.send({err: 'Незаказыннй товар отложить нельзя!'});
+		          }).catch(function (err) {
+		            res.send({err: err});
+		            console.log('postponed',err);
+		          });
+						}else{
+							res.send({err: 'Незаказанный товар не может быть деффектным'});
+						}
+						////////////////////////////////////////////////////////////////////
           }
+					// console.log("models.ordered.statusval: "+goods.ordered.statusval);
         }).catch(function (err) {
           res.send({err: err});
           console.log('goods',err);
@@ -761,7 +1021,7 @@ router.post('/addcomment', function (req, res, next) {
 
 router.get('/order-:orderid', function (req, res, next) {
 	models.orders.findOne({
-    include: [models.users, models.locations, /*models.goods,*/{
+    include: [models.users, models.locations, models.actions,{
       model: models.goods,
 			// where: searchWhereGoods,
       as: 'goods',

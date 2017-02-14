@@ -46,6 +46,22 @@ link(rel='stylesheet', href='/stylesheets/printorder.css')
   hr
   h4.left Комментарий к заказу
   p.left= order.comment
+  
+  h4.left История действий
+  table.table
+    thead
+      tr
+        th Товар
+        th Дата
+        th Пользователь
+        th Место
+        th Присвоеный статус
+        th Комментарий
+    tbody
+      - for (var i=0;i<order.goods.length;i++)
+         tr
+           td 
+          //-  Таблица действий по каждому товару.
   //- .col-md-6.col-sm-6.col-lg-6.col-xs-6
   //-   p= "Исполнитель  _____________________"
   //- .col-md-6.col-sm-6.col-lg-6.col-xs-6
