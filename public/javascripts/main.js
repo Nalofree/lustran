@@ -682,14 +682,23 @@ $(document).ready(function(){
 		$('.modal-layout').hide();
 		$('.close-layout').fadeOut();
 		$('.action').fadeOut();
-	})
+	});
 
 	//Отмена Action
 	$('body').on('click','[data-toggle=cancel-action]',function(){
 		$('.layout-dark').hide();
 		$('.close-layout').fadeOut();
 		$('.action').fadeOut();
-	})
+	});
+
+	$(".checkbox.archive").click(function () {
+		// e.preventDefault
+		if ($(".archive input[name='archive']").prop("checked")) {
+			$(".archive-period").fadeIn();
+		}else{
+			$(".archive-period").fadeOut();
+		}
+	});
 
 	//Сохранить Action
 

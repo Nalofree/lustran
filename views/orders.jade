@@ -83,9 +83,17 @@ block content
                         .checkbox
                           label(for='spicdate')= "Уточненная дата"
                           input(type='checkbox' id='spicdate', name='spicdate')
-                        .checkbox
+                        .checkbox.archive
                           label(for='archive')= "Архивные заказы"
-                          input(type='checkbox' id='archive', name='archive')                        
+                          input(type='checkbox' id='archive', name='archive')
+                      .dropdown.archive-period
+                        .form-group
+                          label(for='issued') Начало периода 
+                          input.form-control(name='startperiod', type='date', id='startperiod')
+                      .dropdown.archive-period
+                        .form-group
+                          label(for='issued') Конец периода
+                          input.form-control(name='endperiod', type='date', id='endperiod')                       
                       hr
                       .dropdown
                         .form-group

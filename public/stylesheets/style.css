@@ -13779,3 +13779,7 @@ form[name='filter'] {
   float: right;
   margin-right: 30px;
 }
+
+.archive-period {
+  display: none;
+}

@@ -91,9 +91,13 @@ router.get('/', function(req, res, next) {
 			searchWhereOrders.$and.push({active: 1});
 		}
 		if (req.query.archive) {
-			searchWhereOrders.$or = [];
+			// searchWhereOrders.$or = [];
 			// searchWhereOrders.$or.push({reject: 1});
-			searchWhereOrders.$or.push({active: 0});
+			var start = req.query.startperiod ? new Date(req.query.startperiod) : new Date(0);
+			var end = req.query.endperiod ? new Date(req.query.endperiod) : new Date();
+			searchWhereOrders.$and.push({active: 0});
+			searchWhereOrders.$and.push({createdAt: {$gte: start}});
+			searchWhereOrders.$and.push({createdAt: {$lte: end}});
 		}
 	}else{
 		searchWhereOrders = {
