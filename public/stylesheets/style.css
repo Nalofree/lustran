@@ -13764,8 +13764,8 @@ form[name='filter'] {
 }
 
 .end-good {
-  background-color: #0f0;
-  opacity: 0.4;
+  background-color: #5fd378;
+  /*opacity: 0.4;*/
 }
 
 .close-good .order-status-list {
