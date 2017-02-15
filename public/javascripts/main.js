@@ -657,6 +657,9 @@ $(document).ready(function(){
 							$(".issued[data-title="+goodid+"]").closest('.order-status').removeClass('status-danger');
 							$(".issued[data-title="+goodid+"]").closest('.order-list-item').addClass('end-good');
 							$(".ordersissued").text(data.pcount);
+							if (data.activeorder == 0) {
+								$(".issued[data-title="+goodid+"]").closest('.order').fadeOut();
+							}
 						}else{
 							$(".issued[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
 							$(".issued[data-title="+goodid+"]").closest('.order-list-item').removeClass('end-good');

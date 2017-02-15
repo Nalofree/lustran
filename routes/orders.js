@@ -257,33 +257,6 @@ router.post('/rejectgood', function (req, res, next) {
 							res.send({err: err});
 					   	console.log(err);
 						});
-						// if (activeorder == 1) {
-						// 	models.orders.update({
-						// 		active: 1
-						// 	},{
-						// 		where:{
-						// 			id: order.id
-						// 		}
-						// 	}).then(function (updorder) {
-						// 		res.send({good: good, order: order, err: false, activeorder: activeorder});
-						// 	}).catch(function (err) {
-						// 		res.send({err: err});
-					  //   	console.log(err);
-						// 	});
-						// }else{
-						// 	models.orders.update({
-						// 		active: 0
-						// 	},{
-						// 		where:{
-						// 			id: order.id
-						// 		}
-						// 	}).then(function (updorder) {
-						// 		res.send({good: good, order: order, err: false, activeorder: activeorder});
-						// 	}).catch(function (err) {
-						// 		res.send({err: err});
-					  //   	console.log(err);
-						// 	});
-						// }
 					}).catch(function (err) {
 						res.send({err: err});
 			    	console.log(err);
@@ -970,6 +943,7 @@ router.post('/setissued', function (req, res, next) {
                   id: req.body.goodid
                 }
               }).then(function (good) {
+								console.log(good);
 								models.goods.findAll({
 									include: [models.issued],
 									where: {
@@ -984,7 +958,83 @@ router.post('/setissued', function (req, res, next) {
 										alias: alias,
 										comment: req.body.comment
 									}).then(function (action) {
-										res.send({issued: issued, user: user, pcount: goods.length});
+										// res.send({issued: issued, user: user, pcount: goods.length});
+										models.goods.findOne({
+											where: {
+												id: req.body.goodid
+											}
+										}).then(function (good) {
+											models.orders.findOne({
+												include: [models.goods],
+												where: {
+													id: good.orderId
+												}
+											}).then(function (order) {
+												var activeorder = 1;
+												for (var i = 0; i < order.goods.length; i++) {
+													if (order.goods[i].reject == 1 || order.goods[i].active == 0) {
+														activeorder = 0;
+													}else if (order.goods[i].reject == 0 || order.goods[i].active == 1){
+														activeorder = 1;
+														break;
+													}
+												}
+												console.log("activeorder: "+ activeorder);
+												models.orders.update({
+													active: activeorder
+												},{
+													where:{
+														id: order.id
+													}
+												}).then(function (updorder) {
+													res.send({good: good, order: order, err: false, activeorder: activeorder, issued: issued, user: user, pcount: goods.length});
+												}).catch(function (err) {
+													res.send({err: err});
+											   	console.log(err);
+												});
+											}).catch(function (err) {
+												res.send({err: err});
+									    	console.log(err);
+											});
+										}).catch(function (err) {
+											res.send({err: err});
+			                console.log(err);
+										});
+										/*
+
+										models.orders.findOne({
+											include: [models.goods],
+											where: {
+												id: good.orderId
+											}
+										}).then(function (order) {
+											var activeorder = 1;
+											for (var i = 0; i < order.goods.length; i++) {
+												if (order.goods[i].reject == 1 || order.goods[i].active == 0) {
+													activeorder = 0;
+												}else if (order.goods[i].reject == 0 || order.goods[i].active == 1){
+													activeorder = 1;
+													break;
+												}
+											}
+											console.log("activeorder: "+ activeorder);
+											models.orders.update({
+												active: activeorder
+											},{
+												where:{
+													id: order.id
+												}
+											}).then(function (updorder) {
+												res.send({good: good, order: order, err: false, activeorder: activeorder});
+											}).catch(function (err) {
+												res.send({err: err});
+										   	console.log(err);
+											});
+										}).catch(function (err) {
+											res.send({err: err});
+								    	console.log(err);
+										});
+										*/
 									}).catch(function (err) {
 										res.send({err: err});
 										console.log(err);
