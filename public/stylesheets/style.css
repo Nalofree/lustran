@@ -13763,6 +13763,11 @@ form[name='filter'] {
   /*z-index: 99;*/
 }
 
+.end-good {
+  background-color: #0f0;
+  opacity: 0.4;
+}
+
 .close-good .order-status-list {
   display: none;
 }

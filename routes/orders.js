@@ -52,37 +52,48 @@ router.get('/', function(req, res, next) {
 
 	var lastStatus = false;
 
-	if (req.query.processed || req.query.oredered || req.query.postponed || req.query.callstatus || req.query.issued || req.query.spicdate) { //processed=&oredered=&postponed=&callstatus=&issued=&spicdate=on
+	if (req.query.processed || req.query.oredered || req.query.postponed || req.query.callstatus || req.query.issued || req.query.spicdate || req.query.archive) { //processed=&oredered=&postponed=&callstatus=&issued=&spicdate=on
 		// console.log("PROCESSED: " + req.query.processed);
 		lastStatus = true;
 		earchWhereOrders = {};
 		searchWhereOrders = {
 			$and: [],
-			locationId: req.cookies.location,
-			active: 1
+			// $or: [],
+			locationId: req.cookies.location
 		};
 		if (req.query.processed) {
 			searchWhereOrders.$and.push({'$goods.processed.statusval$': parseInt(req.query.processed)});
+			searchWhereOrders.$and.push({active: 1});
 			// searchWhereOrders.$and.push({'$goods.processed.statusval$': parseInt(req.query.processed)});
 		}
 		if (req.query.oredered) {
 			searchWhereOrders.$and.push({'$goods.ordered.statusval$': parseInt(req.query.oredered)});
+			searchWhereOrders.$and.push({active: 1});
 			// searchWhereOrders.$and.push({'$goods.ordered.statusval$': parseInt(req.query.oredered)});
 		}
 		if (req.query.postponed) {
 			searchWhereOrders.$and.push({'$goods.postponed.statusval$': parseInt(req.query.postponed)});
+			searchWhereOrders.$and.push({active: 1});
 			// searchWhereOrders.$and.push({'$goods.postponed.statusval$': parseInt(req.query.postponed)});
 		}
 		if (req.query.callstatus) {
 			searchWhereOrders.$and.push({'$goods.callstatus.statusval$': parseInt(req.query.callstatus)});
+			searchWhereOrders.$and.push({active: 1});
 			// searchWhereOrders.$and.push({'$goods.callstatus.statusval$': parseInt(req.query.callstatus)});
 		}
 		if (req.query.issued) {
 			searchWhereOrders.$and.push({'$goods.issued.statusval$': parseInt(req.query.issued)});
+			searchWhereOrders.$and.push({active: 1});
 			// searchWhereOrders.$and.push({'$goods.issued.statusval$': parseInt(req.query.issued)});
 		}
 		if (req.query.spicdate) {
 			searchWhereOrders.$and.push({'$goods.spicdate.statusval$': {$ne: null}});
+			searchWhereOrders.$and.push({active: 1});
+		}
+		if (req.query.archive) {
+			searchWhereOrders.$or = [];
+			// searchWhereOrders.$or.push({reject: 1});
+			searchWhereOrders.$or.push({active: 0});
 		}
 	}else{
 		searchWhereOrders = {
@@ -223,8 +234,20 @@ router.post('/rejectgood', function (req, res, next) {
 								activeorder = 0;
 							}
 						}
+						console.log("activeorder: "+ activeorder);
 						if (activeorder == 1) {
-							res.send({good: good, order: order, err: false, activeorder: activeorder});
+							models.orders.update({
+								active: 1
+							},{
+								where:{
+									id: order.id
+								}
+							}).then(function (updorder) {
+								res.send({good: good, order: order, err: false, activeorder: activeorder});
+							}).catch(function (err) {
+								res.send({err: err});
+					    	console.log(err);
+							});
 						}else{
 							models.orders.update({
 								active: 0
@@ -907,6 +930,7 @@ router.post('/setissued', function (req, res, next) {
           }else{
             alias = 'Выдан';
           }
+					var activestatus = req.body.statusval == 1 ? 0 : 1;
           if (good.callstatus.statusval == 1) {
             models.issued.create({
               statusval: req.body.statusval,
@@ -917,7 +941,8 @@ router.post('/setissued', function (req, res, next) {
               goodId: req.body.goodid
             }).then(function (issued) {
               models.goods.update({
-                issuedId: issued.id
+                issuedId: issued.id,
+								active: activestatus
               },{
                 where: {
                   id: req.body.goodid

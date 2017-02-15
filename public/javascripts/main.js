@@ -277,6 +277,7 @@ $(document).ready(function(){
 	$(".close-layout").click(function () {
 		$(".remove-good").fadeOut();
 		$(".close-layout").fadeOut();
+		$(".remove-order-status").fadeIn();
 	});
 
 	thisAction.keyup(function (e) {
@@ -654,9 +655,11 @@ $(document).ready(function(){
 						$(".issued[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text(data.issued.alias);
 						if (data.issued.statusval == 1) {
 							$(".issued[data-title="+goodid+"]").closest('.order-status').removeClass('status-danger');
+							$(".issued[data-title="+goodid+"]").closest('.order-list-item').addClass('end-good');
 							$(".ordersissued").text(data.pcount);
 						}else{
 							$(".issued[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
+							$(".issued[data-title="+goodid+"]").closest('.order-list-item').removeClass('end-good');
 							$(".ordersissued").text(data.pcount);
 						}
 					}

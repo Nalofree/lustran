@@ -83,6 +83,10 @@ block content
                         .checkbox
                           label(for='spicdate')= "Уточненная дата"
                           input(type='checkbox' id='spicdate', name='spicdate')
+                        .checkbox
+                          label(for='archive')= "Архивные заказы"
+                          input(type='checkbox' id='archive', name='archive')                        
+                      hr
                       .dropdown
                         .form-group
                           input.btn.btn-default(type="submit", value="Применить")
@@ -156,6 +160,8 @@ block content
                           - danger = ''
                         - if (orders[i].goods[j].reject == 1)
                           - danger += " close-good"
+                        - if (orders[i].goods[j].reject == 0 && orders[i].goods[j].active == 0)
+                          - danger += " end-good"
                         li.order-list-item(class=danger, data-title=orders[i].goods[j].id)
                           // удаленный заказ staus-removed 
                           header.order-list-item-header
