@@ -1021,7 +1021,7 @@ router.post('/addcomment', function (req, res, next) {
 
 router.get('/order-:orderid', function (req, res, next) {
 	models.orders.findOne({
-    include: [models.users, models.locations, models.actions,{
+    include: [models.users, models.locations,{
       model: models.goods,
 			// where: searchWhereGoods,
       as: 'goods',
@@ -1055,8 +1055,17 @@ router.get('/order-:orderid', function (req, res, next) {
 			id: req.params.orderid
 		}
   }).then(function (order) {
-    res.render('overvieworder', {order: order});
-    // res.send(order);
+		models.actions.findAll({
+			include: [models.goods, models.users, models.locations],
+			where: {
+				"$good.orderId$": req.params.orderid
+			}
+		}).then(function (actions) {
+			res.render('overvieworder', {order: order, actions: actions});
+		}).catch(function (err) {
+	    res.send(err);
+	    console.log('order error: ' + err);
+	  });
   }).catch(function (err) {
     res.send(err);
     console.log('order error: ' + err);

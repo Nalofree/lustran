@@ -233,6 +233,8 @@ router.get('/order-:orderid', function (req, res, next) {
     }
     res.render('printorder', {order: order, summ: rubles(summ)});
     // res.send(order);
+    var origin = req.get('origin');
+    console.log(origin);
   }).catch(function (err) {
     res.send(err);
     console.log('order error: ' + err);

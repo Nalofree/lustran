@@ -46,9 +46,9 @@ link(rel='stylesheet', href='/stylesheets/printorder.css')
   hr
   h4.left Комментарий к заказу
   p.left= order.comment
-  
+  hr
   h4.left История действий
-  table.table
+  table.table.table-hover
     thead
       tr
         th Товар
@@ -58,9 +58,14 @@ link(rel='stylesheet', href='/stylesheets/printorder.css')
         th Присвоеный статус
         th Комментарий
     tbody
-      - for (var i=0;i<order.goods.length;i++)
+      - for (var i=0;i<actions.length;i++)
          tr
-           td 
+           td= actions[i].good.name
+           td= getReadebleDate(actions[i].createdAt)
+           td= actions[i].user.name
+           td= actions[i].location.alias
+           td= actions[i].alias
+           td= actions[i].comment
           //-  Таблица действий по каждому товару.
   //- .col-md-6.col-sm-6.col-lg-6.col-xs-6
   //-   p= "Исполнитель  _____________________"
