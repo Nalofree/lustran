@@ -139,6 +139,16 @@ function getTimeReadebleYesterday(date){
 
 $(document).ready(function(){
 
+	// $('html, body').animate({scrollTop: $(window.hashName).offset().top}, 2000);
+	// console.log(window.location.hash);
+	if (window.location.hash == '#down') {
+		// $('#down').scrollTop = 9999;
+		$('body').scrollTop(9999);
+		// alert(window.location.hash );
+		// $('body').scrollTop = 9999;
+		// $(".lustran-main").scrollIntoView(true);
+	}
+
 	// ЖДУН-mode on
 	//$(".close-all").fadeIn();
 	// ЖДУН-mode off
@@ -197,6 +207,7 @@ $(document).ready(function(){
 		$(".action").fadeOut();
 		$(".close-layout").fadeIn();
 		thisAction.fadeIn();
+		thisAction.scrollTop(9999);
 		thisAction.find("input[name='yourpin']").val('');
 		thisAction.find("input[name='yourpin']").focus();
 	});

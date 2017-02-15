@@ -91,6 +91,7 @@ $(document).ready(function () {
             $(".new-order-id").text(parseInt($(".new-order-id").text())+1);
             $(".new-order-iter").text(parseInt($(".new-order-iter").text())+1);
             window.location = '/orders#down';
+            $(document).scrollTop = 9999;
             window.open(
               '/addorder/order-'+data.order.id,
               '_blank' // <- This is what makes it open in a new window.
