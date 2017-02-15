@@ -13616,6 +13616,22 @@ label.check {
   cursor: pointer;
 }
 
+.close-all {
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  background-color: #000;
+  background-image: url("../images/2.gif");
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.4;
+  top: 0;
+  left: 0;
+  /*cursor: pointer;*/
+}
+
 .users-table, .locations-table {
   background-color: #fff;
   /*border-radius: 5px;*/

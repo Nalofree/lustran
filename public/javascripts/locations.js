@@ -17,6 +17,7 @@ $(document).ready(function () {
   $('.addlocform').submit(function (e) {
     e.preventDefault();
     if ($(".addlocform input[name='fullname']").val() && $(".addlocform input[name='opentime']").val() && $(".addlocform input[name='closetime']").val() && $(".addlocform input[name='alias']").val() && $(".addlocform input[name='adres']").val() && $(".addlocform input[name='yourpin']").val()) {
+      $(".close-all").fadeIn();
       var data = {
         name: $(".addlocform input[name='name']").val(),
         fullname: $(".addlocform input[name='fullname']").val(),
@@ -42,9 +43,11 @@ $(document).ready(function () {
             $('.close-layout').fadeOut();
             // $('.addlocform input').val('');
           }
+          $(".close-all").fadeOut();
         },
         error: function (data, status, error) {
           console.log(data, status, error);
+          $(".close-all").fadeOut();
         }
       });
     }else{
@@ -70,6 +73,7 @@ $(document).ready(function () {
   $('.setlocpin-submit').click(function (e) {
     e.preventDefault();
     if ($(".setlocpin input[name=yourpin]").val()) {
+      $(".close-all").fadeIn();
       var data = {
         yourpin: $(".setlocpin input[name=yourpin]").val(),
         status: 'manager'
@@ -98,12 +102,14 @@ $(document).ready(function () {
             $(".setlocpin input[name=yourpin]").val("");
             $(".close-layout").fadeOut();
           }
+          $(".close-all").fadeOut();
         },
         error: {function (data, status, error) {
           console.log(data, status, error);
           $(".setlocpin").fadeOut();
           $(".setlocpin input[name=yourpin]").val("");
           $(".close-layout").fadeOut();
+          $(".close-all").fadeOut();
         }}
       });
     }else{
@@ -113,6 +119,7 @@ $(document).ready(function () {
 
   $( ".locations-table" ).on( "click", "div.edit-location", function() {
     // alert($(this).attr('data-title'));
+    // $(".close-all").fadeIn();
     $(".editlocpin").fadeIn();
     $(".close-layout").fadeIn();
     $(".editlocpin-submit").attr('data-title',$(this).attr('data-title'));
@@ -145,6 +152,7 @@ $(document).ready(function () {
     e.preventDefault();
     if ($(".editlocpin input[name='fullname']").val() && $(".editlocpin input[name='alias']").val() && $(".editlocpin input[name='adres']").val() && $(".editlocpin input[name='opentime']").val() && $(".editlocpin input[name='closetime']").val() && $(".editlocpin input[name='yourpin']").val()) {
       // alert('ok');
+      $(".close-all").fadeIn();
       var data = {};
       data.fullname = $(".editlocpin input[name='fullname']").val();
       data.alias = $(".editlocpin input[name='alias']").val();
@@ -174,6 +182,7 @@ $(document).ready(function () {
             $(".editlocpin").fadeOut();
             $(".close-layout").fadeOut();
           }
+          $(".close-all").fadeOut();
         },
         error: function (data, status, error) {
           console.log(data, status, error);
@@ -186,6 +195,7 @@ $(document).ready(function () {
           $(".editlocpin input[name='yourpin']").val('');
           $(".editlocpin").fadeOut();
           $(".close-layout").fadeOut();
+          $(".close-all").fadeOut();
         }
       });
     }else{

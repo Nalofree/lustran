@@ -16,19 +16,34 @@ router.get('/', function (req, res, next) {
         id: req.cookies.location
       }
     }).then(function (location) {
-      // res.send({err: false, location: location});
-      models.orders.max('number').then(function (lastorder) {
-        if (lastorder) {
-          ordernumber = lastorder+1;
-        }else{
-          ordernumber = 1;
-        };
+
+      models.orders.findAll().then(function (orders) {
+        var numbers = [];
+        function getRandomString() {
+          var rendomstring;
+          rendomstring = Math.random().toString(36);
+          rendomstring = rendomstring.split('.')[1];
+          rendomstring = rendomstring.substring(0, 4);
+          return rendomstring;
+        }
+        for (var i = 0; i < orders.length; i++) {
+          numbers.push(orders[i].number);
+        }
+        var ordernumber = getRandomString();;
+        while (numbers.indexOf(ordernumber) >= 0) {
+          ordernumber = getRandomString();
+        }
         res.render('addorder', {title: 'Добавить заказ', err: false, location: location, ordernumber: ordernumber});
-      })
+      }).catch(function (err) {
+        console.log(err);
+        res.send({err: err});
+      });
+      // });
     }).catch(function (err) {
       console.log('locations err: ' + err);
       res.send({err: 'locations err: ' + err});
     });
+
   }
 });
 

@@ -139,6 +139,11 @@ function getTimeReadebleYesterday(date){
 
 $(document).ready(function(){
 
+	// ЖДУН-mode on
+	//$(".close-all").fadeIn();
+	// ЖДУН-mode off
+	//$(".close-all").fadeOut();
+
 	$('.close-layout').click(function () {
 		$('.action').fadeOut();
 	});
@@ -214,6 +219,7 @@ $(document).ready(function(){
 
 	$(".remove-good").submit(function (e) {
 		e.preventDefault();
+		$(".close-all").fadeIn();
 		if ($(".remove-good input[name='yourpin']").val()) {
 			var data = {
 				goodid: removeGoodId,
@@ -251,10 +257,12 @@ $(document).ready(function(){
 							$('.remove-order-status[data-title='+removeGoodId+']').closest('li.order-list-item').removeClass('close-good');
 						}
 					}
+					$(".close-all").fadeOut();
 				},
 				error: function (data, status, error) {
 					console.log(data, status, error);
 					alert(data.err);
+					$(".close-all").fadeOut();
 				}
 			});
 		}else{
@@ -336,6 +344,7 @@ $(document).ready(function(){
 				statusval: action.find('select[name="status"]').val()
 			}
 			console.log(data);
+			$(".close-all").fadeIn();
 			$.ajax({
 				url: '/orders/setprocessed',
 				type: 'POST',
@@ -361,12 +370,14 @@ $(document).ready(function(){
 							$(".ordersproc").text(data.pcount);
 						}
 					}
+					$(".close-all").fadeOut();
 				},
 				error: function (data, status, error) {
 					console.log(data, status, error);
 					alert(error);
 					$('.close-layout').fadeOut();
 					action.fadeOut();
+					$(".close-all").fadeOut();
 				}
 			});
 		}else{
@@ -375,6 +386,7 @@ $(document).ready(function(){
 	};
 
 	function setSpicdate(action) {
+		$(".close-all").fadeIn();
 		var today = new Date();
 	  var dd = today.getDate();
 	  var mm = today.getMonth()+1; //January is 0!
@@ -428,12 +440,14 @@ $(document).ready(function(){
 							$(".spicdate[data-title="+goodid+"]").closest('.order-status').find('.status').text(getDateSuperReadeble(new Date(data.spicdate.statusval)));
 							$(".processed[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text('Обработан');
 						}
+						$(".close-all").fadeOut();
 					},
 					error: function (data, status, error) {
 						console.log(data, status, error);
 						alert(error);
 						$('.close-layout').fadeOut();
 						action.fadeOut();
+						$(".close-all").fadeOut();
 					}
 				});
 			}else{
@@ -448,6 +462,7 @@ $(document).ready(function(){
 
 	function setOrdered(action) {
 		if (action.find('input[name=yourpin]').val()){
+			$(".close-all").fadeIn();
 			var goodid = action.find('.btn-done').attr('data-title');
 			var data = {
 				yourpin: action.find('input[name=yourpin]').val(),
@@ -479,12 +494,14 @@ $(document).ready(function(){
 							$(".ordered[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text('Не заказан');
 						}
 					}
+					$(".close-all").fadeOut();
 				},
 				error: function (data, status, error) {
 					console.log(data, status, error);
 					alert(error);
 					$('.close-layout').fadeOut();
 					action.fadeOut();
+					$(".close-all").fadeOut();
 				}
 			});
 		}else{
@@ -494,6 +511,7 @@ $(document).ready(function(){
 
 	function setPostponed(action) {
 		if (action.find('input[name=yourpin]').val() && action.find('textarea[name=comment]').val()){
+			$(".close-all").fadeIn();
 			var goodid = action.find('.btn-done').attr('data-title');
 			var data = {
 				yourpin: action.find('input[name=yourpin]').val(),
@@ -563,12 +581,14 @@ $(document).ready(function(){
 							// $(".ordersdef").text(data.pcount);
 						}
 					}
+					$(".close-all").fadeOut();
 				},
 				error: function (data, status, error) {
 					console.log(data, status, error);
 					alert(error);
 					$('.close-layout').fadeOut();
 					action.fadeOut();
+					$(".close-all").fadeOut();
 				}
 			});
 		}else{
@@ -578,6 +598,7 @@ $(document).ready(function(){
 
 	function setCallstatus(action) {
 		if (action.find('input[name=yourpin]').val()){
+			$(".close-all").fadeIn();
 			var goodid = action.find('.btn-done').attr('data-title');
 			var data = {
 				yourpin: action.find('input[name=yourpin]').val(),
@@ -613,12 +634,14 @@ $(document).ready(function(){
 							$(".callstatus[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text('Не дозвон');
 						}
 					}
+					$(".close-all").fadeOut();
 				},
 				error: function (data, status, error) {
 					console.log(data, status, error);
 					alert(error);
 					$('.close-layout').fadeOut();
 					action.fadeOut();
+					$(".close-all").fadeOut();
 				}
 			});
 		}else{
@@ -628,6 +651,7 @@ $(document).ready(function(){
 
 	function setIssued(action) {
 		if (action.find('input[name=yourpin]').val()){
+			$(".close-all").fadeIn();
 			var goodid = action.find('.btn-done').attr('data-title');
 			var data = {
 				yourpin: action.find('input[name=yourpin]').val(),
@@ -645,8 +669,10 @@ $(document).ready(function(){
 					if (data.err) {
 						alert(data.err);
 						$('.close-layout').fadeOut();
+						$(".close-all").fadeOut();
 						action.fadeOut();
 					}else{
+						$(".close-all").fadeOut();
 						$('.close-layout').fadeOut();
 						action.fadeOut();
 						console.log(data.issued);
@@ -672,6 +698,7 @@ $(document).ready(function(){
 					alert(error);
 					$('.close-layout').fadeOut();
 					action.fadeOut();
+					$(".close-all").fadeOut();
 				}
 			});
 		}else{
@@ -713,6 +740,7 @@ $(document).ready(function(){
 
 	//Открыть историю действий
 	$('body').on('click','.gethistory',function(e){
+		$(".close-all").fadeIn();
 		// $('.modal-layout').show();
 		e.preventDefault();
 		var goodid = $(this).attr('data-title');
@@ -738,9 +766,11 @@ $(document).ready(function(){
 				$(".addcomment input[name='yourpin']").val('');
 				$(".addcomment textarea[name='comment']").val('');
 				$(".addcomment input[name='yourpin']").focus();
+				$(".close-all").fadeOut();
 			},
 			error: function (data, status, error) {
 				console.log(data, status, error);
+				$(".close-all").fadeOut();
 			}
 		});
 	});
@@ -748,6 +778,7 @@ $(document).ready(function(){
 	$(".history .addcomment-submit").click(function (e) {
 		e.preventDefault();
 		if ($(".addcomment input[name='yourpin']").val() && $(".addcomment textarea[name='comment']").val()) {
+			$(".close-all").fadeIn();
 			data = {
 				yourpin: $(".addcomment input[name='yourpin']").val(),
 				comment: $(".addcomment textarea[name='comment']").val(),
@@ -769,9 +800,11 @@ $(document).ready(function(){
 						$(".addcomment textarea[name='comment']").val('');
 						$(".addcomment input[name='yourpin']").focus();
 					}
+					$(".close-all").fadeOut();
 				},
 				error: function (data, status, error) {
 					console.log(data, status, error);
+					$(".close-all").fadeOut();
 				}
 			});
 
@@ -784,6 +817,7 @@ $(document).ready(function(){
 		if ( e.which == 13 ) {
 	    e.preventDefault();
 			if ($(".addcomment input[name='yourpin']").val() && $(".addcomment textarea[name='comment']").val()) {
+				$(".close-all").fadeIn();
 				data = {
 					yourpin: $(".addcomment input[name='yourpin']").val(),
 					comment: $(".addcomment textarea[name='comment']").val(),
@@ -805,9 +839,11 @@ $(document).ready(function(){
 							$(".addcomment textarea[name='comment']").val('');
 							$(".addcomment input[name='yourpin']").focus();
 						}
+						$(".close-all").fadeOut();
 					},
 					error: function (data, status, error) {
 						console.log(data, status, error);
+						$(".close-all").fadeOut();
 					}
 				});
 

@@ -64,6 +64,7 @@ $(document).ready(function () {
     e.preventDefault();
     // $(".addorder input[name=yourpin]").val('');
     if ($(".addorder input[name=yourpin]").val()) {
+      $(".close-all").fadeIn();
       var yourpin = $(".addorder input[name=yourpin]").val();
       // console.log(goods);
       // console.log(order);
@@ -97,10 +98,12 @@ $(document).ready(function () {
             goods = [];
             order = {};
           }
+          $(".close-all").fadeOut();
         },
         error: function (data, status, error) {
           console.log(data, status, error);
           $('.close-layout').fadeOut();
+          $(".close-all").fadeOut();
         }
       });
     }else{

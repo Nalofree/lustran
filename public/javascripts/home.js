@@ -4,6 +4,7 @@ $(document).ready(function () {
 	    e.preventDefault();
       // alert('Enter!');
       if ($('.check-pin input[name=yourpin]').val()) {
+        $(".close-all").fadeIn();
         // alert('nice');
         // var now = new Date();
         var data = {
@@ -41,9 +42,11 @@ $(document).ready(function () {
             }
             $('.check-pin input[name=yourpin]').val('');
             // $('.check-pin input[name=yourpin]').focus();
+            $(".close-all").fadeOut();
           },
           error: function (data, status, error) {
             console.log(data, status, error);
+            $(".close-all").fadeOut();
             alert('Что-то пошло не так, обратитесь к администратору');
           }
         });
@@ -55,6 +58,7 @@ $(document).ready(function () {
   $('.check-pin .btn-pin').click(function (e) {
     e.preventDefault();
     if ($('.check-pin input[name=yourpin]').val()) {
+      $(".close-all").fadeIn();
       // alert('nice');
       // var now = new Date();
       var data = {
@@ -91,10 +95,12 @@ $(document).ready(function () {
             }
           }
           $('.check-pin input[name=yourpin]').val('');
+          $(".close-all").fadeOut();
           // $('.check-pin input[name=yourpin]').focus();
         },
         error: function (data, status, error) {
           console.log(data, status, error);
+          $(".close-all").fadeOut();
           alert('Что-то пошло не так, обратитесь к администратору');
         }
       });
@@ -128,6 +134,7 @@ $(document).ready(function () {
   $('.showcheckorder').click(function (e) {
     e.preventDefault();
     if ($('.checking-in-footer input[name=startdate]').val() && $('.checking-in-footer input[name=enddate]').val()) {
+      $(".close-all").fadeIn();
       var startDate = $('.checking-in-footer input[name=startdate]').val() + " 06:00";
       var endDate = $('.checking-in-footer input[name=enddate]').val() + " 23:00";
       var latesonly = 0;
@@ -166,9 +173,11 @@ $(document).ready(function () {
               $(".checking-in-list").append('<p>Нет отметок, соответсвующих запросу</p>');
             }
           }
+          $(".close-all").fadeOut();
         },
         error: function (data, status, error) {
           console.log(data, status, error);
+          $(".close-all").fadeOut();
         },
       });
       console.log(data);
@@ -179,6 +188,7 @@ $(document).ready(function () {
 
   $(".export-checks").click(function (e) {
     e.preventDefault();
+    $(".close-all").fadeIn();
     var lis = $('.checking-in-list li');
     var spans = [];
     var checkOrderString = '';
@@ -216,9 +226,11 @@ $(document).ready(function () {
         // $.fileDownload(data.path)
         // .done(function () { alert('File download a success!'); })
         // .fail(function () { alert('File download failed!'); });
+        $(".close-all").fadeOut();
       },
       error: function (data, status, error) {
         console.log(data, status, error);
+        $(".close-all").fadeOut();
       }
     });
   });

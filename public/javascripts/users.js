@@ -74,6 +74,7 @@ $(document).ready(function () {
   $(".adduser-submit").click(function (e) {
     e.preventDefault();
     if($('.adduserform input[name="fio"]').val() && $('.adduserform select[name="status"]').val() && $('.adduserform input[name="yourpin"]').val()){
+      $(".close-all").fadeIn();
       var data = {
         fio: $('.adduserform input[name="fio"]').val(),
         status: $('.adduserform select[name="status"]').val(),
@@ -95,11 +96,13 @@ $(document).ready(function () {
             $(".close-layout").fadeOut();
             $('.adduserform input').val('');
           }
+          $(".close-all").fadeOut();
         },
         error: function (data, error, status) {
           console.log(data, error, status);
           $(".adduserform").fadeOut();
           $(".close-layout").fadeOut();
+          $(".close-all").fadeOut();
         }
       });
     }else{
@@ -119,6 +122,7 @@ $(document).ready(function () {
   $('.banuserpin-submit').click(function (e) {
     e.preventDefault();
     if ($('.banuserpin input[name="yourpin"]').val()) {
+      $(".close-all").fadeIn();
       // var pin = $('.requirepin input[name="yourpin"]').val();
       // pinAuth(status,pin);
       var button = $('.ban-user[data-title='+$(this).attr('data-title')+']');
@@ -154,11 +158,13 @@ $(document).ready(function () {
               $('.banuserpin input').val('');
             }
           }
+          $(".close-all").fadeOut();
         },
         error: function (data, error, status) {
           alert('Что-то пошло не так, обратитесь к админитратору системы '+data.err);
           $(".close-layout").fadeOut();
           $('.banuserpin').fadeOut();
+          $(".close-all").fadeOut();
         }
       });
     }else{
@@ -187,6 +193,7 @@ $(document).ready(function () {
   $('.edituser-submit').click(function (e) {
     e.preventDefault();
     if($('.edituserform input[name="fio"]').val() && $('.edituserform select[name="status"]').val() && $('.edituserform input[name="yourpin"]').val()){
+      $(".close-all").fadeIn();
       var data = {
         fio: $('.edituserform input[name="fio"]').val(),
         status: $('.edituserform select[name="status"]').val(),
@@ -213,11 +220,13 @@ $(document).ready(function () {
             $('tr#'+data.userid+' td').eq(1).text(statusToAlias(data.status));
             $('.edituserform input').val('');
           }
+          $(".close-all").fadeOut();
         },
         error: function (res, error, status) {
           console.log(res, error, status);
           $(".edituserform").fadeOut();
           $(".close-layout").fadeOut();
+          $(".close-all").fadeOut();
           alert('Что-то пошло не так, обратитесь к админитратору системы');
         },
       });
@@ -250,6 +259,7 @@ $(document).ready(function () {
   $('.getuserinfo-submit').click(function (e) {
     e.preventDefault();
     if ($('.getuserinfo input[name=yourpin]').val()) {
+      $(".close-all").fadeIn();
       // alert($('.getuserinfo input[name=yourpin]').val() + ' ' + $(this).attr('data-title'));
       data = {
         userid: $(this).attr('data-title'),
@@ -270,12 +280,14 @@ $(document).ready(function () {
             $('.userinfo .userstatus').text(statusToAlias(data.status));
           }
           console.log(data, status, error);
+          $(".close-all").fadeOut();
           // $('.close-layout').fadeOut();
         },
         error: function (data, status, error) {
           console.log(data, status, error);
           $('.close-layout').fadeOut();
           $('.getuserinfo').fadeOut();
+          $(".close-all").fadeOut();
         }
       });
     }else{
@@ -287,6 +299,7 @@ $('.getuserinfo input[name=yourpin]').keyup(function( event ) {
   if ( event.which == 13 ) {
     event.preventDefault();
     if ($('.getuserinfo input[name=yourpin]').val()) {
+      $(".close-all").fadeIn();
       // alert($('.getuserinfo input[name=yourpin]').val() + ' ' + $(this).attr('data-title'));
       data = {
         userid: $('.getuserinfo-submit').attr('data-title'),
@@ -310,12 +323,14 @@ $('.getuserinfo input[name=yourpin]').keyup(function( event ) {
 
           }
           console.log(data, status, error);
+          $(".close-all").fadeOut();
           // $('.close-layout').fadeOut();
         },
         error: function (data, status, error) {
           console.log(data, status, error);
           $('.close-layout').fadeOut();
           $('.getuserinfo').fadeOut();
+          $(".close-all").fadeOut();
         }
       });
     }else{
