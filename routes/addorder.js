@@ -55,7 +55,7 @@ router.post('/', function (req, res, nex) {
     }
   }).then(function (user) {
     if (user) {
-      if ((user.status == "manager" || user.status == "saler") && (user.active == 1)) {
+      if ((user.status == "manager" || user.status == "saler" || user.status == "supplier") && (user.active == 1)) {
         models.users.findOne({
           where: {
             status: 'starter'

@@ -63,7 +63,7 @@ block content
                             option(value='')
                             option(value='1') Отложен
                             option(value='0') Не отложен                            
-                            option(value='2') Есть деффект
+                            option(value='2') Есть дефект
                       .dropdown
                         .form-group
                           label(for='callstatus') Дозвон 
@@ -134,12 +134,12 @@ block content
               tbody
             form.addcomment.col-sm-6.col-sm-offset-3(action="/orders/addcomment" method="POST")
               .form-group
-                label(for='yourpin') Пин
-                input.form-control(type='password', name='yourpin', placeholder='ПИН', autofocus)
-              .form-group
                 label(for='comment') Комментарий
                 textarea.form-control(name='comment', placeholder='Комментарий')
               input(type='hidden',name='goodid')
+              .form-group
+                label(for='yourpin') Пин
+                input.form-control(type='password', name='yourpin', placeholder='ПИН', autofocus)
               .form-group
                 input.btn.btn-success.form-control.addcomment-submit(type='submit')
           // Заказ
@@ -210,25 +210,9 @@ block content
                                           - 
                                           span.action-date= getDateReadeble(new Date(orders[i].goods[j].processed.createdAt))
                                           | &nbsp
-                                          //- span.action-time 12.12.16
-                                        //- .new-order-info-row
-                                        //-   | Изменения в заказе:&nbsp
-                                        //-   span.action-order 0001
-                                        //- .new-order-info-row
-                                        //-   | Товар:&nbsp
-                                        //-   span.action-shop Название товара
                                         i.fa.fa-times-circle.close-action(aria-hidden='true', data-toggle='close-action')
                                     .action-body
                                       .form-group
-                                        .row.action-row
-                                          label.col-sm-12(for='') Введите ваш пин-код
-                                          .col-sm-6
-                                            .form-group
-                                              input.form-control(type='password', name='yourpin')
-                                          .col-sm-12
-                                            label.col-sm-12(for='comment') Комментарий
-                                            .form-group
-                                              textarea.form-control(name='comment', id=comment)
                                         .row.action-row.choose-satus
                                           .col-sm-12
                                             .form-group
@@ -236,10 +220,20 @@ block content
                                                 option(selected='', value='1') В обработке
                                                 option(value='0') Не обработан
                                         .row.action-row
+                                          .col-sm-12
+                                            label.col-sm-12(for='comment') Комментарий
+                                            .form-group
+                                              textarea.form-control(name='comment', id=comment)
+                                        .row.action-row
+                                          label.col-sm-12(for='') Введите ваш пин-код
                                           .col-sm-6
-                                            button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-action') Отмена
+                                            .form-group
+                                              input.form-control(type='password', name='yourpin')
+                                        .row.action-row                                          
                                           .col-sm-6
                                             button.btn.btn-done.btn-block(type='button', data-toggle='save-action', data-title= orders[i].goods[j].id) Сохранить
+                                          .col-sm-6
+                                            button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-action') Отмена
                               li.col-sm-2
                                 - if (orders[i].goods[j].spicdate.statusval == null)
                                   - goodstatus = 'status-danger'
@@ -270,24 +264,25 @@ block content
                                         i.fa.fa-times-circle.close-action(aria-hidden='true', data-toggle='close-action')
                                     .action-body
                                       .form-group
-                                        .row.action-row
-                                          label.col-sm-12(for='') Введите ваш пин-код
-                                          .col-sm-6
-                                            .form-group
-                                              input.form-control(type='password', name='yourpin')
-                                          .col-sm-12
-                                            label.col-sm-12(for='comment') Комментарий
-                                            .form-group
-                                              textarea.form-control(name='comment', id=comment)
                                         .row.action-row.choose-satus
                                           .col-sm-12
                                             .form-group
                                               input.form-control(name='status', type='date')
                                         .row.action-row
+                                          .col-sm-12
+                                            label.col-sm-12(for='comment') Комментарий
+                                            .form-group
+                                              textarea.form-control(name='comment', id=comment)
+                                        .row.action-row
+                                          label.col-sm-12(for='') Введите ваш пин-код
                                           .col-sm-6
-                                            button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-action') Отмена
+                                            .form-group
+                                              input.form-control(type='password', name='yourpin')
+                                        .row.action-row                                          
                                           .col-sm-6
                                             button.btn.btn-done.btn-block(type='button', data-toggle='save-action', data-title= orders[i].goods[j].id) Сохранить
+                                          .col-sm-6
+                                            button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-action') Отмена
                               li.col-sm-2
                                 - if (orders[i].goods[j].ordered.statusval == 0)
                                   - goodstatus = 'status-danger'
@@ -317,16 +312,7 @@ block content
                                         //-   span.action-shop Название товара
                                         i.fa.fa-times-circle.close-action(aria-hidden='true', data-toggle='close-action')
                                     .action-body
-                                      .form-group
-                                        .row.action-row
-                                          label.col-sm-12(for='') Введите ваш пин-код
-                                          .col-sm-6
-                                            .form-group
-                                              input.form-control(type='password', name='yourpin')
-                                          .col-sm-12
-                                            label.col-sm-12(for='comment') Комментарий
-                                            .form-group
-                                              textarea.form-control(name='comment', id=comment)
+                                      .form-group                                        
                                         .row.action-row.choose-satus
                                           .col-sm-12
                                             .form-group
@@ -334,10 +320,20 @@ block content
                                                 option(value='0') Не заказан
                                                 option(selected='', value='1') Заказан
                                         .row.action-row
+                                          .col-sm-12
+                                            label.col-sm-12(for='comment') Комментарий
+                                            .form-group
+                                              textarea.form-control(name='comment', id=comment)
+                                        .row.action-row
+                                          label.col-sm-12(for='') Введите ваш пин-код
                                           .col-sm-6
-                                            button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-action') Отмена
+                                            .form-group
+                                              input.form-control(type='password', name='yourpin')
+                                        .row.action-row                                          
                                           .col-sm-6
                                             button.btn.btn-done.btn-block(type='button', data-toggle='save-action', data-title= orders[i].goods[j].id) Сохранить
+                                          .col-sm-6
+                                            button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-action') Отмена
                               li.col-sm-2
                                 - if (orders[i].goods[j].postponed.statusval == 0 || orders[i].goods[j].postponed.statusval == 2)
                                   - goodstatus = 'status-danger'
@@ -368,27 +364,28 @@ block content
                                         i.fa.fa-times-circle.close-action(aria-hidden='true', data-toggle='close-action')
                                     .action-body
                                       .form-group
-                                        .row.action-row
-                                          label.col-sm-12(for='') Введите ваш пин-код
-                                          .col-sm-6
-                                            .form-group
-                                              input.form-control(type='password', name='yourpin')
-                                          .col-sm-12
-                                            label.col-sm-12(for='comment') Комментарий
-                                            .form-group
-                                              textarea.form-control(name='comment', id=comment)
                                         .row.action-row.choose-satus
                                           .col-sm-12
                                             .form-group
                                               select.form-control(name='status')
                                                 option(value='0') Не отложен
                                                 option(selected='', value='1') Проверен и отложен
-                                                option(value='2') Есть деффект
+                                                option(value='2') Есть дефект
                                         .row.action-row
+                                          .col-sm-12
+                                            label.col-sm-12(for='comment') Комментарий
+                                            .form-group
+                                              textarea.form-control(name='comment', id=comment)
+                                        .row.action-row
+                                          label.col-sm-12(for='') Введите ваш пин-код
                                           .col-sm-6
-                                            button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-action') Отмена
+                                            .form-group
+                                              input.form-control(type='password', name='yourpin')
+                                        .row.action-row                                          
                                           .col-sm-6
                                             button.btn.btn-done.btn-block(type='button', data-toggle='save-action', data-title= orders[i].goods[j].id) Сохранить
+                                          .col-sm-6
+                                            button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-action') Отмена
                               li.col-sm-2
                                 - if (orders[i].goods[j].callstatus.statusval == 0 || orders[i].goods[j].callstatus.statusval == 2)
                                   - goodstatus = 'status-danger'
@@ -419,15 +416,6 @@ block content
                                         i.fa.fa-times-circle.close-action(aria-hidden='true', data-toggle='close-action')
                                     .action-body
                                       .form-group
-                                        .row.action-row
-                                          label.col-sm-12(for='') Введите ваш пин-код
-                                          .col-sm-6
-                                            .form-group
-                                              input.form-control(type='password', name='yourpin')
-                                          .col-sm-12
-                                            label.col-sm-12(for='comment') Комментарий
-                                            .form-group
-                                              textarea.form-control(name='comment', id=comment)
                                         .row.action-row.choose-satus
                                           .col-sm-12
                                             .form-group
@@ -436,10 +424,20 @@ block content
                                                 option(selected='', value='1') Дозвон
                                                 option(value='2') Не дозвон
                                         .row.action-row
+                                          .col-sm-12
+                                            label.col-sm-12(for='comment') Комментарий
+                                            .form-group
+                                              textarea.form-control(name='comment', id=comment)
+                                        .row.action-row
+                                          label.col-sm-12(for='') Введите ваш пин-код
                                           .col-sm-6
-                                            button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-action') Отмена
+                                            .form-group
+                                              input.form-control(type='password', name='yourpin')
+                                        .row.action-row                                          
                                           .col-sm-6
                                             button.btn.btn-done.btn-block(type='button', data-toggle='save-action', data-title= orders[i].goods[j].id) Сохранить
+                                          .col-sm-6
+                                            button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-action') Отмена
                               li.col-sm-2
                                 - if (orders[i].goods[j].issued.statusval == 0)
                                   - goodstatus = 'status-danger'
@@ -463,15 +461,7 @@ block content
                                         i.fa.fa-times-circle.close-action(aria-hidden='true', data-toggle='close-action')
                                     .action-body
                                       .form-group
-                                        .row.action-row
-                                          label.col-sm-12(for='') Введите ваш пин-код
-                                          .col-sm-6
-                                            .form-group
-                                              input.form-control(type='password', name='yourpin')
-                                          .col-sm-12
-                                            label.col-sm-12(for='comment') Комментарий
-                                            .form-group
-                                              textarea.form-control(name='comment', id=comment)
+                                        
                                         .row.action-row.choose-satus
                                           .col-sm-12
                                             .form-group
@@ -479,10 +469,20 @@ block content
                                                 option(value='0') Не выдан
                                                 option(selected='', value='1') Выдан
                                         .row.action-row
+                                          .col-sm-12
+                                            label.col-sm-12(for='comment') Комментарий
+                                            .form-group
+                                              textarea.form-control(name='comment', id=comment)
+                                        .row.action-row
+                                          label.col-sm-12(for='') Введите ваш пин-код
                                           .col-sm-6
-                                            button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-action') Отмена
+                                            .form-group
+                                              input.form-control(type='password', name='yourpin')
+                                        .row.action-row                                          
                                           .col-sm-6
                                             button.btn.btn-done.btn-block(type='button', data-toggle='save-action', data-title= orders[i].goods[j].id) Сохранить
+                                          .col-sm-6
+                                            button.btn.btn-cancel.btn-block(type='button', data-toggle='cancel-action') Отмена
                     - else
                       .container
                         .panel.panel-default

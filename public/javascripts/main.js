@@ -209,7 +209,11 @@ $(document).ready(function(){
 		thisAction.fadeIn();
 		thisAction.scrollTop(9999);
 		thisAction.find("input[name='yourpin']").val('');
-		thisAction.find("input[name='yourpin']").focus();
+		// thisAction.find("input[name='yourpin']").focus();
+		thisAction.find('textarea[name="comment"]').focus();
+		if (thisAction.hasClass('spicdate-action')) {
+			thisAction.find('input[name="status"]').focus();
+		}
 	});
 
 	var removeGoodId;
@@ -303,6 +307,7 @@ $(document).ready(function(){
 		if (e.keyCode == 13) {
 			e.preventDefault();
 			if (thisAction.hasClass('processed-action')) {
+				// thisAction.find('textarea[name="comment"]').focus();
 				setProcessed(thisAction);
 			}
 			if (thisAction.hasClass('spicdate-action')) {
@@ -326,6 +331,7 @@ $(document).ready(function(){
 	thisAction.find('.btn-done').click(function (e) {
 			e.preventDefault();
 			if (thisAction.hasClass('processed-action')) {
+				// thisAction.find('textarea[name="comment"]').focus();
 				setProcessed(thisAction);
 			}
 			if (thisAction.hasClass('spicdate-action')) {

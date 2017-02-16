@@ -22,11 +22,13 @@ html
     meta(name='theme-color', content='#ffffff')
   body
     - var getReadebleDateTime = function(date) {
-    -   readebleDate = date.getDate() + '.' + date.getMonth()+1 + '.' + date.getFullYear() +' '+ ('00' + date.getHours()).slice(-2) +':'+ ('00' + date.getMinutes()).slice(-2)
+    -   var month = date.getMonth() + 1;
+    -   readebleDate = date.getDate() + '.' + month + '.' + date.getFullYear() +' '+ ('00' + date.getHours()).slice(-2) +':'+ ('00' + date.getMinutes()).slice(-2)
     -   return readebleDate;
     - }
     - var getReadebleDate = function(date) {
-    -   readebleDate = date.getDate() + '.' + date.getMonth()+1 + '.' + date.getFullYear()
+    -   var month = date.getMonth() + 1;
+    -   readebleDate = date.getDate() + '.' + month + '.' + date.getFullYear()
     -   return readebleDate;
     - }
     .close-layout
