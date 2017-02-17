@@ -446,11 +446,28 @@ $(document).ready(function(){
 						if (data.err) {
 							alert(data.err);
 							$('.close-layout').fadeOut();
+							$(".close-all").fadeOut();
 							action.fadeOut();
 						}else{
 							$('.close-layout').fadeOut();
+							// order-float-date
+							console.log($(".spicdate[data-title="+goodid+"]").closest('.order-list-item').find(".order-float-date").text());
+							var indDateTxt = $(".spicdate[data-title="+goodid+"]").closest('.order-list-item').find(".order-float-date").text();
+							var indDateEl = $(".spicdate[data-title="+goodid+"]").closest('.order-list-item').find(".order-float-date");
+							var indDateArr = indDateTxt.split('.');
+							indDateStr = indDateArr[1]+-+indDateArr[0]+-+indDateArr[2];
+							// console.log(new Date(indDateStr));
+							indDate = new Date(indDateStr);
+							spicDate = new Date(data.spicdate.statusval);
+							indDateTime = indDate.getTime();
+							spicDateTime = spicDate.getTime();
 							action.fadeOut();
-							console.log(data.spicdate.statusval);
+							if (indDateTime < spicDateTime) {
+								indDateEl.addClass('red-text');
+							}else{
+								indDateEl.removeClass('red-text');
+							}
+							// console.log(data.spicdate.statusval);
 							$(".spicdate[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.spicdate.createdAt)));
 							$(".spicdate[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(data.user.name);
 							$(".spicdate[data-title="+goodid+"]").closest('.order-status').removeClass('status-danger');

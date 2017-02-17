@@ -11,6 +11,14 @@ function getDateSuperReadeble(date){
 			return readebleTime;
 };
 
+router.use(function (req, res, next) {
+  // console.log('Time:', Date.now());
+	// for (var i = 0; i < 100; i++) {
+	// 	console.log('Time:', Date.now());
+	// }
+  next();
+});
+
 /* GET orders listing. */
 router.get('/', function(req, res, next) {
 	if (!req.session.isauth) {
