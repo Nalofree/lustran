@@ -179,6 +179,7 @@ $(document).ready(function(){
 	$('[data-input=time]').inputmask('hh:mm',{ "placeholder": "чч.мм" });
 	$('[type=time]').inputmask('99:99');
 	$('[data-input=phone]').inputmask('+7 (999) 999-99-99');
+	$('[name=tel]').inputmask('+7 (999) 999-99-99');
 
 	//Отмена стандартного действия ссылок
 	// $('body').delegate('a[href*="#"]','click',function(e){

@@ -45,8 +45,8 @@ router.get('/', function(req, res, next) {
 		// for (var i = 0; i < searchsarray.length; i++) {
 		searchWhereOrders.$or.push({'$goods.name$': {$like: '%'+searchstring+'%'}});
 		searchWhereOrders.$or.push({'$goods.vencode$': {$like: '%'+searchstring+'%'}});
-		// searchWhereOrders.$or.push({number: {$like: '%'+searchstring+'%'}});
-		searchWhereOrders.$or.push({customerphone: {$like: '%'+searchstring+'%'}});
+		searchWhereOrders.$or.push({number: {$like: '%'+searchstring+'%'}});
+		// searchWhereOrders.$or.push({customerphone: {$like: '%'+searchstring+'%'}});
 		searchWhereOrders.$or.push({customername: {$like: '%'+searchstring+'%'}});
 		// }
 		// console.log(searchWhereGoods.$or);
@@ -57,7 +57,12 @@ router.get('/', function(req, res, next) {
 			active: 1
 		};
 	}
-	// console.log(searchWhereGoods);
+
+	if (req.query.tel) {
+		var searchstring = req.query.tel;
+		console.log(searchstring);
+		searchWhereOrders.customerphone = {$like: '%'+searchstring+'%'};
+	}
 
 	var lastStatus = false;
 
