@@ -183,7 +183,7 @@ router.get('/', function(req, res, next) {
 				}
 			// }
     }
-		// if (lastStatus) {
+		// if (lastStatus) { 
 		//
 		// }
     res.render('orders', {title: 'Заказы', goodcount: goodcount, orders: forders, orderscount: orderscount, ordersproc: ordersproc, ordersissued: ordersissued, ordersdef: ordersdef});

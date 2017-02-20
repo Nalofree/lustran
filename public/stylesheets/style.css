@@ -13780,7 +13780,8 @@ form[name='filter'] {
 }
 
 .end-good {
-  background-color: #5fd378;
+  /*background-color: #5fd378;*/
+  background-color: #594566;
   /*opacity: 0.4;*/
 }
 
