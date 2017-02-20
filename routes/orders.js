@@ -33,6 +33,7 @@ router.get('/', function(req, res, next) {
 	};
 	var searchWhereOrders = {
 		$or: [],
+		active: 1,
 		locationId: req.cookies.location
 	};
 	if (req.query.search) {
@@ -44,11 +45,11 @@ router.get('/', function(req, res, next) {
 		// for (var i = 0; i < searchsarray.length; i++) {
 		searchWhereOrders.$or.push({'$goods.name$': {$like: '%'+searchstring+'%'}});
 		searchWhereOrders.$or.push({'$goods.vencode$': {$like: '%'+searchstring+'%'}});
-		searchWhereOrders.$or.push({number: {$like: '%'+searchstring+'%'}});
+		// searchWhereOrders.$or.push({number: {$like: '%'+searchstring+'%'}});
 		searchWhereOrders.$or.push({customerphone: {$like: '%'+searchstring+'%'}});
 		searchWhereOrders.$or.push({customername: {$like: '%'+searchstring+'%'}});
 		// }
-		console.log(searchWhereGoods.$or);
+		// console.log(searchWhereGoods.$or);
 	}else{
 		searchWhereGoods = {};
 		searchWhereOrders = {
@@ -56,7 +57,7 @@ router.get('/', function(req, res, next) {
 			active: 1
 		};
 	}
-	console.log(searchWhereGoods);
+	// console.log(searchWhereGoods);
 
 	var lastStatus = false;
 
@@ -67,6 +68,7 @@ router.get('/', function(req, res, next) {
 		searchWhereOrders = {
 			$and: [],
 			// $or: [],
+			active: 1,
 			locationId: req.cookies.location
 		};
 		if (req.query.processed) {
@@ -107,12 +109,13 @@ router.get('/', function(req, res, next) {
 			searchWhereOrders.$and.push({createdAt: {$gte: start}});
 			searchWhereOrders.$and.push({createdAt: {$lte: end}});
 		}
-	}else{
-		searchWhereOrders = {
-			locationId: req.cookies.location,
-			active: 1
-		};
-	}
+	}//else{
+	// 	searchWhereOrders = {
+	// 		locationId: req.cookies.location,
+	// 		active: 1
+	// 	};
+	// }
+	console.log(searchWhereOrders);
   var now = new Date();
   models.orders.findAll({
     include: [models.users, models.locations, /*models.goods,*/{
@@ -183,7 +186,7 @@ router.get('/', function(req, res, next) {
 				}
 			// }
     }
-		// if (lastStatus) { 
+		// if (lastStatus) {
 		//
 		// }
     res.render('orders', {title: 'Заказы', goodcount: goodcount, orders: forders, orderscount: orderscount, ordersproc: ordersproc, ordersissued: ordersissued, ordersdef: ordersdef});
