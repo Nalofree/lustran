@@ -12,10 +12,104 @@ function getDateSuperReadeble(date){
 };
 
 router.use(function (req, res, next) {
-  // console.log('Time:', Date.now());
-	// for (var i = 0; i < 100; i++) {
-	// 	console.log('Time:', Date.now());
-	// }
+	models.orders.findAll({
+		include: [{
+			model: models.goods,
+			// where: searchWhereGoods,
+			as: 'goods',
+			include: [{
+				model: models.postponed,
+				as: 'postponed'
+			}]
+		}],
+		where: {
+			'$goods.postponed.statusval$': 2,
+			active: 1,
+			locationId: req.cookies.location,
+			$or: [
+				{'$goods.active$': 1},
+				{'$goods.reject$': 0}
+			]
+		}
+	}).then(function (postponedgoods) {
+		models.orders.findAll({
+			include: [{
+				model: models.goods,
+				as: 'goods',
+				include: [{
+					model: models.processed,
+					as: 'processed'
+				}]
+			}],
+			where: {
+				'$goods.processed.statusval$': 1,
+				active: 1,
+				locationId: req.cookies.location,
+				$or: [
+					{'$goods.active$': 1},
+					{'$goods.reject$': 0}
+				]
+			}
+		}).then(function (processedgoods) {
+			models.orders.findAll({
+				include: [{
+					model: models.goods,
+					as: 'goods',
+					include: [{
+						model: models.issued,
+						as: 'issued'
+					}]
+				}],
+				where: {
+					'$goods.issued.statusval$': 1,
+					active: 1,
+					locationId: req.cookies.location,
+					$or: [
+						{'$goods.active$': 1},
+						{'$goods.reject$': 0}
+					]
+				}
+			}).then(function (issuedgoods) {
+				models.orders.findAll({
+					where: {
+						active: 1,
+						locationId: req.cookies.location
+					}
+				}).then(function (orders) {
+					models.orders.findAll({
+						include: [{
+							model: models.goods,
+							as: 'goods'
+						}],
+						where: {
+							'$orders.locationId$': req.cookies.location,
+							'$orders.active$': 1,
+							$or: [
+								{'$goods.active$': 1},
+								{'$goods.reject$': 0}
+							]
+						}
+					}).then(function (goods) {
+						console.log("goods: " + goods.length);
+						console.log("orders: " + orders.length);
+						console.log("postponedcount: " + postponedgoods.length);
+						console.log("issuedcount: " + issuedgoods.length);
+						console.log("processedcount: " + processedgoods.length);
+					}).catch(function (err) {
+						console.log(err);
+					});
+				}).catch(function (err) {
+					console.log(err);
+				});
+			}).catch(function (err) {
+				console.log(err);
+			});
+		}).catch(function (err) {
+			console.log(err);
+		});
+	}).catch(function (err) {
+		console.log(err);
+	});
   next();
 });
 
@@ -110,7 +204,8 @@ router.get('/', function(req, res, next) {
 			// searchWhereOrders.$or.push({reject: 1});
 			var start = req.query.startperiod ? new Date(req.query.startperiod) : new Date(0);
 			var end = req.query.endperiod ? new Date(req.query.endperiod) : new Date();
-			searchWhereOrders.$and.push({active: 0});
+			// searchWhereOrders.$and.push({active: 0});
+			searchWhereOrders.active = 0;
 			searchWhereOrders.$and.push({createdAt: {$gte: start}});
 			searchWhereOrders.$and.push({createdAt: {$lte: end}});
 		}
@@ -334,7 +429,9 @@ router.post('/setprocessed', function (req, res, next) {
 								models.goods.findAll({
 									include: [models.processed],
 									where: {
-				            '$processed.statusval$': 1
+				            '$processed.statusval$': 1,
+										active: 1,
+										reject: 0
 				          }
 								}).then(function (goods) {
 									models.actions.create({
@@ -629,7 +726,30 @@ router.post('/setpostponed', function (req, res, next) {
 													alias: alias,
 													comment: req.body.comment
 												}).then(function (action) {
-													res.send({postponed: postponed, callstatus: callstatus, issued: issued, user: user});
+													models.orders.findAll({
+												    include: [{
+												      model: models.goods,
+															// where: searchWhereGoods,
+												      as: 'goods',
+												      include: [{
+												        model: models.postponed,
+												        as: 'postponed'
+												      }]
+												    }],
+														where: {
+															'$goods.postponed.statusval$': 1,
+															active: 1,
+															$or: [
+																{'$goods.active$': 1},
+																{'$goods.reject$': 0}
+															]
+														}
+												  }).then(function (pgoods) {
+												  	res.send({postponed: postponed, callstatus: callstatus, issued: issued, user: user, pcount: pgoods.length});
+												  }).catch(function (err) {
+														res.send({err: err});
+														console.log(err);
+													});
 												}).catch(function (err) {
 													res.send({err: err});
 													console.log(err);
@@ -777,7 +897,32 @@ router.post('/setpostponed', function (req, res, next) {
 																	alias: alias,
 																	comment: req.body.comment
 																}).then(function (action) {
-																	res.send({postponed: postponed, callstatus: callstatus, issued: issued, processed: processed, spicdate: spicdate, ordered: ordered, user: user});
+																	models.orders.findAll({
+																    include: [{
+																      model: models.goods,
+																			// where: searchWhereGoods,
+																      as: 'goods',
+																      include: [{
+																        model: models.postponed,
+																        as: 'postponed'
+																      }]
+																    }],
+																		where: {
+																			'$goods.postponed.statusval$': 1,
+																			active: 1,
+																			$or: [
+																				{'$goods.active$': 1},
+																				{'$goods.reject$': 0}
+																			]
+																		}
+																  }).then(function (pgoods) {
+																  	// res.send({postponed: postponed, callstatus: callstatus, issued: issued, user: user, pcount: pgoods.length});
+																		res.send({postponed: postponed, callstatus: callstatus, issued: issued, processed: processed, spicdate: spicdate, ordered: ordered, user: user, pcount: pgoods.length});
+																  }).catch(function (err) {
+																		res.send({err: err});
+																		console.log(err);
+																	});
+																	// res.send({postponed: postponed, callstatus: callstatus, issued: issued, processed: processed, spicdate: spicdate, ordered: ordered, user: user, pcount: pgoods.length});
 																}).catch(function (err) {
 																	res.send({err: err});
 																	console.log(err);
@@ -960,12 +1105,25 @@ router.post('/setissued', function (req, res, next) {
                 }
               }).then(function (good) {
 								console.log(good);
-								models.goods.findAll({
-									include: [models.issued],
+								models.orders.findAll({
+							    include: [{
+							      model: models.goods,
+										// where: searchWhereGoods,
+							      as: 'goods',
+							      include: [{
+							        model: models.issued,
+							        as: 'issued'
+							      }]
+							    }],
 									where: {
-				            '$issued.statusval$': 1
-				          }
-								}).then(function (goods) {
+										'$goods.issued.statusval$': 1,
+										active: 1,
+										$or: [
+											{'$goods.active$': 1},
+											{'$goods.reject$': 0}
+										]
+									}
+							  }).then(function (goods) {
 									models.actions.create({
 										locationId: req.cookies.location,
 										userId: user.id,

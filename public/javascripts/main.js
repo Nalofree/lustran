@@ -380,12 +380,13 @@ $(document).ready(function(){
 						$(".processed[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.processed.createdAt)));
 						$(".processed[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(data.user.name);
 						$(".processed[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text(data.processed.alias);
+						$(".ordersproc").text(data.pcount);
 						if (data.processed.statusval != 0) {
 							$(".processed[data-title="+goodid+"]").closest('.order-status').removeClass('status-danger');
-							$(".ordersproc").text(data.pcount);
+							// $(".ordersproc").text(data.pcount);
 						}else{
 							$(".processed[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
-							$(".ordersproc").text(data.pcount);
+							// $(".ordersproc").text(data.pcount);
 						}
 					}
 					$(".close-all").fadeOut();
@@ -569,6 +570,7 @@ $(document).ready(function(){
 						$('.close-layout').fadeOut();
 						action.fadeOut();
 						console.log(data.postponed);
+						$(".ordersdef").text(data.pcount);
 						$(".postponed[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.postponed.createdAt)));
 						$(".postponed[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(data.user.name);
 						$(".postponed[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text(data.postponed.alias);
