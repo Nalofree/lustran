@@ -83,11 +83,11 @@ router.use(function (req, res, next) {
 						}],
 						where: {
 							'$orders.locationId$': req.cookies.location,
-							'$orders.active$': 1,
-							$or: [
-								{'$goods.active$': 1},
-								{'$goods.reject$': 0}
-							]
+							// '$orders.active$': 1,
+							// $or: [
+							// 	{'$goods.active$': 1},
+							// 	{'$goods.reject$': 0}
+							// ]
 						}
 					}).then(function (goods) {
 						console.log("goods: " + goods.length);
