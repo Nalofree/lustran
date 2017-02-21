@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  $(".login-form input[type='submit']").click(function (e) {
+  $(".login-form").submit(function (e) {
     e.preventDefault()
     if ($(".login-form input[type='password']").val()) {
       $(".close-all").fadeIn();
@@ -25,6 +25,11 @@ $(document).ready(function () {
       });
     }else{
       alert('Введите пароль!');
+    }
+  });
+  $(".login-form").keyup(function (e) {
+    if (e.keyCode == 13) {
+      $(".login-form").submit();
     }
   });
 });
