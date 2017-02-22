@@ -34,9 +34,9 @@ block content
               .new-order-barcode
             .new-order-body
               form.new-order-form#neworderform(action='')
-                .new-row.add(data-toggle='add-row')
-                  i.fa.fa-plus-circle(aria-hidden='true')
-                  | &nbspДобавить товар
+                //- .new-row.add(data-toggle='add-row')
+                //-   i.fa.fa-plus-circle(aria-hidden='true')
+                //-   | &nbspДобавить товар
                 .new-order-form-row.good-item.row
                   fieldset.col-sm-1
                     label(for='') Артикул
@@ -56,6 +56,9 @@ block content
                   //- .new-row.add(data-toggle='add-row')
                   //-   i.fa.fa-plus-circle(aria-hidden='true')
                   //-   | &nbspДобавить товар
+                .new-row.add(data-toggle='add-row')
+                  i.fa.fa-plus-circle(aria-hidden='true')
+                  | &nbspДобавить товар
                 .new-order-form-row.bottom.row
                   .col-sm-4
                     fieldset
