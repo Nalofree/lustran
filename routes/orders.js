@@ -322,10 +322,13 @@ router.post('/rejectgood', function (req, res, next) {
 	}).then(function (user) {
 		if (user) {
 			var activestatus;
+			var aliastext;
 			if (req.body.reject == 1) {
 				activestatus = 0;
+				aliastext = 'Товар отменен';
 			}else{
 				activestatus = 1;
+				aliastext = 'Товар востановлен';
 			}
 			models.goods.update({
 				reject: req.body.reject,
@@ -363,7 +366,19 @@ router.post('/rejectgood', function (req, res, next) {
 								id: order.id
 							}
 						}).then(function (updorder) {
-							res.send({good: good, order: order, err: false, activeorder: activeorder});
+							models.actions.create({
+								locationId: req.cookies.location,
+								userId: user.id,
+								goodId: good.id,
+								statusval: ' ',
+								alias: aliastext,
+								comment: req.body.comment
+							}).then(function (action) {
+								res.send({good: good, order: order, err: false, activeorder: activeorder});
+							}).catch(function (err) {
+								res.send({err: err});
+						   	console.log(err);
+							});
 						}).catch(function (err) {
 							res.send({err: err});
 					   	console.log(err);

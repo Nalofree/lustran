@@ -13,6 +13,9 @@ block content
           - }
         form.remove-good(action="#" method="method")
           .form-group
+            label(for='comment') Подтвердите действие
+            textarea.form-control(name='comment' placeholder='Комментарий')
+          .form-group
             label(for='yourpin') Подтвердите действие
             input.form-control(type='password', name='yourpin' placeholder='ПИН')
           input(type="hidden", name='goodid')

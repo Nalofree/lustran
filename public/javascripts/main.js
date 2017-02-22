@@ -166,13 +166,18 @@ $(document).ready(function(){
 	})
 
 	//Добавить заказ
+	// $('.new-order').on('click','[data-toggle=add-row]',function(){
+	// 	var row = $(this).parents('.new-order-form-row').html();
+	// 	$(this).removeClass('add');
+	// 	$(this).addClass('remove');
+	// 	$(this).attr('data-toggle','remove-row');
+	// 	$(this).html('<i class="fa fa-times-circle" aria-hidden="true"></i>&nbspУдалить товар');
+	// 	$(this).parents('.new-order-form-row').after('<div class="new-order-form-row good-item row">'+row+'</div>');
+	// })
+
 	$('.new-order').on('click','[data-toggle=add-row]',function(){
-		var row = $(this).parents('.new-order-form-row').html();
-		$(this).removeClass('add');
-		$(this).addClass('remove');
-		$(this).attr('data-toggle','remove-row');
-		$(this).html('<i class="fa fa-times-circle" aria-hidden="true"></i>&nbspУдалить товар');
-		$(this).parents('.new-order-form-row').after('<div class="new-order-form-row good-item row">'+row+'</div>');
+		var row = $('.new-order-form-row:first').html();
+		$('.new-order-form-row.good-item:last').after('<div class="new-order-form-row good-item row">'+row+'<div data-toggle="remove-row" class="new-row remove"><i class="fa fa-times-circle" aria-hidden="true"></i>&nbsp;Удалить товар</div></div>');
 	})
 
 	// Валидация инпутов
@@ -227,8 +232,9 @@ $(document).ready(function(){
 			$(".remove-good input[name=goodid]").val(removeGoodId);
 			$(".close-layout").fadeIn();
 			$(".remove-order-status").fadeOut();
-			$(".remove-good input[name='yourpin']").focus();
+			$(".remove-good textarea[name='comment']").focus();
 			$(".remove-good input[name='yourpin']").val('');
+			$(".remove-good textarea[name='comment']").val('');
 		// }
 		// $(this).closest('li.order-list-item').addClass('close-good');
 	});
@@ -236,10 +242,11 @@ $(document).ready(function(){
 	$(".remove-good").submit(function (e) {
 		e.preventDefault();
 		$(".close-all").fadeIn();
-		if ($(".remove-good input[name='yourpin']").val()) {
+		if ($(".remove-good input[name='yourpin']").val() && $(".remove-good textarea[name='comment']").val()) {
 			var data = {
 				goodid: removeGoodId,
-				yourpin: $(".remove-good input[name='yourpin']").val()
+				yourpin: $(".remove-good input[name='yourpin']").val(),
+				comment: $(".remove-good textarea[name='comment']").val()
 			}
 			if ($('.remove-order-status[data-title='+removeGoodId+']').closest('li.order-list-item').hasClass('close-good')) {
 				$(".remove-good").fadeOut();
@@ -282,7 +289,7 @@ $(document).ready(function(){
 				}
 			});
 		}else{
-			alert("Введите пин!");
+			alert("Заполните все поля!");
 		}
 	});
 

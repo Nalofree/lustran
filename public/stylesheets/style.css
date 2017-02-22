@@ -13170,30 +13170,50 @@ h2 {
   bottom: 15px;
   right: 0;
   text-transform: lowercase;
-  font-size: 12px;
+  font-size: 14px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
+  line-height: 30px;
+  bottom: 15px;
+  padding-left: 30px;
 }
 /* line 365, ../sass/_components.sass */
-.new-order-form .new-order-form-row .new-row i {
+/*.new-order-form .new-order-form-row*/
+ .new-row i {
   font-size: 30px;
+  position: absolute;
+  left: 0;
 }
 /* line 367, ../sass/_components.sass */
-.new-order-form .new-order-form-row .new-row.add {
+/*.new-order-form .new-order-form-row*/
+ .new-row.add {
+  display: block;
+  position: relative;
   color: #5dd39e;
+  text-transform: lowercase;
+  text-transform: lowercase;
+  /*font-size: 24px;*/
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  line-height: 30px;
+  bottom: 15px;
+  padding-left: 30px;
 }
 /* line 369, ../sass/_components.sass */
-.new-order-form .new-order-form-row .new-row.add:hover {
+/*.new-order-form .new-order-form-row*/
+ .new-row.add:hover {
   color: #7ddcb1;
 }
 /* line 371, ../sass/_components.sass */
-.new-order-form .new-order-form-row .new-row.remove {
+/*.new-order-form .new-order-form-row*/
+ .new-row.remove {
   visibility: hidden;
   opacity: 0;
   color: #d35d5d;
 }
 /* line 375, ../sass/_components.sass */
-.new-order-form .new-order-form-row .new-row.remove:hover {
+/*.new-order-form .new-order-form-row*/
+ .new-row.remove:hover {
   color: #dc7d7d;
 }
 /* line 378, ../sass/_components.sass */
@@ -13583,7 +13603,7 @@ label.check {
 
 .history {
   display: none;
-  position: fixed;
+  position: absolute;
   color: #000;
   background-color: #fff;
   border-radius: 5px;

@@ -31,9 +31,12 @@ block content
                 .new-order-info-row
                   | Порядковай номер&nbsp
                   span.new-order-iter= ordernumber
-              .new-order-barcode(style='background-image: url(img/shtrihcod.png);')
+              .new-order-barcode
             .new-order-body
               form.new-order-form#neworderform(action='')
+                .new-row.add(data-toggle='add-row')
+                  i.fa.fa-plus-circle(aria-hidden='true')
+                  | &nbspДобавить товар
                 .new-order-form-row.good-item.row
                   fieldset.col-sm-1
                     label(for='') Артикул
@@ -50,9 +53,9 @@ block content
                   fieldset.col-sm-1
                     label(for='') Предоплата
                     input.form-control(type='text', data-input='number', name='prepayment')
-                  .new-row.add(data-toggle='add-row')
-                    i.fa.fa-plus-circle(aria-hidden='true')
-                    | &nbspДобавить товар
+                  //- .new-row.add(data-toggle='add-row')
+                  //-   i.fa.fa-plus-circle(aria-hidden='true')
+                  //-   | &nbspДобавить товар
                 .new-order-form-row.bottom.row
                   .col-sm-4
                     fieldset
