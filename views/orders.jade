@@ -1,6 +1,6 @@
 extends layout
 
-block content              
+block content
       main.lustran-main
         //- script(type='text/javascript').
         - var now = new Date();
@@ -46,30 +46,30 @@ block content
                     form(name='filter', method="GET")
                       .dropdown
                         .form-group
-                          label(for='processed') Обработка 
+                          label(for='processed') Обработка
                           select.form-control(name='processed', id='processed')
                             option(value='')
                             option(value='1') В обработке
-                            option(value='0') Не обработан                            
+                            option(value='0') Не обработан
                             option(value='2') Обработан
                       .dropdown
                         .form-group
-                          label(for='oredered') Заказ 
+                          label(for='oredered') Заказ
                           select.form-control(name='oredered', id='oredered')
                             option(value='')
                             option(value='1') Заказан
                             option(value='0') Не заказан
                       .dropdown
                         .form-group
-                          label(for='postponed') Отгрузка 
+                          label(for='postponed') Отгрузка
                           select.form-control(name='postponed', id='postponed')
                             option(value='')
                             option(value='1') Отложен
-                            option(value='0') Не отложен                            
+                            option(value='0') Не отложен
                             option(value='2') Есть дефект
                       .dropdown
                         .form-group
-                          label(for='callstatus') Дозвон 
+                          label(for='callstatus') Дозвон
                           select.form-control(name='callstatus', id='callstatus')
                             option(value='')
                             option(value='1') Дозвонились
@@ -77,11 +77,11 @@ block content
                             option(value='2') Не дозвонились
                       .dropdown
                         .form-group
-                          label(for='issued') Выдача 
+                          label(for='issued') Выдача
                           select.form-control(name='issued', id='issued')
                             option(value='')
                             option(value='1') Выдан
-                            option(value='0') Не выдан                            
+                            option(value='0') Не выдан
                       .status-menu-check
                         .checkbox
                           label(for='spicdate')= "Уточненная дата"
@@ -91,12 +91,12 @@ block content
                           input(type='checkbox' id='archive', name='archive')
                       .dropdown.archive-period
                         .form-group
-                          label(for='issued') Начало периода 
+                          label(for='issued') Начало периода
                           input.form-control(name='startperiod', type='date', id='startperiod')
                       .dropdown.archive-period
                         .form-group
                           label(for='issued') Конец периода
-                          input.form-control(name='endperiod', type='date', id='endperiod')                       
+                          input.form-control(name='endperiod', type='date', id='endperiod')
                       hr
                       .dropdown
                         .form-group
@@ -112,20 +112,15 @@ block content
                 .form-group
                   input.form-control(type='text', placeholder='Телефон...', name='tel')
               ul.nav.navbar-nav.navbar-right
-                li.navbar-text
-                  | Заказов 
+                li.navbar-text= "Заказов "
                   span.badge.badge-pur-light.orderscount= orderscount
-                li.navbar-text
-                  | Товаров 
-                  span.badge.badge-pur-light.goodcount= goodcount                
-                li.navbar-text
-                  | В обработке 
+                li.navbar-text= "Товаров "
+                  span.badge.badge-pur-light.goodcount= goodcount
+                li.navbar-text= "В обработке "
                   span.badge.badge-pur-light.ordersproc= ordersproc
-                li.navbar-text
-                  | Выдано 
+                li.navbar-text= "Выдано "
                   span.badge.badge-pur-light.ordersissued= ordersissued
-                li.navbar-text
-                  | Дефект 
+                li.navbar-text= "Дефект "
                   span.badge.badge-pur-light.ordersdef= ordersdef
         .lustran-container
           .history
@@ -177,7 +172,7 @@ block content
                         - if (orders[i].goods[j].reject == 0 && orders[i].goods[j].active == 0)
                           - danger += " end-good"
                         li.order-list-item(class=danger, data-title=orders[i].goods[j].id)
-                          // удаленный заказ staus-removed 
+                          // удаленный заказ staus-removed
                           header.order-list-item-header
                             span.badge.badge-pur= j+1
                             span.order-date.sep-dot= getReadebleDate(orders[i].goods[j].createdAt)
@@ -193,7 +188,7 @@ block content
                             - else
                               span.order-float-date= getDateReadeble(orders[i].goods[j].inddate)
                             .btn.btn-success.btn-xs.gethistory( data-title=orders[i].goods[j].id) История действий
-                            a.remove-order-status(href='#', data-title=orders[i].goods[j].id)                            
+                            a.remove-order-status(href='#', data-title=orders[i].goods[j].id)
                           .container-fluid
                             ul.order-status-list.row
                               li.col-sm-2
@@ -213,7 +208,7 @@ block content
                                     .action-header
                                       .action-info
                                         .new-order-info-row
-                                          - 
+                                          -
                                           span.action-date= getDateReadeble(new Date(orders[i].goods[j].processed.createdAt))
                                           | &nbsp
                                         i.fa.fa-times-circle.close-action(aria-hidden='true', data-toggle='close-action')
@@ -235,7 +230,7 @@ block content
                                           .col-sm-6
                                             .form-group
                                               input.form-control(type='password', name='yourpin')
-                                        .row.action-row                                          
+                                        .row.action-row
                                           .col-sm-6
                                             button.btn.btn-done.btn-block(type='button', data-toggle='save-action', data-title= orders[i].goods[j].id) Сохранить
                                           .col-sm-6
@@ -257,7 +252,7 @@ block content
                                     .action-header
                                       .action-info
                                         .new-order-info-row
-                                          - 
+                                          -
                                           span.action-date= getDateReadeble(now)
                                           | &nbsp
                                           //- span.action-time 12.12.16
@@ -284,7 +279,7 @@ block content
                                           .col-sm-6
                                             .form-group
                                               input.form-control(type='password', name='yourpin')
-                                        .row.action-row                                          
+                                        .row.action-row
                                           .col-sm-6
                                             button.btn.btn-done.btn-block(type='button', data-toggle='save-action', data-title= orders[i].goods[j].id) Сохранить
                                           .col-sm-6
@@ -306,7 +301,7 @@ block content
                                     .action-header
                                       .action-info
                                         .new-order-info-row
-                                          - 
+                                          -
                                           span.action-date= getDateReadeble(now)
                                           | &nbsp
                                           //- span.action-time 12.12.16
@@ -318,7 +313,7 @@ block content
                                         //-   span.action-shop Название товара
                                         i.fa.fa-times-circle.close-action(aria-hidden='true', data-toggle='close-action')
                                     .action-body
-                                      .form-group                                        
+                                      .form-group
                                         .row.action-row.choose-satus
                                           .col-sm-12
                                             .form-group
@@ -335,7 +330,7 @@ block content
                                           .col-sm-6
                                             .form-group
                                               input.form-control(type='password', name='yourpin')
-                                        .row.action-row                                          
+                                        .row.action-row
                                           .col-sm-6
                                             button.btn.btn-done.btn-block(type='button', data-toggle='save-action', data-title= orders[i].goods[j].id) Сохранить
                                           .col-sm-6
@@ -357,7 +352,7 @@ block content
                                     .action-header
                                       .action-info
                                         .new-order-info-row
-                                          - 
+                                          -
                                           span.action-date= getDateReadeble(now)
                                           | &nbsp
                                           //- span.action-time 12.12.16
@@ -387,7 +382,7 @@ block content
                                           .col-sm-6
                                             .form-group
                                               input.form-control(type='password', name='yourpin')
-                                        .row.action-row                                          
+                                        .row.action-row
                                           .col-sm-6
                                             button.btn.btn-done.btn-block(type='button', data-toggle='save-action', data-title= orders[i].goods[j].id) Сохранить
                                           .col-sm-6
@@ -409,7 +404,7 @@ block content
                                     .action-header
                                       .action-info
                                         .new-order-info-row
-                                          - 
+                                          -
                                           span.action-date= getDateReadeble(now)
                                           | &nbsp
                                           //- span.action-time 12.12.16
@@ -439,7 +434,7 @@ block content
                                           .col-sm-6
                                             .form-group
                                               input.form-control(type='password', name='yourpin')
-                                        .row.action-row                                          
+                                        .row.action-row
                                           .col-sm-6
                                             button.btn.btn-done.btn-block(type='button', data-toggle='save-action', data-title= orders[i].goods[j].id) Сохранить
                                           .col-sm-6
@@ -461,13 +456,13 @@ block content
                                     .action-header
                                       .action-info
                                         .new-order-info-row
-                                          - 
+                                          -
                                           span.action-date= getDateReadeble(now)
                                           | &nbsp
                                         i.fa.fa-times-circle.close-action(aria-hidden='true', data-toggle='close-action')
                                     .action-body
                                       .form-group
-                                        
+
                                         .row.action-row.choose-satus
                                           .col-sm-12
                                             .form-group
@@ -484,7 +479,7 @@ block content
                                           .col-sm-6
                                             .form-group
                                               input.form-control(type='password', name='yourpin')
-                                        .row.action-row                                          
+                                        .row.action-row
                                           .col-sm-6
                                             button.btn.btn-done.btn-block(type='button', data-toggle='save-action', data-title= orders[i].goods[j].id) Сохранить
                                           .col-sm-6
@@ -492,7 +487,7 @@ block content
                     - else
                       .container
                         .panel.panel-default
-                          .panel-body= "Товаров не найдено"            
+                          .panel-body= "Товаров не найдено"
           - else
             .container
               .panel.panel-default

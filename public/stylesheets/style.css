@@ -13802,7 +13802,12 @@ form[name='filter'] {
 .end-good {
   /*background-color: #5fd378;*/
   background-color: #594566;
+  color: #36C598;
   /*opacity: 0.4;*/
+}
+
+.end-good .order-status-list {
+  display: none;
 }
 
 .close-good .order-status-list {

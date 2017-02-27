@@ -136,6 +136,35 @@ function getTimeReadebleYesterday(date){
 			return readebleTime;
 };
 
+$("select[name='processed']").change(function () {
+	if ($(this).val() == 1 || $(this).val() == 2) {
+		$("select[name='oredered']").val('0');
+		$("select[name='postponed']").val('0');
+		$("select[name='callstatus']").val('0');
+		$("select[name='issued']").val('0');
+	}
+});
+
+$("select[name='oredered']").change(function () {
+	if ($(this).val() == 1 || $(this).val() == 2) {
+		$("select[name='postponed']").val();
+		$("select[name='callstatus']").val('0');
+		$("select[name='issued']").val('0');
+	}
+});
+
+$("select[name='postponed']").change(function () {
+	if ($(this).val() == 1 || $(this).val() == 2) {
+		$("select[name='callstatus']").val('0');
+		$("select[name='issued']").val('0');
+	}
+});
+
+$("select[name='callstatus']").change(function () {
+	if ($(this).val() == 1 || $(this).val() == 2) {
+		$("select[name='issued']").val('0');
+	}
+});
 
 $(document).ready(function(){
 
