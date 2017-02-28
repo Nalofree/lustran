@@ -26,7 +26,16 @@ $(document).ready(function () {
     }
   };
 
-  // $("span.order-name.sep-dot")
+  $("span.order-name.sep-dot").each(function () {
+    var text = $(this).text();
+    var wLength = text.split(" ").length;
+    if (wLength > 4) {
+      var wArr = text.split(" ");
+      wArr.splice(3,wLength-1);
+      text = wArr.join(" ");
+      $(this).text(text+'..');
+    }
+  });
 
   $('.users-table tr').each(function () {
     // console.log();
