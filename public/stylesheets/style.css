@@ -13176,6 +13176,7 @@ h2 {
   line-height: 30px;
   bottom: 15px;
   padding-left: 30px;
+  top: 5px;
 }
 /* line 365, ../sass/_components.sass */
 /*.new-order-form .new-order-form-row*/
@@ -13827,12 +13828,11 @@ form[name='filter'] {
   display: none;
 }
 
-span.order-name.sep-dot {
+/*span.order-name.sep-dot {
   position: relative;
   display: inline-block;
   overflow: hidden;
   width: 600px;
-  /* margin-top: 10px; */
   text-overflow: ellipsis;
   margin-bottom: -5px;
-}
+}*/
