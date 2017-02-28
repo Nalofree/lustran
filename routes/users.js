@@ -19,19 +19,20 @@ router.get('/', function (req,res,next) {
   }).catch(function () {
     console.log('Users err: ' + users);
     res.send('Users err: ' + users);
-  })
-})
+  });
+});
+
+function randomPin(min, max) {
+  var pin = "", pinElem;
+  for (var i = 0; i < 4; i++) {
+    pinElem = Math.floor(Math.random() * (max - min + 1)) + min;
+    pin += pinElem;
+  }
+  return pin;
+};
 
 router.post('/', function(req, res, next) {
-  function randomPin(min, max)
-  {
-    var pin = "", pinElem;
-    for (var i = 0; i < 4; i++) {
-      pinElem = Math.floor(Math.random() * (max - min + 1)) + min;
-      pin += pinElem;
-    }
-    return pin;
-  }
+
     models.users.findOne({
       where: {
         pin: req.body.yourpin
@@ -76,6 +77,8 @@ router.post('/', function(req, res, next) {
     });
 });
 
+
+
 router.post('/updateuser', function(req, res, next) {
   models.users.findOne({
     where: {
@@ -84,21 +87,40 @@ router.post('/updateuser', function(req, res, next) {
   }).then(function (fuser) {
     if (fuser) {
       if (fuser.status == "manager" && fuser.active == 1) {
-        createObj = {};
-        createObj.name = req.body.fio;
-        createObj.status = req.body.status;
-        // if (req.body.userpin != 0) {
-        //   createObj.pin = req.body.userpin;
-        // }
-        models.users.update(
-          createObj,
-          {
-            where: {id: req.body.userid}
+        var randomUserPin = randomPin(0,9);
+        models.users.findAll().then(function (fusers) {
+          var pins = [];
+          for (var i = 0; i < fusers.length; i++) {
+            pins.push(fusers[i].pin);
           }
-        ).then(function (user) {
-          res.send({err: false, user: user});
+          console.log(pins);
+          while (pins.indexOf(randomUserPin) > 0) {
+            randomUserPin = randomPin(0,9);
+          }
+          createObj = {};
+          createObj.name = req.body.fio;
+          createObj.status = req.body.status;
+          // console.log(req.body.changepin);
+          if (req.body.changepin != 0) {
+            // console.log(req.body.changepin);
+            createObj.pin = randomUserPin;
+            userpin = createObj.pin;            
+          }else{
+            userpin = 0;
+          }
+          models.users.update(
+            createObj,
+            {
+              where: {id: req.body.userid}
+            }
+          ).then(function (user) {
+            res.send({err: false, user: user, userpin: userpin});
+          }).catch(function () {
+            res.send({err: true});
+          });
         }).catch(function () {
-          res.send({err: true});
+          console.log('Users err: ' + users);
+          res.send('Users err: ' + users);
         });
       }else{
         res.send({err: 'Ошибка доступа, недостаточно прав'});

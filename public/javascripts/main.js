@@ -417,12 +417,44 @@ $(document).ready(function(){
 						$(".processed[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(data.user.name);
 						$(".processed[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text(data.processed.alias);
 						$(".ordersproc").text(data.pcount);
-						if (data.processed.statusval != 0) {
+						// if (data.processed.statusval != 0) {
+						// 	$(".processed[data-title="+goodid+"]").closest('.order-status').removeClass('status-danger');
+						// 	// $(".ordersproc").text(data.pcount);
+						// }else{
+						// 	$(".processed[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
+						// 	// $(".ordersproc").text(data.pcount);
+						// }
+						if (data.processed.statusval == 1) {
 							$(".processed[data-title="+goodid+"]").closest('.order-status').removeClass('status-danger');
-							// $(".ordersproc").text(data.pcount);
-						}else{
+							$(".processed[data-title="+goodid+"]").closest('.order-list-item').removeClass('status-danger');
+							// $(".ordersdef").text(data.pcount);
+						}else if(data.processed.statusval == 0){
 							$(".processed[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
-							// $(".ordersproc").text(data.pcount);
+							$(".callstatus[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
+							$(".callstatus[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.callstatus.createdAt)));
+							$(".callstatus[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(' ');
+							$(".callstatus[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text(data.callstatus.alias);
+
+							$(".spicdate[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
+							$(".spicdate[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.spicdate.createdAt)));
+							$(".spicdate[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(' ');
+							$(".spicdate[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text("--.--.--");
+
+							$(".issued[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
+							$(".issued[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.issued.createdAt)));
+							$(".issued[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(' ');
+							$(".issued[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text(data.issued.alias);
+
+							$(".postponed[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
+							$(".postponed[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.postponed.createdAt)));
+							$(".postponed[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(' ');
+							$(".postponed[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text(data.postponed.alias);
+
+							$(".ordered[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
+							$(".ordered[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.ordered.createdAt)));
+							$(".ordered[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(' ');
+							$(".ordered[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text(data.ordered.alias);
+							// $(".postponed[data-title="+goodid+"]").closest('.order-list-item').removeClass('status-danger');
 						}
 					}
 					$(".close-all").fadeOut();

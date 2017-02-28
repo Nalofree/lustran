@@ -2,6 +2,109 @@ var express = require('express');
 var router = express.Router();
 var models  = require('../models');
 
+// models.users.findOne({
+// 	where: {
+// 		status: "starter"
+// 	}
+// }).then(function (starter) {
+// 	if (starter) {
+// 		models.callstatus.create({
+// 			statusval: 0,
+// 			comment: ' ',
+// 			alias: 'Не звонили',
+// 			locationId: req.cookies.location,
+// 			userId: starter.id,
+// 			goodId: req.body.goodid
+// 		}).then(function (callstatus) {
+// 			models.issued.create({
+// 				statusval: 0,
+// 				comment: ' ',
+// 				alias: 'Не выдан',
+// 				locationId: req.cookies.location,
+// 				userId: starter.id,
+// 				goodId: req.body.goodid
+// 			}).then(function (issued) {
+// 				models.processed.create({
+// 					statusval: 0,
+// 					comment: ' ',
+// 					alias: 'Не обработан',
+// 					locationId: req.cookies.location,
+// 					userId: starter.id,
+// 					goodId: req.body.goodid
+// 				}).then(function (processed) {
+// 					models.spicdate.create({
+// 						comment: ' ',
+// 						locationId: req.cookies.location,
+// 						userId: starter.id,
+// 						goodId: req.body.goodid
+// 					}).then(function (spicdate) {
+// 						models.ordered.create({
+// 							statusval: 0,
+// 							comment: ' ',
+// 							alias: 'Не заказан',
+// 							locationId: req.cookies.location,
+// 							userId: starter.id,
+// 							goodId: req.body.goodid
+// 						}).then(function (ordered) {
+// 							models.postponed.create({
+// 								statusval: 0,
+// 								comment: ' ',
+// 								alias: 'Не отложен',
+// 								locationId: req.cookies.location,
+// 								userId: starter.id,
+// 								goodId: req.body.goodid
+// 							}).then(function (ordered) {
+// 								models.goods.update({
+// 									postponedId: postponed.id,
+// 									callstatusId: callstatus.id,
+// 									processedId: processed.id,
+// 									spicdateId: spicdate.id,
+// 									orderedId: ordered.id,
+// 									issuedId: issued.id
+// 								},{
+// 									where: {
+// 										id: req.body.goodid
+// 									}
+// 								}).then(function (good) {
+//
+//
+//
+// 								}).catch(function (err) {
+// 									res.send({err: err});
+// 									console.log('update goods',err);
+// 								});
+// 							}).catch(function (err) {
+// 								res.send({err: err});
+// 								console.log('update goods',err);
+// 							});
+// 						}).catch(function (err) {
+// 							res.send({err: err});
+// 							console.log('update goods',err);
+// 						});
+// 					}).catch(function (err) {
+// 						res.send({err: err});
+// 						console.log('update goods',err);
+// 					});
+// 				}).catch(function (err) {
+// 					res.send({err: err});
+// 					console.log('update goods',err);
+// 				});
+// 			}).catch(function (err) {
+// 				res.send({err: err});
+// 				console.log(err);
+// 			});
+// 		}).catch(function (err) {
+// 			res.send({err: err});
+// 			console.log(err);
+// 		});
+// 	}else{
+// 		res.send({err: 'Что-то пошло не так, обратитесь к администратору! / starter is not exist'});
+// 	}
+// }).catch(function (err) {
+// 	res.send({err: err});
+// 	console.log(err);
+// });
+
 function getDateSuperReadeble(date){
 	var readebleTime;//1998-02-03 22:23:00
 	var year = date.getFullYear();
@@ -414,69 +517,210 @@ router.post('/setprocessed', function (req, res, next) {
     if (user) {
       if ((user.status == 'supplier' || user.status == 'manager') && user.active == 1) {
         models.goods.findOne({
-          include: [models.processed],
+          include: [models.processed, models.spicdate, models.ordered, models.postponed, models.callstatus, models.issued],
           where: {
             id: req.body.goodid
           }
         }).then(function (good) {
-          if (good.processed.statusval != 2) {
+          // if (good.processed.statusval != 2) {
             var alias = '';
             if (req.body.statusval == 0) {
-              alias = 'Не обработан'
-            }else{
-              alias = 'В обработке'
-            }
-            models.processed.create({
-              statusval: req.body.statusval,
-							comment: req.body.comment,
-              alias: alias,
-              locationId: req.cookies.location,
-              userId: user.id,
-              goodId: req.body.goodid
-            }).then(function (processed) {
-              models.goods.update({
-                processedId: processed.id
-              },{
-                where: {
-                  id: req.body.goodid
-                }
-              }).then(function (good) {
-								models.goods.findAll({
-									include: [models.processed],
-									where: {
-				            '$processed.statusval$': 1,
-										active: 1,
-										reject: 0
-				          }
-								}).then(function (goods) {
-									models.actions.create({
+              alias = 'Не обработан';
+							models.users.findOne({
+								where: {
+									status: "starter"
+								}
+							}).then(function (starter) {
+								if (starter) {
+									models.callstatus.create({
+										statusval: 0,
+										comment: ' ',
+										alias: 'Не звонили',
 										locationId: req.cookies.location,
-	                  userId: user.id,
-	                  goodId: req.body.goodid,
-	                  statusval: req.body.statusval,
-	                  alias: alias,
-	                  comment: req.body.comment
-									}).then(function (action) {
-										res.send({processed: processed, user: user, pcount: goods.length});
+										userId: starter.id,
+										goodId: req.body.goodid
+									}).then(function (callstatus) {
+										models.issued.create({
+											statusval: 0,
+											comment: ' ',
+											alias: 'Не выдан',
+											locationId: req.cookies.location,
+											userId: starter.id,
+											goodId: req.body.goodid
+										}).then(function (issued) {
+												models.spicdate.create({
+													comment: ' ',
+													locationId: req.cookies.location,
+													userId: starter.id,
+													goodId: req.body.goodid
+												}).then(function (spicdate) {
+													models.ordered.create({
+														statusval: 0,
+														comment: ' ',
+														alias: 'Не заказан',
+														locationId: req.cookies.location,
+														userId: starter.id,
+														goodId: req.body.goodid
+													}).then(function (ordered) {
+														models.postponed.create({
+															statusval: 0,
+															comment: ' ',
+															alias: 'Не отложен',
+															locationId: req.cookies.location,
+															userId: starter.id,
+															goodId: req.body.goodid
+														}).then(function (postponed) {
+															models.goods.update({
+																postponedId: postponed.id,
+																callstatusId: callstatus.id,
+																// processedId: processed.id,
+																spicdateId: spicdate.id,
+																orderedId: ordered.id,
+																issuedId: issued.id
+															},{
+																where: {
+																	id: req.body.goodid
+																}
+															}).then(function (good) {
+
+																models.processed.create({
+										              statusval: req.body.statusval,
+																	comment: req.body.comment,
+										              alias: alias,
+										              locationId: req.cookies.location,
+										              userId: user.id,
+										              goodId: req.body.goodid
+										            }).then(function (processed) {
+										              models.goods.update({
+										                processedId: processed.id
+										              },{
+										                where: {
+										                  id: req.body.goodid
+										                }
+										              }).then(function (good) {
+																		models.goods.findAll({
+																			include: [models.processed],
+																			where: {
+														            '$processed.statusval$': 1,
+																				active: 1,
+																				reject: 0
+														          }
+																		}).then(function (goods) {
+																			models.actions.create({
+																				locationId: req.cookies.location,
+											                  userId: user.id,
+											                  goodId: req.body.goodid,
+											                  statusval: req.body.statusval,
+											                  alias: alias,
+											                  comment: req.body.comment
+																			}).then(function (action) {
+																				res.send({processed: processed, postponed: postponed, callstatus: callstatus, issued: issued, spicdate: spicdate, ordered: ordered, user: user, pcount: goods.length});
+																			}).catch(function (err) {
+																				res.send({err: err});
+												                console.log(err);
+																			});
+																		}).catch(function (err) {
+																			res.send({err: err});
+											                console.log(err);
+																		});
+										              }).catch(function (err) {
+										                res.send({err: err});
+										                console.log(err);
+										              });
+										            }).catch(function (err) {
+										              res.send({err: err});
+										              console.log(err);
+										            });
+
+															}).catch(function (err) {
+																res.send({err: err});
+																console.log('update goods',err);
+															});
+														}).catch(function (err) {
+															res.send({err: err});
+															console.log('update goods',err);
+														});
+													}).catch(function (err) {
+														res.send({err: err});
+														console.log('update goods',err);
+													});
+												}).catch(function (err) {
+													res.send({err: err});
+													console.log('update goods',err);
+												});
+										}).catch(function (err) {
+											res.send({err: err});
+											console.log(err);
+										});
 									}).catch(function (err) {
 										res.send({err: err});
-		                console.log(err);
+										console.log(err);
 									});
-								}).catch(function (err) {
-									res.send({err: err});
-	                console.log(err);
-								});
-              }).catch(function (err) {
-                res.send({err: err});
-                console.log(err);
-              });
-            }).catch(function (err) {
-              res.send({err: err});
-              console.log(err);
-            });
-          }else{
-            res.send({err: 'Заказ уже обработан!'});
-          }
+								}else{
+									res.send({err: 'Что-то пошло не так, обратитесь к администратору! / starter is not exist'});
+								}
+							}).catch(function (err) {
+								res.send({err: err});
+								console.log(err);
+							});
+            }else{
+							if (good.processed.statusval != 2) {
+								alias = 'В обработке';
+								models.processed.create({
+		              statusval: req.body.statusval,
+									comment: req.body.comment,
+		              alias: alias,
+		              locationId: req.cookies.location,
+		              userId: user.id,
+		              goodId: req.body.goodid
+		            }).then(function (processed) {
+		              models.goods.update({
+		                processedId: processed.id
+		              },{
+		                where: {
+		                  id: req.body.goodid
+		                }
+		              }).then(function (good) {
+										models.goods.findAll({
+											include: [models.processed],
+											where: {
+						            '$processed.statusval$': 1,
+												active: 1,
+												reject: 0
+						          }
+										}).then(function (goods) {
+											models.actions.create({
+												locationId: req.cookies.location,
+			                  userId: user.id,
+			                  goodId: req.body.goodid,
+			                  statusval: req.body.statusval,
+			                  alias: alias,
+			                  comment: req.body.comment
+											}).then(function (action) {
+												res.send({processed: processed, user: user, pcount: goods.length});
+											}).catch(function (err) {
+												res.send({err: err});
+				                console.log(err);
+											});
+										}).catch(function (err) {
+											res.send({err: err});
+			                console.log(err);
+										});
+		              }).catch(function (err) {
+		                res.send({err: err});
+		                console.log(err);
+		              });
+		            }).catch(function (err) {
+		              res.send({err: err});
+		              console.log(err);
+		            });
+							}else{
+			          res.send({err: 'Заказ уже обработан!'});
+			        }
+            }
+          // }else{
+          //   res.send({err: 'Заказ уже обработан!'});
+          // }
         }).catch(function (err) {
           res.send({err: err});
           console.log(err);

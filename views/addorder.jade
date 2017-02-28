@@ -37,22 +37,28 @@ block content
                 //- .new-row.add(data-toggle='add-row')
                 //-   i.fa.fa-plus-circle(aria-hidden='true')
                 //-   | &nbspДобавить товар
-                .new-order-form-row.good-item.row
+                .row
                   fieldset.col-sm-1
                     label(for='') Артикул
-                    input.form-control(type='text', name='vencode')
                   fieldset.col-sm-4
                     label(for='') Наименование товара
-                    input.form-control(type='text', name='name')
                   fieldset.col-sm-2
                     label(for='') Количество товара
-                    input.form-control(type='text', value='1', data-input='number', , name='number')
                   fieldset.col-sm-2
                     label(for='') Ориентировочная дата поставки
-                    input.form-control(type='date', data-input='date', , name='indicativedate')
                   fieldset.col-sm-1
                     label(for='') Предоплата
-                    input.form-control(type='text', data-input='number', name='prepayment')
+                .new-order-form-row.good-item.row
+                  fieldset.col-sm-1
+                    input.form-control(type='text', name='vencode')
+                  fieldset.col-sm-4
+                    input.form-control(type='text', name='name')
+                  fieldset.col-sm-2
+                    input.form-control(type='text', value='1', data-input='number', , name='number')
+                  fieldset.col-sm-2
+                    input.form-control(type='date', data-input='date', , name='indicativedate')
+                  fieldset.col-sm-1
+                    input.form-control(type='text', data-input='number', name='prepayment')                  
                   //- .new-row.add(data-toggle='add-row')
                   //-   i.fa.fa-plus-circle(aria-hidden='true')
                   //-   | &nbspДобавить товар

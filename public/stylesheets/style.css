@@ -13143,7 +13143,7 @@ h2 {
   display: -webkit-box;
   display: flex;
   align-items: flex-end;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 }
 /* line 347, ../sass/_components.sass */
 .new-order-form .new-order-form-row:hover .new-row.remove {
@@ -13198,6 +13198,7 @@ h2 {
   line-height: 30px;
   bottom: 15px;
   padding-left: 30px;
+  margin-top: 10px;
 }
 /* line 369, ../sass/_components.sass */
 /*.new-order-form .new-order-form-row*/
@@ -13824,4 +13825,14 @@ form[name='filter'] {
 
 .archive-period {
   display: none;
+}
+
+span.order-name.sep-dot {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  width: 600px;
+  /* margin-top: 10px; */
+  text-overflow: ellipsis;
+  margin-bottom: -5px;
 }

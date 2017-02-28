@@ -26,6 +26,8 @@ $(document).ready(function () {
     }
   };
 
+  // $("span.order-name.sep-dot")
+
   $('.users-table tr').each(function () {
     // console.log();
     console.log($(this).find('td').eq(1).text());
@@ -200,11 +202,11 @@ $(document).ready(function () {
         yourpin: $('.edituserform input[name="yourpin"]').val(),
         userid: $(this).attr('data-title')
       };
-      // if ($('.edituserform input[name="userpin"]').val()) {
-      //   data.userpin = $('.edituserform input[name="userpin"]').val();
-      // }else{
-      //   data.userpin = 0;
-      // }
+      if ($('.edituserform input[name="changepin"]').prop('checked')) {
+        data.changepin = 1;
+      }else{
+        data.changepin = 0;
+      }
       $.ajax({
         url: '/users/updateuser',
         type: 'POST',
@@ -214,11 +216,14 @@ $(document).ready(function () {
           $(".edituserform").fadeOut();
           $(".close-layout").fadeOut();
           if (res.err) {
-            alert( res.err);
+            alert( 'Ошибка ' + res.err);
           }else{
             $('tr#'+data.userid+' td').eq(0).text(data.fio);
             $('tr#'+data.userid+' td').eq(1).text(statusToAlias(data.status));
             $('.edituserform input').val('');
+            if (res.userpin !== 0) {
+              alert('Новый пин пользователя: '+res.userpin);
+            }
           }
           $(".close-all").fadeOut();
         },
