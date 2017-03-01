@@ -179,7 +179,9 @@ block content
                           header.order-list-item-header
                             span.badge.badge-pur= j+1
                             span.order-date.sep-dot= getReadebleDate(orders[i].goods[j].createdAt)
-                            span.order-name.sep-dot(title=orders[i].goods[j].name)= orders[i].goods[j].name
+                            span.order-name(title=orders[i].goods[j].name)= orders[i].goods[j].name
+                            span.order-name-copy.sep-dot(data-clipboard-text=orders[i].goods[j].name) &#9668; Копировать
+                              span.copiedtooltip Скопировано
                             span.order-count.sep-dot
                               i= orders[i].goods[j].num
                               |  шт

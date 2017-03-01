@@ -136,6 +136,35 @@ function getTimeReadebleYesterday(date){
 			return readebleTime;
 };
 
+	var clipboard = new Clipboard('.order-name-copy');
+
+	$(".order-name-copy").click(function () {
+		var copiedtooltip = $(this).children(".copiedtooltip");
+		copiedtooltip.fadeIn(200, function () {
+			setTimeout(function () {
+				copiedtooltip.fadeOut(500)
+			}, 600);
+		});
+	});
+
+	function orderSortName(elem) {
+		var text = elem.text();
+		var textLength = elem.text().split(' ').length;
+		if (textLength > 4) {
+			var textArr = elem.text().split(' ');
+			textArr.splice(4, textLength-1)
+			elem.text(textArr.join(' ')+"...");
+		}
+	}
+
+
+
+	$(".order-name").each(function () {
+		orderSortName($(this));
+	})
+
+
+
 $("select[name='processed']").change(function () {
 	if ($(this).val() == 1 || $(this).val() == 2) {
 		$("select[name='oredered']").val('0');
