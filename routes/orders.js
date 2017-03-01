@@ -263,7 +263,7 @@ router.get('/', function(req, res, next) {
 
 	var lastStatus = false;
 
-	if (req.query.processed || req.query.oredered || req.query.postponed || req.query.callstatus || req.query.issued || req.query.spicdate || req.query.archive) { //processed=&oredered=&postponed=&callstatus=&issued=&spicdate=on
+	if (req.query.processed || req.query.oredered || req.query.postponed || req.query.callstatus || req.query.issued || req.query.spicdate || req.query.archive || req.query.locationsall) { //processed=&oredered=&postponed=&callstatus=&issued=&spicdate=on
 		// console.log("PROCESSED: " + req.query.processed);
 		lastStatus = true;
 		earchWhereOrders = {};
@@ -311,6 +311,11 @@ router.get('/', function(req, res, next) {
 			searchWhereOrders.active = 0;
 			searchWhereOrders.$and.push({createdAt: {$gte: start}});
 			searchWhereOrders.$and.push({createdAt: {$lte: end}});
+		}
+		if (req.query.locationsall) {
+			searchWhereOrders.locationId = {
+				$ne: null
+			}
 		}
 	}//else{
 	// 	searchWhereOrders = {
@@ -739,6 +744,22 @@ router.post('/setprocessed', function (req, res, next) {
 
 router.post('/setspicdate', function (req, res, next) {
   // res.send('response');
+	// models.goods.findOne({
+	// 	include: [models.processed, models.spicdate, models.ordered, models.postponed, models.callstatus, models.issued],
+	// 	where: {
+	// 		id: req.body.goodid
+	// 	}
+	// }).then(function (good) {
+	// 	if (good.postponed.statusval != 1) {
+	//
+	// 	}else{
+	// 		res.send()
+	// 	}
+	//
+	// }).catch(function (err) {
+	// 	console.log(err);
+	// 	res.send({err: err});
+	// });
   models.users.findOne({
     where: {
       pin: req.body.yourpin
@@ -747,82 +768,86 @@ router.post('/setspicdate', function (req, res, next) {
     if (user) {
       if ((user.status == 'supplier' || user.status == 'manager') && user.active == 1) {
         models.goods.findOne({
-          include: [models.spicdate, models.processed],
+          include: [models.spicdate, models.processed, models.postponed],
           where: {
             id: req.body.goodid
           }
         }).then(function (good) {
           if (good.processed.statusval == 1 || good.processed.statusval == 2) {
-            models.spicdate.create({
-              statusval: req.body.statusval,
-							comment: req.body.comment,
-              locationId: req.cookies.location,
-              userId: user.id,
-              goodId: req.body.goodid
-            }).then(function (spicdate) {
-              models.goods.update({
-                spicdateId: spicdate.id
-              },{
-                where: {
-                  id: req.body.goodid
-                }
-              }).then(function (goods) {
-                models.processed.create({
-                  statusval: 2,
-                  alias: 'Обработан',
-                  locationId: req.cookies.location,
-                  userId: user.id,
-                  goodId: req.body.goodid
-                }).then(function (processed) {
-                  models.goods.update({
-                    processedId: processed.id
-                  },{
-                    where: {
-                      id: req.body.goodid
-                    }
-                  }).then(function (goods) {
-										models.actions.create({
-											locationId: req.cookies.location,
-		                  userId: user.id,
-		                  goodId: req.body.goodid,
-		                  statusval: req.body.statusval,
-		                  alias: 'Ут. дата: '+req.body.statusval,
-		                  comment: req.body.comment
-										}).then(function (action) {
+						if (good.postponed.statusval != 1) {
+							models.spicdate.create({
+	              statusval: req.body.statusval,
+								comment: req.body.comment,
+	              locationId: req.cookies.location,
+	              userId: user.id,
+	              goodId: req.body.goodid
+	            }).then(function (spicdate) {
+	              models.goods.update({
+	                spicdateId: spicdate.id
+	              },{
+	                where: {
+	                  id: req.body.goodid
+	                }
+	              }).then(function (goods) {
+	                models.processed.create({
+	                  statusval: 2,
+	                  alias: 'Обработан',
+	                  locationId: req.cookies.location,
+	                  userId: user.id,
+	                  goodId: req.body.goodid
+	                }).then(function (processed) {
+	                  models.goods.update({
+	                    processedId: processed.id
+	                  },{
+	                    where: {
+	                      id: req.body.goodid
+	                    }
+	                  }).then(function (goods) {
 											models.actions.create({
 												locationId: req.cookies.location,
 			                  userId: user.id,
 			                  goodId: req.body.goodid,
-			                  statusval: 2,
-			                  alias: 'Обработан',
-			                  comment: ' '
+			                  statusval: req.body.statusval,
+			                  alias: 'Ут. дата: '+req.body.statusval,
+			                  comment: req.body.comment
 											}).then(function (action) {
-												res.send({spicdate: spicdate, user: user});
+												models.actions.create({
+													locationId: req.cookies.location,
+				                  userId: user.id,
+				                  goodId: req.body.goodid,
+				                  statusval: 2,
+				                  alias: 'Обработан',
+				                  comment: ' '
+												}).then(function (action) {
+													res.send({spicdate: spicdate, user: user});
+												}).catch(function (err) {
+													res.send({err: err});
+					                console.log(err);
+												});
 											}).catch(function (err) {
 												res.send({err: err});
 				                console.log(err);
 											});
-										}).catch(function (err) {
-											res.send({err: err});
-			                console.log(err);
-										});
-                    // res.send({spicdate: spicdate, user: user});
-                  }).catch(function (err) {
-                    res.send({err: err});
-                    console.log(err);
-                  });
-                }).catch(function (err) {
-                  res.send({err: err});
-                  console.log(err);
-                });
-              }).catch(function (err) {
-                res.send({err: err});
-                console.log(err);
-              });
-            }).catch(function (err) {
-              res.send({err: err});
-              console.log(err);
-            });
+	                    // res.send({spicdate: spicdate, user: user});
+	                  }).catch(function (err) {
+	                    res.send({err: err});
+	                    console.log(err);
+	                  });
+	                }).catch(function (err) {
+	                  res.send({err: err});
+	                  console.log(err);
+	                });
+	              }).catch(function (err) {
+	                res.send({err: err});
+	                console.log(err);
+	              });
+	            }).catch(function (err) {
+	              res.send({err: err});
+	              console.log(err);
+	            });
+						}else{
+							res.send({err: 'Товар уже отложен! Уточненную дату сменить нельзя!'});
+						}
           }else{
             res.send({err: 'Поставьте товар в обработку!'});
           }
@@ -858,49 +883,158 @@ router.post('/setordered', function (req, res, next) {
           }
         }).then(function (good) {
           if (good.processed.statusval == 2) {
-            var alias;
+            var alias, active;
             if (req.body.statusval == 0) {
-              alias = 'Не заказан'
+              alias = 'Не заказан';
+							models.users.findOne({
+								where: {
+									status: "starter"
+								}
+							}).then(function (starter) {
+								if (starter) {
+									models.callstatus.create({
+										statusval: 0,
+										comment: ' ',
+										alias: 'Не звонили',
+										locationId: req.cookies.location,
+										userId: starter.id,
+										goodId: req.body.goodid
+									}).then(function (callstatus) {
+										models.issued.create({
+											statusval: 0,
+											comment: ' ',
+											alias: 'Не выдан',
+											locationId: req.cookies.location,
+											userId: starter.id,
+											goodId: req.body.goodid
+										}).then(function (issued) {
+											models.postponed.create({
+												statusval: 0,
+												comment: ' ',
+												alias: 'Не отложен',
+												locationId: req.cookies.location,
+												userId: starter.id,
+												goodId: req.body.goodid
+											}).then(function (postponed) {
+												models.goods.update({
+													postponedId: postponed.id,
+													callstatusId: callstatus.id,
+													issuedId: issued.id
+												},{
+													where: {
+														id: req.body.goodid
+													}
+												}).then(function (good) {
+
+													models.ordered.create({
+							              statusval: req.body.statusval,
+														comment: req.body.comment,
+							              alias: alias,
+							              locationId: req.cookies.location,
+							              userId: user.id,
+							              goodId: req.body.goodid
+							            }).then(function (ordered) {
+							              models.goods.update({
+							                orderedId: ordered.id,
+							              },{
+							                where: {
+							                  id: req.body.goodid
+							                }
+							              }).then(function (goods) {
+															models.actions.create({
+																locationId: req.cookies.location,
+																userId: user.id,
+																goodId: req.body.goodid,
+																statusval: req.body.statusval,
+																alias: alias,
+																comment: req.body.comment
+															}).then(function (action) {
+																res.send({ordered: ordered, postponed: postponed, callstatus: callstatus, issued: issued, user: user});
+															}).catch(function (err) {
+																res.send({err: err});
+																console.log(err);
+															});
+							                // res.send({ordered: ordered, user: user});
+							              }).catch(function (err) {
+							                res.send({err: err});
+							                console.log('update goods',err);
+							              })
+							            }).catch(function (err) {
+							              res.send({err: err});
+							              console.log('ordered',err);
+							            });
+
+												}).catch(function (err) {
+													res.send({err: err});
+													console.log('update goods',err);
+												});
+											}).catch(function (err) {
+												res.send({err: err});
+												console.log('update goods',err);
+											});
+										}).catch(function (err) {
+											res.send({err: err});
+											console.log(err);
+										});
+									}).catch(function (err) {
+										res.send({err: err});
+										console.log(err);
+									});
+								}else{
+									res.send({err: 'Что-то пошло не так, обратитесь к администратору! / starter is not exist'});
+								}
+							}).catch(function (err) {
+								res.send({err: err});
+								console.log(err);
+							});
             }else{
-              alias = 'Заказан'
+              alias = 'Заказан';
+							models.ordered.create({
+	              statusval: req.body.statusval,
+								comment: req.body.comment,
+	              alias: alias,
+	              locationId: req.cookies.location,
+	              userId: user.id,
+	              goodId: req.body.goodid
+	            }).then(function (ordered) {
+	              models.goods.update({
+	                orderedId: ordered.id,
+									// active: 1
+	              },{
+	                where: {
+	                  id: req.body.goodid
+	                }
+	              }).then(function (goods) {
+									// models.orders.update({
+									// 	active: 1
+									// },{
+									// 	where: {
+									// 		id: good.orderId
+									// 	}
+									// }).
+									models.actions.create({
+										locationId: req.cookies.location,
+										userId: user.id,
+										goodId: req.body.goodid,
+										statusval: req.body.statusval,
+										alias: alias,
+										comment: req.body.comment
+									}).then(function (action) {
+										res.send({ordered: ordered, user: user});
+									}).catch(function (err) {
+										res.send({err: err});
+										console.log(err);
+									});
+	                // res.send({ordered: ordered, user: user});
+	              }).catch(function (err) {
+	                res.send({err: err});
+	                console.log('update goods',err);
+	              })
+	            }).catch(function (err) {
+	              res.send({err: err});
+	              console.log('ordered',err);
+	            });
             }
-            models.ordered.create({
-              statusval: req.body.statusval,
-							comment: req.body.comment,
-              alias: alias,
-              locationId: req.cookies.location,
-              userId: user.id,
-              goodId: req.body.goodid
-            }).then(function (ordered) {
-              models.goods.update({
-                orderedId: ordered.id
-              },{
-                where: {
-                  id: req.body.goodid
-                }
-              }).then(function (goods) {
-								models.actions.create({
-									locationId: req.cookies.location,
-									userId: user.id,
-									goodId: req.body.goodid,
-									statusval: req.body.statusval,
-									alias: alias,
-									comment: req.body.comment
-								}).then(function (action) {
-									res.send({ordered: ordered, user: user});
-								}).catch(function (err) {
-									res.send({err: err});
-									console.log(err);
-								});
-                // res.send({ordered: ordered, user: user});
-              }).catch(function (err) {
-                res.send({err: err});
-                console.log('update goods',err);
-              })
-            }).catch(function (err) {
-              res.send({err: err});
-              console.log('ordered',err);
-            });
           }else{
             res.send({err: 'Поставьте товар в обработку и уточните дату!'});
           }
@@ -1261,53 +1395,200 @@ router.post('/setcallstatus', function (req, res, next) {
           var alias;
           if (req.body.statusval == 0) {
             alias = 'Не звонили';
+						models.users.findOne({
+							where: {
+								status: "starter"
+							}
+						}).then(function (starter) {
+							if (starter) {
+									models.issued.create({
+										statusval: 0,
+										comment: ' ',
+										alias: 'Не выдан',
+										locationId: req.cookies.location,
+										userId: starter.id,
+										goodId: req.body.goodid
+									}).then(function (issued) {
+										models.goods.update({
+											issuedId: issued.id
+										},{
+											where: {
+												id: req.body.goodid
+											}
+										}).then(function (good) {
+											models.callstatus.create({
+					              statusval: req.body.statusval,
+												comment: req.body.comment,
+					              alias: alias,
+					              locationId: req.cookies.location,
+					              userId: user.id,
+					              goodId: req.body.goodid
+					            }).then(function (callstatus) {
+					              models.goods.update({
+					                callstatusId: callstatus.id
+					              },{
+					                where: {
+					                  id: req.body.goodid
+					                }
+					              }).then(function (goods) {
+													models.actions.create({
+														locationId: req.cookies.location,
+														userId: user.id,
+														goodId: req.body.goodid,
+														statusval: req.body.statusval,
+														alias: alias,
+														comment: req.body.comment
+													}).then(function (action) {
+														res.send({callstatus: callstatus, issued: issued, user: user});
+													}).catch(function (err) {
+														res.send({err: err});
+														console.log(err);
+													});
+					                // res.send({callstatus: callstatus, user: user});
+					              }).catch(function (err) {
+					                res.send({err: err});
+					                console.log('update goods',err);
+					              })
+					            }).catch(function (err) {
+					              res.send({err: err});
+					              console.log('callstatus',err);
+					            });
+										}).catch(function (err) {
+											res.send({err: err});
+											console.log('update goods',err);
+										});
+									}).catch(function (err) {
+										res.send({err: err});
+										console.log(err);
+									});
+							}else{
+								res.send({err: 'Что-то пошло не так, обратитесь к администратору! / starter is not exist'});
+							}
+						}).catch(function (err) {
+							res.send({err: err});
+							console.log(err);
+						});
           }else if(req.body.statusval == 1){
             alias = 'Дозвон';
+						if (good.postponed.statusval == 1) {
+	            models.callstatus.create({
+	              statusval: req.body.statusval,
+								comment: req.body.comment,
+	              alias: alias,
+	              locationId: req.cookies.location,
+	              userId: user.id,
+	              goodId: req.body.goodid
+	            }).then(function (callstatus) {
+	              models.goods.update({
+	                callstatusId: callstatus.id
+	              },{
+	                where: {
+	                  id: req.body.goodid
+	                }
+	              }).then(function (goods) {
+									models.actions.create({
+										locationId: req.cookies.location,
+										userId: user.id,
+										goodId: req.body.goodid,
+										statusval: req.body.statusval,
+										alias: alias,
+										comment: req.body.comment
+									}).then(function (action) {
+										res.send({callstatus: callstatus, user: user});
+									}).catch(function (err) {
+										res.send({err: err});
+										console.log(err);
+									});
+	                // res.send({callstatus: callstatus, user: user});
+	              }).catch(function (err) {
+	                res.send({err: err});
+	                console.log('update goods',err);
+	              })
+	            }).catch(function (err) {
+	              res.send({err: err});
+	              console.log('callstatus',err);
+	            });
+	          }else{
+	            res.send({err: 'Сначала отложите товар!'});
+	          }
           }else{
             alias = 'Не дозвон';
+						models.users.findOne({
+							where: {
+								status: "starter"
+							}
+						}).then(function (starter) {
+							if (starter) {
+									models.issued.create({
+										statusval: 0,
+										comment: ' ',
+										alias: 'Не выдан',
+										locationId: req.cookies.location,
+										userId: starter.id,
+										goodId: req.body.goodid
+									}).then(function (issued) {
+										models.goods.update({
+											issuedId: issued.id
+										},{
+											where: {
+												id: req.body.goodid
+											}
+										}).then(function (good) {
+											models.callstatus.create({
+					              statusval: req.body.statusval,
+												comment: req.body.comment,
+					              alias: alias,
+					              locationId: req.cookies.location,
+					              userId: user.id,
+					              goodId: req.body.goodid
+					            }).then(function (callstatus) {
+					              models.goods.update({
+					                callstatusId: callstatus.id
+					              },{
+					                where: {
+					                  id: req.body.goodid
+					                }
+					              }).then(function (goods) {
+													models.actions.create({
+														locationId: req.cookies.location,
+														userId: user.id,
+														goodId: req.body.goodid,
+														statusval: req.body.statusval,
+														alias: alias,
+														comment: req.body.comment
+													}).then(function (action) {
+														res.send({callstatus: callstatus, issued: issued, user: user});
+													}).catch(function (err) {
+														res.send({err: err});
+														console.log(err);
+													});
+					                // res.send({callstatus: callstatus, user: user});
+					              }).catch(function (err) {
+					                res.send({err: err});
+					                console.log('update goods',err);
+					              })
+					            }).catch(function (err) {
+					              res.send({err: err});
+					              console.log('callstatus',err);
+					            });
+										}).catch(function (err) {
+											res.send({err: err});
+											console.log('update goods',err);
+										});
+									}).catch(function (err) {
+										res.send({err: err});
+										console.log(err);
+									});
+							}else{
+								res.send({err: 'Что-то пошло не так, обратитесь к администратору! / starter is not exist'});
+							}
+						}).catch(function (err) {
+							res.send({err: err});
+							console.log(err);
+						});
           }
-					console.log('good.issued.statusval: '+good.postponed.statusval);
-          if (good.postponed.statusval == 1) {
-            models.callstatus.create({
-              statusval: req.body.statusval,
-							comment: req.body.comment,
-              alias: alias,
-              locationId: req.cookies.location,
-              userId: user.id,
-              goodId: req.body.goodid
-            }).then(function (callstatus) {
-              models.goods.update({
-                callstatusId: callstatus.id
-              },{
-                where: {
-                  id: req.body.goodid
-                }
-              }).then(function (goods) {
-								models.actions.create({
-									locationId: req.cookies.location,
-									userId: user.id,
-									goodId: req.body.goodid,
-									statusval: req.body.statusval,
-									alias: alias,
-									comment: req.body.comment
-								}).then(function (action) {
-									res.send({callstatus: callstatus, user: user});
-								}).catch(function (err) {
-									res.send({err: err});
-									console.log(err);
-								});
-                // res.send({callstatus: callstatus, user: user});
-              }).catch(function (err) {
-                res.send({err: err});
-                console.log('update goods',err);
-              })
-            }).catch(function (err) {
-              res.send({err: err});
-              console.log('callstatus',err);
-            });
-          }else{
-            res.send({err: 'Сначала отложите товар!'});
-          }
+					// console.log('good.issued.statusval: '+good.postponed.statusval);
+
         }).catch(function (err) {
           res.send({err: err});
           console.log('goods',err);

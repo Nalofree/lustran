@@ -13809,7 +13809,7 @@ form[name='filter'] {
 }
 
 .end-good .order-status-list {
-  display: none;
+  /*display: none;*/
 }
 
 .close-good .order-status-list {

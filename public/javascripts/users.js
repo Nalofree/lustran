@@ -31,9 +31,9 @@ $(document).ready(function () {
     var wLength = text.split(" ").length;
     if (wLength > 4) {
       var wArr = text.split(" ");
-      wArr.splice(3,wLength-1);
+      wArr.splice(4,wLength-1);
       text = wArr.join(" ");
-      $(this).text(text+'..');
+      $(this).text(text+' ...');
     }
   });
 
@@ -274,7 +274,6 @@ $(document).ready(function () {
     e.preventDefault();
     if ($('.getuserinfo input[name=yourpin]').val()) {
       $(".close-all").fadeIn();
-      // alert($('.getuserinfo input[name=yourpin]').val() + ' ' + $(this).attr('data-title'));
       data = {
         userid: $(this).attr('data-title'),
         yourpin: $('.getuserinfo input[name=yourpin]').val()

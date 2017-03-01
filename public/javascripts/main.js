@@ -590,12 +590,24 @@ $(document).ready(function(){
 						console.log(data.ordered);
 						$(".ordered[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.ordered.createdAt)));
 						$(".ordered[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(data.user.name);
-						if ($(this).closest('.action').find('select[name="status"]').val() != 0) {
+						if (data.ordered.statusval != 0) {
 							$(".ordered[data-title="+goodid+"]").closest('.order-status').removeClass('status-danger');
 							$(".ordered[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text('Заказан');
 						}else{
 							$(".ordered[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
 							$(".ordered[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text('Не заказан');
+
+							$(".postponed[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
+							$(".postponed[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text(data.postponed.alias);
+							$(".callstatus[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
+							$(".callstatus[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.callstatus.createdAt)));
+							$(".callstatus[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(' ');
+							$(".callstatus[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text(data.callstatus.alias);
+							$(".issued[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
+							$(".issued[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.issued.createdAt)));
+							$(".issued[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(' ');
+							$(".issued[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text(data.issued.alias);
+							$(".postponed[data-title="+goodid+"]").closest('.order-list-item').removeClass('status-danger');
 						}
 					}
 					$(".close-all").fadeOut();
@@ -734,9 +746,19 @@ $(document).ready(function(){
 						}else if(data.callstatus.statusval == 0){
 							$(".callstatus[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
 							$(".callstatus[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text('Не Звонили');
+
+							$(".issued[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
+							$(".issued[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.issued.createdAt)));
+							$(".issued[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(' ');
+							$(".issued[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text(data.issued.alias);
 						}else{
 							$(".callstatus[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
 							$(".callstatus[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text('Не дозвон');
+
+							$(".issued[data-title="+goodid+"]").closest('.order-status').addClass('status-danger');
+							$(".issued[data-title="+goodid+"]").closest('.order-status').find('.status-date').text(getDateSuperReadeble(new Date(data.issued.createdAt)));
+							$(".issued[data-title="+goodid+"]").closest('.order-status').find('.status-bottom span').text(' ');
+							$(".issued[data-title="+goodid+"]").closest('.order-status').find('.status-top .status').text(data.issued.alias);
 						}
 					}
 					$(".close-all").fadeOut();
