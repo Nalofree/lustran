@@ -70,7 +70,7 @@ $(document).ready(function () {
     $(".setlocpin input[name=yourpin]").focus();
   });
 
-  $('.setlocpin-submit').click(function (e) {
+  $('.setlocpin').submit(function (e) {
     e.preventDefault();
     if ($(".setlocpin input[name=yourpin]").val()) {
       $(".close-all").fadeIn();
@@ -78,7 +78,7 @@ $(document).ready(function () {
         yourpin: $(".setlocpin input[name=yourpin]").val(),
         status: 'manager'
       }
-      var locId = $(this).attr('data-title');
+      var locId = $('.setlocpin-submit').attr('data-title');
       console.log(locId);
       $.ajax({
         url: '/pinauth',
@@ -113,9 +113,21 @@ $(document).ready(function () {
         }}
       });
     }else{
-      alert('Заполните поля');
+      alert('Введите ПИН');
     }
-  })
+  });
+
+  $('.setlocpin').keyup(function (e) {
+    if (e.keyCode == 13) {
+      e.preventDefault();
+      $('.setlocpin').submit();
+    }
+  });
+
+  $('.setlocpin-submit').click(function (e) {
+    e.preventDefault();
+    $('.setlocpin').submit();
+  });
 
   $( ".locations-table" ).on( "click", "div.edit-location", function() {
     // alert($(this).attr('data-title'));

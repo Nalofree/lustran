@@ -20,6 +20,10 @@ module.exports = function(sequelize, DataTypes) {
         type: DataTypes.INTEGER,
         defaultValue: 0
     },
+    refuse: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+    },
     orderId: DataTypes.INTEGER,
     processedId: DataTypes.INTEGER,
     spicdateId: DataTypes.INTEGER,

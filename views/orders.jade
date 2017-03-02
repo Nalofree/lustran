@@ -153,7 +153,7 @@ block content
                 header.order-header
                   .order-id
                     | заказ
-                    span= orders[i].number
+                    span.number= orders[i].number
                   //- a(href='/addorder/order-3').order-basket= orders[i].goods.length
                   a.btn.btn-sm.btn-success(href='/orders/order-'+orders[i].id, target='_blanket')
                     b= 'ОБЗОР'
@@ -162,6 +162,7 @@ block content
                     //- открыть
                     //- i.fa.fa-plus-circle(aria-hidden='true')
                 section.order-body
+                  span.location= orders[i].location.alias
                   ul.order-list
                     - if (orders[i].goods)
                       - for (var j=0;j<orders[i].goods.length;j++)
@@ -179,8 +180,13 @@ block content
                           header.order-list-item-header
                             span.badge.badge-pur= j+1
                             span.order-date.sep-dot= getReadebleDate(orders[i].goods[j].createdAt)
-                            span.order-name(title=orders[i].goods[j].name)= orders[i].goods[j].name
-                            span.order-name-copy.sep-dot(data-clipboard-text=orders[i].goods[j].name) &#9668; Копировать
+                            - if (orders[i].goods[j].refuse == 1)
+                              span.refuse ОТКАЗ
+                              span.order-name.short(title=orders[i].goods[j].name)= orders[i].goods[j].name
+                            - else
+                              span.order-name(title=orders[i].goods[j].name)= orders[i].goods[j].name
+                            span.order-name-copy.sep-dot(data-clipboard-text=orders[i].goods[j].name)
+                              i.fa.fa-files-o(aria-hidden="true")
                               span.copiedtooltip Скопировано
                             span.order-count.sep-dot
                               i= orders[i].goods[j].num
@@ -191,7 +197,7 @@ block content
                             - if ((spicdate.getTime() > inddate.getTime() || now.getTime() > inddate.getTime()) && orders[i].goods[j].postponed.statusval != 1)
                               span.order-float-date.red-text= getDateReadeble(orders[i].goods[j].inddate)
                             - else
-                              span.order-float-date= getDateReadeble(orders[i].goods[j].inddate)
+                              span.order-float-date= getDateReadeble(orders[i].goods[j].inddate)                            
                             .btn.btn-success.btn-xs.gethistory( data-title=orders[i].goods[j].id) История действий
                             a.remove-order-status(href='#', data-title=orders[i].goods[j].id)
                             br

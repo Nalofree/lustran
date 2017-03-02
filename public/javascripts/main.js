@@ -160,7 +160,7 @@ function getTimeReadebleYesterday(date){
 
 
 	$(".order-name").each(function () {
-		orderSortName($(this));
+		// orderSortName($(this));
 	})
 
 
@@ -336,6 +336,14 @@ $(document).ready(function(){
 							}
 						}else{
 							$('.remove-order-status[data-title='+removeGoodId+']').closest('li.order-list-item').removeClass('close-good');
+						}
+						console.log(data.good.refuse);
+						if (data.refusestatus == 1) {
+							$(".order-list-item[data-title="+data.good.id+"] .order-date").after("<span class='refuse'>ОТКАЗ</span>");
+							$(".order-list-item[data-title="+data.good.id+"] .order-name").addClass('short');
+						}else{
+							$(".order-list-item[data-title="+data.good.id+"] .refuse").remove();
+							$(".order-list-item[data-title="+data.good.id+"] .order-name").removeClass('short');
 						}
 					}
 					$(".close-all").fadeOut();
@@ -921,7 +929,10 @@ $(document).ready(function(){
 				$('input[name="goodid"]').val(goodid);
 				$(".addcomment input[name='yourpin']").val('');
 				$(".addcomment textarea[name='comment']").val('');
-				$(".addcomment input[name='yourpin']").focus();
+
+				setTimeout(function() {
+							  $(".addcomment textarea[name='comment']").focus();
+							}, 0);
 				$(".close-all").fadeOut();
 			},
 			error: function (data, status, error) {
@@ -954,7 +965,10 @@ $(document).ready(function(){
 						$('.history .table tbody').append('<tr><td>'+getTimeReadeble(new Date(data.action.createdAt)) +"</td><td>"+ data.action.user.name +"</td><td>"+ data.action.location.alias +'</td><td>'+ data.action.alias+'</td><td>'+ comment +'</td></tr>');
 						$(".addcomment input[name='yourpin']").val('');
 						$(".addcomment textarea[name='comment']").val('');
-						$(".addcomment input[name='yourpin']").focus();
+
+						setTimeout(function() {
+							  $(".addcomment textarea[name='comment']").focus();
+							}, 0);
 					}
 					$(".close-all").fadeOut();
 				},
@@ -993,7 +1007,10 @@ $(document).ready(function(){
 							$('.history .table tbody').append('<tr><td>'+getTimeReadeble(new Date(data.action.createdAt)) +"</td><td>"+ data.action.user.name +"</td><td>"+ data.action.location.alias +'</td><td>'+ data.action.alias+'</td><td>'+ comment +'</td></tr>');
 							$(".addcomment input[name='yourpin']").val('');
 							$(".addcomment textarea[name='comment']").val('');
-							$(".addcomment input[name='yourpin']").focus();
+
+							setTimeout(function() {
+							  $(".addcomment textarea[name='comment']").focus();
+							}, 0);
 						}
 						$(".close-all").fadeOut();
 					},

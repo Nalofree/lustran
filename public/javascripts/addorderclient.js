@@ -1,4 +1,19 @@
 $(document).ready(function () {
+
+  $("#neworderform").on('keyup','input[name=prepayment]', function (e) {
+    $(this).keyup(function () {
+      var text, newText;
+      text = $(this).val();
+      if (/^[0-9]+(\.?|\,?)[0-9]{0,2}$/g.test(text)) {
+        console.log(text);
+        newText = text.replace(/\,/, ".");
+        $(this).val(newText);
+      }else{
+        $(this).val(text.substring(0,text.length-1));
+      }
+    });
+  })
+
   var today = new Date();
   var dd = today.getDate();
   var mm = today.getMonth()+1; //January is 0!

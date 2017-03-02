@@ -30,7 +30,7 @@ link(rel='stylesheet', href='/stylesheets/printorder.css')
       th Плановая дата доставки
       th Предоплата
     - for (var i=0;i<order.goods.length;i++)
-      - itog = itog + parseInt(order.goods[i].prepay)
+      - itog = itog + parseFloat(order.goods[i].prepay)
       tr
         td= i+1
         td= order.goods[i].name + ", " + order.goods[i].vencode

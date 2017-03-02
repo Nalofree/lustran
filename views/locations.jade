@@ -38,7 +38,8 @@ block content
         label(for='yourpin')
         input(type='password',name='yourpin',placeholder='ПИН', required='required', autofocus).form-control
       .form-group
-        button.btn.btn-success.setlocpin-submit(type='submit') Подтвердить
+        input.btn.btn-success.setlocpin-submit(type='submit', role='submit', value='Подтвердить')
+        //- input(type='submit')
     
     from.editlocpin(method='post', name='requirepin', enctype="multipart/form-data")
       h3= "Подтвердите действие"

@@ -425,55 +425,112 @@ router.post('/rejectgood', function (req, res, next) {
 	models.users.findOne({
 		where: {
 			pin: req.body.yourpin,
-			status: 'manager'
+			// status: $or'manager'
+			$or: {
+				status: ['manager', 'saler']
+			}
 		}
 	}).then(function (user) {
 		if (user) {
-			var activestatus;
-			var aliastext;
-			if (req.body.reject == 1) {
-				activestatus = 0;
-				aliastext = 'Товар отменен';
-			}else{
-				activestatus = 1;
-				aliastext = 'Товар востановлен';
-			}
-			models.goods.update({
-				reject: req.body.reject,
-				active: activestatus
-			},{
-				where: {
-					id: req.body.goodid
+			if (user.status == 'manager') {
+				var activestatus;
+				var aliastext;
+				if (req.body.reject == 1) {
+					activestatus = 0;
+					aliastext = 'Товар отменен';
+				}else{
+					activestatus = 1;
+					aliastext = 'Товар востановлен';
 				}
-			}).then(function (goods) {
+				models.goods.update({
+					reject: req.body.reject,
+					active: activestatus
+				},{
+					where: {
+						id: req.body.goodid
+					}
+				}).then(function (goods) {
+					models.goods.findOne({
+						where: {
+							id: req.body.goodid
+						}
+					}).then(function (good) {
+						models.orders.findOne({
+							include: [models.goods],
+							where: {
+								id: good.orderId
+							}
+						}).then(function (order) {
+							var activeorder = 1;
+							for (var i = 0; i < order.goods.length; i++) {
+								if (order.goods[i].reject == 1 || order.goods[i].active == 0) {
+									activeorder = 0;
+								}else if (order.goods[i].reject == 0 || order.goods[i].active == 1){
+									activeorder = 1;
+									break;
+								}
+							}
+							console.log("activeorder: "+ activeorder);
+							models.orders.update({
+								active: activeorder
+							},{
+								where:{
+									id: order.id
+								}
+							}).then(function (updorder) {
+								models.actions.create({
+									locationId: req.cookies.location,
+									userId: user.id,
+									goodId: good.id,
+									statusval: ' ',
+									alias: aliastext,
+									comment: req.body.comment
+								}).then(function (action) {
+									res.send({good: good, order: order, err: false, activeorder: activeorder});
+								}).catch(function (err) {
+									res.send({err: err});
+							   	console.log(err);
+								});
+							}).catch(function (err) {
+								res.send({err: err});
+						   	console.log(err);
+							});
+						}).catch(function (err) {
+							res.send({err: err});
+				    	console.log(err);
+						});
+					}).catch(function (err) {
+						res.send({err: err});
+				    console.log(err);
+					});
+				}).catch(function (err) {
+					res.send({err: err});
+			    console.log(err);
+				});
+			}else if (user.status == 'saler') {
 				models.goods.findOne({
 					where: {
 						id: req.body.goodid
 					}
 				}).then(function (good) {
-					models.orders.findOne({
-						include: [models.goods],
-						where: {
-							id: good.orderId
+					if (good.reject == 1) {
+						res.send({err: 'Товар уже отменен'});
+					}else{
+						var aliastext, refusestatus;
+						if (good.refuse == 1) {
+							aliastext = "Товар восстановлен";
+							refusestatus = 0;
+						}else{
+							aliastext = "Покупатель отказался";
+							refusestatus = 1;
 						}
-					}).then(function (order) {
-						var activeorder = 1;
-						for (var i = 0; i < order.goods.length; i++) {
-							if (order.goods[i].reject == 1 || order.goods[i].active == 0) {
-								activeorder = 0;
-							}else if (order.goods[i].reject == 0 || order.goods[i].active == 1){
-								activeorder = 1;
-								break;
-							}
-						}
-						console.log("activeorder: "+ activeorder);
-						models.orders.update({
-							active: activeorder
+						models.goods.update({
+							refuse: refusestatus
 						},{
-							where:{
-								id: order.id
+							where: {
+								id: req.body.goodid
 							}
-						}).then(function (updorder) {
+						}).then(function () {
 							models.actions.create({
 								locationId: req.cookies.location,
 								userId: user.id,
@@ -482,29 +539,29 @@ router.post('/rejectgood', function (req, res, next) {
 								alias: aliastext,
 								comment: req.body.comment
 							}).then(function (action) {
-								res.send({good: good, order: order, err: false, activeorder: activeorder});
+								res.send({good: good, refusestatus: refusestatus, err: false});
 							}).catch(function (err) {
 								res.send({err: err});
-						   	console.log(err);
+								console.log(err);
 							});
 						}).catch(function (err) {
-							res.send({err: err});
-					   	console.log(err);
-						});
-					}).catch(function (err) {
-						res.send({err: err});
-			    	console.log(err);
-					});
+					    res.send({err: err});
+					    console.log(err);
+					  });
+					}
 				}).catch(function (err) {
-					res.send({err: err});
+			    res.send({err: err});
 			    console.log(err);
-				});
-			}).catch(function (err) {
-				res.send({err: err});
-		    console.log(err);
-			});
+			  });
+				// res.send({err: 'log'});
+			}else{
+				res.send({err: 'Недостаточно прав'});
+			}
+			// {
+			// 	res.send({err: 'log'});
+			// }
 		}else{
-			res.send({err: 'Неверный пин!'});
+			res.send({err: 'Неверный ПИН'});
 		}
 	}).catch(function (err) {
     res.send({err: err});

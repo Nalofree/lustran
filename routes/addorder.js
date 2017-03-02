@@ -244,7 +244,7 @@ router.get('/order-:orderid', function (req, res, next) {
   }).then(function (order) {
     var summ = 0;
     for (var i = 0; i < order.goods.length; i++) {
-      summ = summ + parseInt(order.goods[i].prepay);
+      summ = summ + parseFloat(order.goods[i].prepay);
     }
     res.render('printorder', {order: order, summ: rubles(summ)});
     // res.send(order);
