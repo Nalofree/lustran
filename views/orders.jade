@@ -92,6 +92,11 @@ block content
                         .checkbox.locationsall
                           label(for='locationsall')= "Со всех мест"
                           input(type='checkbox' id='locationsall', name='locationsall')
+                        ul.locationslist
+                          - for (var i = 0; i < locations.length; i++)
+                            li.checkbox.locationslist-item
+                              label(for='locationslist-'+locations[i].id)= locations[i].alias
+                              input(type='checkbox' id='locationslist-'+locations[i].id, name='locationslist', value=locations[i].id)
                       .dropdown.archive-period
                         .form-group
                           label(for='issued') Начало периода

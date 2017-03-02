@@ -224,7 +224,7 @@ router.get('/', function(req, res, next) {
   if (!req.cookies.location) {
     res.redirect('/locations');
   }
-	// console.log(req.query);
+	console.log(req.query);
 	var searchWhereGoods = {
 		$or: []
 	};
@@ -263,7 +263,7 @@ router.get('/', function(req, res, next) {
 
 	var lastStatus = false;
 
-	if (req.query.processed || req.query.oredered || req.query.postponed || req.query.callstatus || req.query.issued || req.query.spicdate || req.query.archive || req.query.locationsall) { //processed=&oredered=&postponed=&callstatus=&issued=&spicdate=on
+	if (req.query.processed || req.query.oredered || req.query.postponed || req.query.callstatus || req.query.issued || req.query.spicdate || req.query.archive || req.query.locationsall || req.query.locationslist) { //processed=&oredered=&postponed=&callstatus=&issued=&spicdate=on
 		// console.log("PROCESSED: " + req.query.processed);
 		lastStatus = true;
 		earchWhereOrders = {};
@@ -315,6 +315,17 @@ router.get('/', function(req, res, next) {
 		if (req.query.locationsall) {
 			searchWhereOrders.locationId = {
 				$ne: null
+			}
+		}
+		if (req.query.locationslist) {
+			var locListArr = [];
+			if (typeof(req.query.locationslist) == 'string') {
+				locListArr.push(req.query.locationslist);
+			}else{
+				locListArr = req.query.locationslist;
+			}
+			searchWhereOrders.locationId = {
+				$in: locListArr
 			}
 		}
 	}//else{
@@ -397,7 +408,13 @@ router.get('/', function(req, res, next) {
 		// if (lastStatus) {
 		//
 		// }
-    res.render('orders', {title: 'Заказы', goodcount: goodcount, orders: forders, orderscount: orderscount, ordersproc: ordersproc, ordersissued: ordersissued, ordersdef: ordersdef});
+		models.locations.findAll().then(function (locations) {
+			res.render('orders', {title: 'Заказы', goodcount: goodcount, orders: forders, orderscount: orderscount, ordersproc: ordersproc, ordersissued: ordersissued, ordersdef: ordersdef, locations: locations});
+		}).catch(function (err) {
+	    res.send(err);
+	    console.log('locations error: ' + err);
+	  });
+
     // res.send(forders);
   }).catch(function (err) {
     res.send(err);

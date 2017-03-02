@@ -13897,3 +13897,8 @@ span.order-name {
 span.order-name.short {
   width: 316px;
 }
+
+ul.locationslist li{
+  /*list-style: circle;*/
+  margin-left: 10px;
+}
