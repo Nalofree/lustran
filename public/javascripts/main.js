@@ -356,6 +356,7 @@ $(document).ready(function(){
 			});
 		}else{
 			alert("Заполните все поля!");
+			$(".close-all").fadeOut();
 		}
 	});
 
