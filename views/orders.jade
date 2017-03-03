@@ -261,6 +261,7 @@ block content
                                 - else
                                   - goodstatus = ''
                                 .order-status(class=goodstatus)
+                                  .text-muted.help-text Плановая дата поставки
                                   .order-status-body
                                     .status-top
                                       span.status= orders[i].goods[j].spicdate.statusval == null ? "--.--.--" : getDateReadeble(orders[i].goods[j].spicdate.statusval)
@@ -287,9 +288,8 @@ block content
                                       .form-group
                                         .row.action-row.choose-satus
                                           .col-sm-12
-                                            //- .form-group
-                                            input.form-control(name='status', type='date')
-                                            p.text-muted.help-text Плановая дата поставки
+                                            .form-group
+                                              input.form-control(name='status', type='date')
                                         .row.action-row
                                           .col-sm-12
                                             label.col-sm-12(for='comment') Комментарий

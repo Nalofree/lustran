@@ -13919,7 +13919,11 @@ ul.locationslist li{
 }
 
 .help-text {
-  font-size: 10px;
+  display: block;
+  position: absolute;
+  top: -20px;
+  font-size: 12px;
+  font-weight: 600;
   margin-bottom: 0;
   margin-top: 2px;
   padding: 0;
