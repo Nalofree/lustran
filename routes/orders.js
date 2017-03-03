@@ -202,8 +202,10 @@ router.get('/', function(req, res, next) {
 		if (req.query.archive) {
 			// searchWhereOrders.$or = [];
 			// searchWhereOrders.$or.push({reject: 1});
+			var endDate = new Date(req.query.endperiod);
+			endDate.setDate(endDate.getDate()+1);
 			var start = req.query.startperiod ? new Date(req.query.startperiod) : new Date(0);
-			var end = req.query.endperiod ? new Date(req.query.endperiod) : new Date();
+			var end = req.query.endperiod ? endDate : new Date();
 			// searchWhereOrders.$and.push({active: 0});
 			searchWhereOrders.active = 0;
 			searchWhereOrders.$and.push({createdAt: {$gte: start}});
