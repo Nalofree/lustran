@@ -13917,3 +13917,14 @@ ul.locationslist li{
   /*list-style: circle;*/
   margin-left: 10px;
 }
+
+.help-text {
+  font-size: 10px;
+  margin-bottom: 0;
+  margin-top: 2px;
+  padding: 0;
+}
+
+.spicdate-action > .form-group {
+  margin-bottom: 5 !important;
+}
