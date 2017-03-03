@@ -85,13 +85,13 @@ block content
                       .status-menu-check
                         .checkbox
                           label(for='spicdate')= "Уточненная дата"
-                          input(type='checkbox' id='spicdate', name='spicdate')
+                          input(type='checkbox' id='spicdate', name='spicdate', value=1)
                         .checkbox.archive
                           label(for='archive')= "Архивные заказы"
-                          input(type='checkbox' id='archive', name='archive')
+                          input(type='checkbox' id='archive', name='archive', value=1)
                         .checkbox.locationsall
                           label(for='locationsall')= "Со всех мест"
-                          input(type='checkbox' id='locationsall', name='locationsall')
+                          input(type='checkbox' id='locationsall', name='locationsall', value=1)
                         ul.locationslist
                           - for (var i = 0; i < locations.length; i++)
                             li.checkbox.locationslist-item

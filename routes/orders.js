@@ -2,109 +2,6 @@ var express = require('express');
 var router = express.Router();
 var models  = require('../models');
 
-// models.users.findOne({
-// 	where: {
-// 		status: "starter"
-// 	}
-// }).then(function (starter) {
-// 	if (starter) {
-// 		models.callstatus.create({
-// 			statusval: 0,
-// 			comment: ' ',
-// 			alias: 'Не звонили',
-// 			locationId: req.cookies.location,
-// 			userId: starter.id,
-// 			goodId: req.body.goodid
-// 		}).then(function (callstatus) {
-// 			models.issued.create({
-// 				statusval: 0,
-// 				comment: ' ',
-// 				alias: 'Не выдан',
-// 				locationId: req.cookies.location,
-// 				userId: starter.id,
-// 				goodId: req.body.goodid
-// 			}).then(function (issued) {
-// 				models.processed.create({
-// 					statusval: 0,
-// 					comment: ' ',
-// 					alias: 'Не обработан',
-// 					locationId: req.cookies.location,
-// 					userId: starter.id,
-// 					goodId: req.body.goodid
-// 				}).then(function (processed) {
-// 					models.spicdate.create({
-// 						comment: ' ',
-// 						locationId: req.cookies.location,
-// 						userId: starter.id,
-// 						goodId: req.body.goodid
-// 					}).then(function (spicdate) {
-// 						models.ordered.create({
-// 							statusval: 0,
-// 							comment: ' ',
-// 							alias: 'Не заказан',
-// 							locationId: req.cookies.location,
-// 							userId: starter.id,
-// 							goodId: req.body.goodid
-// 						}).then(function (ordered) {
-// 							models.postponed.create({
-// 								statusval: 0,
-// 								comment: ' ',
-// 								alias: 'Не отложен',
-// 								locationId: req.cookies.location,
-// 								userId: starter.id,
-// 								goodId: req.body.goodid
-// 							}).then(function (ordered) {
-// 								models.goods.update({
-// 									postponedId: postponed.id,
-// 									callstatusId: callstatus.id,
-// 									processedId: processed.id,
-// 									spicdateId: spicdate.id,
-// 									orderedId: ordered.id,
-// 									issuedId: issued.id
-// 								},{
-// 									where: {
-// 										id: req.body.goodid
-// 									}
-// 								}).then(function (good) {
-//
-//
-//
-// 								}).catch(function (err) {
-// 									res.send({err: err});
-// 									console.log('update goods',err);
-// 								});
-// 							}).catch(function (err) {
-// 								res.send({err: err});
-// 								console.log('update goods',err);
-// 							});
-// 						}).catch(function (err) {
-// 							res.send({err: err});
-// 							console.log('update goods',err);
-// 						});
-// 					}).catch(function (err) {
-// 						res.send({err: err});
-// 						console.log('update goods',err);
-// 					});
-// 				}).catch(function (err) {
-// 					res.send({err: err});
-// 					console.log('update goods',err);
-// 				});
-// 			}).catch(function (err) {
-// 				res.send({err: err});
-// 				console.log(err);
-// 			});
-// 		}).catch(function (err) {
-// 			res.send({err: err});
-// 			console.log(err);
-// 		});
-// 	}else{
-// 		res.send({err: 'Что-то пошло не так, обратитесь к администратору! / starter is not exist'});
-// 	}
-// }).catch(function (err) {
-// 	res.send({err: err});
-// 	console.log(err);
-// });
-
 function getDateSuperReadeble(date){
 	var readebleTime;//1998-02-03 22:23:00
 	var year = date.getFullYear();
@@ -671,7 +568,8 @@ router.post('/setprocessed', function (req, res, next) {
 										              goodId: req.body.goodid
 										            }).then(function (processed) {
 										              models.goods.update({
-										                processedId: processed.id
+										                processedId: processed.id,
+																		active: 1
 										              },{
 										                where: {
 										                  id: req.body.goodid
@@ -693,7 +591,32 @@ router.post('/setprocessed', function (req, res, next) {
 											                  alias: alias,
 											                  comment: req.body.comment
 																			}).then(function (action) {
-																				res.send({processed: processed, postponed: postponed, callstatus: callstatus, issued: issued, spicdate: spicdate, ordered: ordered, user: user, pcount: goods.length});
+																				models.orders.findAll({
+																					include: [{
+																						model: models.goods,
+																			      as: 'goods',
+																					}],
+																					where: {
+																						'$goods.id$': req.body.goodid
+																					}
+																				}).then(function (order) {
+																					models.orders.update({
+																						active: 1
+																					},{
+																						where: {
+																							id: order[0].id
+																						}
+																					}).then(function (order) {
+																						console.log('order updated');
+																						res.send({processed: processed, postponed: postponed, callstatus: callstatus, issued: issued, spicdate: spicdate, ordered: ordered, user: user, pcount: goods.length});
+																					}).catch(function (err) {
+																						res.send({err: err});
+														                console.log(err);
+																					});
+																				}).catch(function (err) {
+																					res.send({err: err});
+													                console.log(err);
+																				});
 																			}).catch(function (err) {
 																				res.send({err: err});
 												                console.log(err);
@@ -893,7 +816,32 @@ router.post('/setspicdate', function (req, res, next) {
 				                  alias: 'Обработан',
 				                  comment: ' '
 												}).then(function (action) {
-													res.send({spicdate: spicdate, user: user});
+													models.orders.findAll({
+														include: [{
+															model: models.goods,
+															as: 'goods',
+														}],
+														where: {
+															'$goods.id$': req.body.goodid
+														}
+													}).then(function (order) {
+														models.orders.update({
+															active: 1
+														},{
+															where: {
+																id: order[0].id
+															}
+														}).then(function (order) {
+															console.log('order updated');
+															res.send({spicdate: spicdate, user: user});
+														}).catch(function (err) {
+															res.send({err: err});
+															console.log(err);
+														});
+													}).catch(function (err) {
+														res.send({err: err});
+														console.log(err);
+													});
 												}).catch(function (err) {
 													res.send({err: err});
 					                console.log(err);
@@ -940,6 +888,35 @@ router.post('/setspicdate', function (req, res, next) {
     console.log(err);
   })
 });
+
+/*
+models.orders.findAll({
+	include: [{
+		model: models.goods,
+		as: 'goods',
+	}],
+	where: {
+		'$goods.id$': req.body.goodid
+	}
+}).then(function (order) {
+	models.orders.update({
+		active: 1
+	},{
+		where: {
+			id: order[0].id
+		}
+	}).then(function (order) {
+		console.log('order updated');
+		res.send({spicdate: spicdate, user: user});
+	}).catch(function (err) {
+		res.send({err: err});
+		console.log(err);
+	});
+}).catch(function (err) {
+	res.send({err: err});
+	console.log(err);
+});
+*/
 
 router.post('/setordered', function (req, res, next) {
   // res.send('response');
@@ -1010,6 +987,7 @@ router.post('/setordered', function (req, res, next) {
 							            }).then(function (ordered) {
 							              models.goods.update({
 							                orderedId: ordered.id,
+															active: 1
 							              },{
 							                where: {
 							                  id: req.body.goodid
@@ -1023,7 +1001,32 @@ router.post('/setordered', function (req, res, next) {
 																alias: alias,
 																comment: req.body.comment
 															}).then(function (action) {
-																res.send({ordered: ordered, postponed: postponed, callstatus: callstatus, issued: issued, user: user});
+																models.orders.findAll({
+																	include: [{
+																		model: models.goods,
+																		as: 'goods',
+																	}],
+																	where: {
+																		'$goods.id$': req.body.goodid
+																	}
+																}).then(function (order) {
+																	models.orders.update({
+																		active: 1
+																	},{
+																		where: {
+																			id: order[0].id
+																		}
+																	}).then(function (order) {
+																		console.log('order updated');
+																		res.send({ordered: ordered, postponed: postponed, callstatus: callstatus, issued: issued, user: user});
+																	}).catch(function (err) {
+																		res.send({err: err});
+																		console.log(err);
+																	});
+																}).catch(function (err) {
+																	res.send({err: err});
+																	console.log(err);
+																});
 															}).catch(function (err) {
 																res.send({err: err});
 																console.log(err);
@@ -1179,7 +1182,8 @@ router.post('/setpostponed', function (req, res, next) {
 											models.goods.update({
 					              postponedId: postponed.id,
 												callstatusId: callstatus.id,
-												issuedId: issued.id
+												issuedId: issued.id,
+												active: 1
 					            },{
 					              where: {
 					                id: req.body.goodid
@@ -1212,7 +1216,32 @@ router.post('/setpostponed', function (req, res, next) {
 															]
 														}
 												  }).then(function (pgoods) {
-												  	res.send({postponed: postponed, callstatus: callstatus, issued: issued, user: user, pcount: pgoods.length});
+														models.orders.findAll({
+															include: [{
+																model: models.goods,
+																as: 'goods',
+															}],
+															where: {
+																'$goods.id$': req.body.goodid
+															}
+														}).then(function (order) {
+															models.orders.update({
+																active: 1
+															},{
+																where: {
+																	id: order[0].id
+																}
+															}).then(function (order) {
+																console.log('order updated');
+																res.send({postponed: postponed, callstatus: callstatus, issued: issued, user: user, pcount: pgoods.length});
+															}).catch(function (err) {
+																res.send({err: err});
+																console.log(err);
+															});
+														}).catch(function (err) {
+															res.send({err: err});
+															console.log(err);
+														});
 												  }).catch(function (err) {
 														res.send({err: err});
 														console.log(err);
@@ -1350,7 +1379,8 @@ router.post('/setpostponed', function (req, res, next) {
 																processedId: processed.id,
 																spicdateId: spicdate.id,
 																orderedId: ordered.id,
-																issuedId: issued.id
+																issuedId: issued.id,
+																active: 1
 									            },{
 									              where: {
 									                id: req.body.goodid
@@ -1384,7 +1414,33 @@ router.post('/setpostponed', function (req, res, next) {
 																		}
 																  }).then(function (pgoods) {
 																  	// res.send({postponed: postponed, callstatus: callstatus, issued: issued, user: user, pcount: pgoods.length});
-																		res.send({postponed: postponed, callstatus: callstatus, issued: issued, processed: processed, spicdate: spicdate, ordered: ordered, user: user, pcount: pgoods.length});
+																		models.orders.findAll({
+																			include: [{
+																				model: models.goods,
+																				as: 'goods',
+																			}],
+																			where: {
+																				'$goods.id$': req.body.goodid
+																			}
+																		}).then(function (order) {
+																			models.orders.update({
+																				active: 1
+																			},{
+																				where: {
+																					id: order[0].id
+																				}
+																			}).then(function (order) {
+																				console.log('order updated');
+																				res.send({postponed: postponed, callstatus: callstatus, issued: issued, processed: processed, spicdate: spicdate, ordered: ordered, user: user, pcount: pgoods.length});
+																			}).catch(function (err) {
+																				res.send({err: err});
+																				console.log(err);
+																			});
+																		}).catch(function (err) {
+																			res.send({err: err});
+																			console.log(err);
+																		});
+
 																  }).catch(function (err) {
 																		res.send({err: err});
 																		console.log(err);
@@ -1499,7 +1555,8 @@ router.post('/setcallstatus', function (req, res, next) {
 					              goodId: req.body.goodid
 					            }).then(function (callstatus) {
 					              models.goods.update({
-					                callstatusId: callstatus.id
+					                callstatusId: callstatus.id,
+													active: 1
 					              },{
 					                where: {
 					                  id: req.body.goodid
@@ -1513,7 +1570,34 @@ router.post('/setcallstatus', function (req, res, next) {
 														alias: alias,
 														comment: req.body.comment
 													}).then(function (action) {
-														res.send({callstatus: callstatus, issued: issued, user: user});
+
+														models.orders.findAll({
+															include: [{
+																model: models.goods,
+																as: 'goods',
+															}],
+															where: {
+																'$goods.id$': req.body.goodid
+															}
+														}).then(function (order) {
+															models.orders.update({
+																active: 1
+															},{
+																where: {
+																	id: order[0].id
+																}
+															}).then(function (order) {
+																console.log('order updated');
+																res.send({callstatus: callstatus, issued: issued, user: user});
+															}).catch(function (err) {
+																res.send({err: err});
+																console.log(err);
+															});
+														}).catch(function (err) {
+															res.send({err: err});
+															console.log(err);
+														});
+
 													}).catch(function (err) {
 														res.send({err: err});
 														console.log(err);
@@ -1617,7 +1701,8 @@ router.post('/setcallstatus', function (req, res, next) {
 					              goodId: req.body.goodid
 					            }).then(function (callstatus) {
 					              models.goods.update({
-					                callstatusId: callstatus.id
+					                callstatusId: callstatus.id,
+													active: 1
 					              },{
 					                where: {
 					                  id: req.body.goodid
@@ -1631,7 +1716,34 @@ router.post('/setcallstatus', function (req, res, next) {
 														alias: alias,
 														comment: req.body.comment
 													}).then(function (action) {
-														res.send({callstatus: callstatus, issued: issued, user: user});
+
+														models.orders.findAll({
+															include: [{
+																model: models.goods,
+																as: 'goods',
+															}],
+															where: {
+																'$goods.id$': req.body.goodid
+															}
+														}).then(function (order) {
+															models.orders.update({
+																active: 1
+															},{
+																where: {
+																	id: order[0].id
+																}
+															}).then(function (order) {
+																console.log('order updated');
+																res.send({callstatus: callstatus, issued: issued, user: user});
+															}).catch(function (err) {
+																res.send({err: err});
+																console.log(err);
+															});
+														}).catch(function (err) {
+															res.send({err: err});
+															console.log(err);
+														});
+
 													}).catch(function (err) {
 														res.send({err: err});
 														console.log(err);

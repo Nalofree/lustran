@@ -1,3 +1,58 @@
+// Велосипедостроение MODE ON
+
+$.fn.form = function() {
+    var formData = {};
+    this.find('[name]').each(function() {
+        formData[this.name] = this.value;
+    })
+    return formData;
+};
+
+$.fn.serializeObject = function() {
+    var data = {};
+    $.each( this.serializeArray(), function( key, obj ) {
+        var a = obj.name.match(/(.*?)\[(.*?)\]/);
+        if(a !== null)
+        {
+            var subName = new String(a[1]);
+            var subKey = new String(a[2]);
+            if( !data[subName] ) {
+              data[subName] = { };
+              data[subName].length = 0;
+            };
+            if (!subKey.length) {
+                subKey = data[subName].length;
+            }
+            if( data[subName][subKey] ) {
+              if( $.isArray( data[subName][subKey] ) ) {
+                data[subName][subKey].push( obj.value );
+              } else {
+                data[subName][subKey] = { };
+                data[subName][subKey].push( obj.value );
+              };
+            } else {
+                data[subName][subKey] = obj.value;
+            };
+            data[subName].length++;
+        } else {
+            var keyName = new String(obj.name);
+            if( data[keyName] ) {
+                if( $.isArray( data[keyName] ) ) {
+                    data[keyName].push( obj.value );
+                } else {
+                    data[keyName] = { };
+                    data[keyName].push( obj.value );
+                };
+            } else {
+                data[keyName] = obj.value;
+            };
+        };
+    });
+    return data;
+};
+
+// Велосипедостроение MODE OFF
+
 //убъем автокомплит на пинах
 
 $(document).ready(function () {
@@ -26,7 +81,7 @@ function getCookie(cname) {
 	return "";
 }
 
-function removeCookie(cookie_name){
+	function removeCookie(cookie_name){
 	var cookie_date = new Date ();
 	cookie_date.setTime (cookie_date.getTime() - 1);
 	document.cookie = cookie_name += "=; expires=" + cookie_date.toGMTString();
@@ -163,7 +218,63 @@ function getTimeReadebleYesterday(date){
 		// orderSortName($(this));
 	})
 
+// var s = $('form').serializeArray();
 
+$("form[name='filter']").ready(function () {
+	if (getCookie('filterdata')) {
+		// console.log('filtr saved');
+		var filtrobj = JSON.parse(getCookie('filterdata'));
+		$.each(filtrobj, function(key, val) {
+			// if ($("#"+key).attr('type') == '') {
+			//
+			// }
+			$("select#"+key).val(val);
+			$("input#"+key+"[type='checkbox']").attr("checked",true);
+			$("input#"+key+"[type='data']").val(val);
+			console.log(key+": "+val);
+		  // $("#" + this).text("My id is " + this + ".");
+			//   return (this != "four"); // will stop running to skip "five"
+		});
+	}
+});
+
+$("form[name='filter'] input[type='submit']").click(function (e) {
+	e.preventDefault();
+	// var s = $("form[name='filter']").serializeObject();
+	// var s = $("form[name='filter']").form();
+	var formArray = [];
+	var s = $("form[name='filter']").serializeArray();
+	for (var i = 0; i < s.length; i++) {
+		if (i>0) {
+			if (s[i].name == s[i-1].name) {
+				formArray[s[i-1].name] = [];
+				formArray[s[i-1].name].push(s[i-1].value);
+				formArray[s[i-1].name].push(s[i].value);
+			}else{
+				formArray[s[i].name] = s[i].value;
+			}
+		}else{
+			formArray[s[i].name] = s[i].value;
+		}
+	}
+	// console.log(s);
+	// console.log(formArray);
+	var formObj = $.extend({}, formArray);
+	// console.log(formObj);
+	var formJSON = JSON.stringify(formObj);
+	// console.log(formJSON);
+	setCookie('filterdata',formJSON,365);
+	// console.log(getCookie('filterdata'));
+	 $("form[name='filter']").submit();
+});
+
+$(".resetfiltr a").click(function (e) {
+	e.preventDefault();
+	// console.log(getCookie('filterdata'));
+	removeCookie('filterdata');
+	// console.log(getCookie('filterdata'));
+	location.href = '/orders';
+})
 
 $("select[name='processed']").change(function () {
 	if ($(this).val() == 1 || $(this).val() == 2) {
