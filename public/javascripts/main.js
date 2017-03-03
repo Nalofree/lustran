@@ -458,6 +458,7 @@ $(document).ready(function(){
 							$('.remove-order-status[data-title='+removeGoodId+']').closest('li.order-list-item').addClass('close-good');
 							if (data.activeorder == 0) {
 								$('.remove-order-status[data-title='+removeGoodId+']').closest('.order').fadeOut();
+                alert("Заказ перенесен в архив!")
 							}
 						}else{
 							$('.remove-order-status[data-title='+removeGoodId+']').closest('li.order-list-item').removeClass('close-good');
