@@ -291,34 +291,49 @@ $(".resetfiltr a").click(function (e) {
 })
 
 $("select[name='processed']").change(function () {
-	if ($(this).val() == 1 || $(this).val() == 2) {
+	// if ($(this).val() == 1 || $(this).val() == 2) {
 		$("select[name='oredered']").val('0');
 		$("select[name='postponed']").val('0');
 		$("select[name='callstatus']").val('0');
 		$("select[name='issued']").val('0');
-	}
+	// }
 });
 
 $("select[name='oredered']").change(function () {
-	if ($(this).val() == 1 || $(this).val() == 2) {
-		$("select[name='postponed']").val();
+	// if ($(this).val() == 1 || $(this).val() == 2) {
+    // $("select[name='processed']").val('');
+		$("select[name='postponed']").val('0');
 		$("select[name='callstatus']").val('0');
 		$("select[name='issued']").val('0');
-	}
+	// }
 });
 
 $("select[name='postponed']").change(function () {
-	if ($(this).val() == 1 || $(this).val() == 2) {
+	// if ($(this).val() == 1 || $(this).val() == 2) {
+    // $("select[name='processed']").val('');
+    // $("select[name='oredered']").val('');
 		$("select[name='callstatus']").val('0');
 		$("select[name='issued']").val('0');
-	}
+	// }
 });
 
 $("select[name='callstatus']").change(function () {
-	if ($(this).val() == 1 || $(this).val() == 2) {
+	// if ($(this).val() == 1 || $(this).val() == 2) {
+    // $("select[name='processed']").val('');
+    // $("select[name='oredered']").val('');
+    // $("select[name='postponed']").val('');
 		$("select[name='issued']").val('0');
-	}
+	// }
 });
+
+// $("select[name='issued']").change(function () {
+// 	// if ($(this).val() == 1 || $(this).val() == 2) {
+//     $("select[name='processed']").val('');
+//     $("select[name='oredered']").val('');
+//     $("select[name='postponed']").val('');
+// 		$("select[name='callstatus']").val('');
+// 	// }
+// });
 
 $(document).ready(function(){
 
