@@ -1,11 +1,11 @@
 link(rel='stylesheet', href='/stylesheets/style.css')
 link(rel='stylesheet', href='/stylesheets/printorder.css')
 - var getReadebleDateTime = function(date) {
--   readebleDate = date.getDate() + '.' + date.getMonth()+1 + '.' + date.getFullYear() +' '+ ('00' + date.getHours()).slice(-2) +':'+ ('00' + date.getMinutes()).slice(-2)
+-   readebleDate = date.getDate() + '.' + (parseInt(date.getMonth(),10)+1) + '.' + date.getFullYear() +' '+ ('00' + date.getHours()).slice(-2) +':'+ ('00' + date.getMinutes()).slice(-2)
 -   return readebleDate;
 - }
 - var getReadebleDate = function(date) {
--   readebleDate = date.getDate() + '.' + date.getMonth()+1 + '.' + date.getFullYear()
+-   readebleDate = date.getDate() + '.' + (parseInt(date.getMonth(),10)+1) + '.' + date.getFullYear()
 -   return readebleDate;
 - }
 .printorder-wrap
