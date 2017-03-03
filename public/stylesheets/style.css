@@ -13847,6 +13847,8 @@ form[name='filter'] {
   padding: 3px 5px;
   border-radius: 3px;
   cursor: pointer;
+  float: right;
+  /*width: 40px;*/
 }
 
 .order-name-copy:hover{
@@ -13879,23 +13881,36 @@ span.order-date {
   float: left;
 }
 
+span.order-count {
+  float: right;
+  width: 150px;
+}
+
 .badge.badge-pur {
   float: left;
 }
 
-span.order-name {
+span.order-float-date {
   position: relative;
   display: inline-block;
   overflow: hidden;
-  width: 400px;
+  width: 300px;
   height: 20px;
-  text-overflow: ellipsis;
-  float: left;
+  float: right;
+  /*text-align: right;*/
   /*padding-top: 10px;*/
 }
 
+span.order-name {
+  display: inline-block;
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 30px;
+}
+
 span.order-name.short {
-  width: 316px;
+  max-width: 316px;
 }
 
 ul.locationslist li{
