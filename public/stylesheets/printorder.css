@@ -1,6 +1,7 @@
 body {
   background-color: #fff;
   text-align: center;
+  font-size: 24px;
 }
 .printorder-wrap {
   display: inline-block;;
@@ -9,11 +10,11 @@ body {
 }
 
 .table {
-  font-size: 12px;
+  font-size: 18px;
 }
 
 .small{
-  font-size: 12px;
+  font-size: 18px;
 }
 
 .left {
