@@ -51,11 +51,18 @@ router.post('/', function (req, res, nex) {
   // res.send("response responsed text");
   models.users.findOne({
     where: {
-      pin: req.body.yourpin
+      pin: req.body.yourpin,
+      $or: [{
+        status: "manager"
+      },{
+        status: "saler"
+      },{
+        status: "supplier"
+      }]
     }
   }).then(function (user) {
     if (user) {
-      if ((user.status == "manager" || user.status == "saler" || user.status == "supplier") && (user.active == 1)) {
+      if (user.active == 1) {
         models.users.findOne({
           where: {
             status: 'starter'

@@ -202,8 +202,8 @@ block content
                             - if ((spicdate.getTime() > inddate.getTime() || now.getTime() > inddate.getTime()) && orders[i].goods[j].postponed.statusval != 1)
                               span.order-float-date.red-text= getDateReadeble(orders[i].goods[j].inddate)
                             - else
-                              span.order-float-date= getDateReadeble(orders[i].goods[j].inddate)                            
-                            .btn.btn-success.btn-xs.gethistory( data-title=orders[i].goods[j].id) История действий
+                              span.order-float-date= getDateReadeble(orders[i].goods[j].inddate)
+                            .btn.btn-success.btn-xs.gethistory( data-title=orders[i].goods[j].id) История
                             a.remove-order-status(href='#', data-title=orders[i].goods[j].id)
                             br
                           .container-fluid

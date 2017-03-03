@@ -29,7 +29,9 @@ $(document).ready(function () {
   var goods = [];
   var order = {};
   $(".new-order input[name='name']:first").focus();
-  $('.new-order-form').submit(function(e) {
+
+  // $('.new-order-form').submit(function(e) {
+  $(".setorder-button").click(function(e) {
     e.preventDefault();
     var nowdate = new Date();
     var nowtime = nowdate.getTime();
@@ -101,6 +103,10 @@ $(document).ready(function () {
           // $(".new-order-form").reset();
           if (data.err) {
             alert(data.err);
+            $(".addorder input[name=yourpin]").val('');
+            // $(".new-order input[name='name']:first").focus();
+            goods = [];
+            order = {};
           }else{
             document.getElementById("neworderform").reset();
             $(".new-order-id").text(parseInt($(".new-order-id").text())+1);
@@ -115,11 +121,15 @@ $(document).ready(function () {
             order = {};
           }
           $(".close-all").fadeOut();
+          $(".addorder input[name=yourpin]").val('');
+          $(".new-order input[name='name']:first").focus();
         },
         error: function (data, status, error) {
           console.log(data, status, error);
           $('.close-layout').fadeOut();
           $(".close-all").fadeOut();
+          $(".addorder input[name=yourpin]").val('');
+          $(".new-order input[name='name']:first").focus();
         }
       });
     }else{
@@ -131,6 +141,7 @@ $(document).ready(function () {
     if (e.keyCode == 13) {
       e.preventDefault();
       $(".addorder").submit();
+
     }else if (e.keyCode == 27) {
       $('from.addorder').fadeOut(100,function () {
         $(".new-order input[name='name']:first").focus();
@@ -139,10 +150,18 @@ $(document).ready(function () {
     }
   });
 
+  $('.addorder-submit').click(function (e) {
+    e.preventDefault();
+    $(".addorder").submit();
+  });
+
   $('.new-order-form').keyup(function (e) {
     if (e.keyCode == 13) {
       e.preventDefault();
-      $('.new-order-form').submit();
+      // $('.new-order-form').submit();
+      $(".setorder-button").click();
     }
   });
+
+
 });

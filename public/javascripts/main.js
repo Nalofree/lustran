@@ -1,3 +1,4 @@
+
 // Велосипедостроение MODE ON
 
 $.fn.form = function() {
@@ -238,14 +239,13 @@ $("form[name='filter']").ready(function () {
       if (key == "locationslist") {
         if (typeof(val) == 'string') {
           $("input#locationslist-"+val+"[name='locationslist']").attr("checked",true);
-          // console.log(  $("input#locationslist-"+val+"[name='locationslist']"));
         }else{
           for (var i = 0; i < val.length; i++) {
             $("input#locationslist-"+val[i]+"[name='locationslist']").attr("checked",true);
           }
         }
       }
-			console.log(key+": "+val);
+			// console.log(key+": "+val);
 		  // $("#" + this).text("My id is " + this + ".");
 			//   return (this != "four"); // will stop running to skip "five"
 		});
