@@ -224,14 +224,17 @@ function getTimeReadebleYesterday(date){
 // Hacker mode ON
 
 var mikrotimefield = document.getElementById("mikrotimefield");
-var nowtimevar = function () {
-  var now = new Date();
-  return now;
+if (mikrotimefield) {
+  var nowtimevar = function () {
+    var now = new Date();
+    return now;
+  }
+  setInterval(function () {
+    mikrotimefield.value = nowtimevar().getTime();
+    // console.log(nowtimevar().getTime());
+  },500);
 }
-setInterval(function () {
-  mikrotimefield.value = nowtimevar().getTime();
-  console.log(nowtimevar().getTime());
-},500);
+
 
 //Hacker mode OFF
 
@@ -266,16 +269,16 @@ $("form[name='filter']").ready(function () {
 	}
 });
 
-$("#locationsall").change(function () {
-  if ($(this).prop('checked')) {
-    $(".locationslist input[type='checkbox']").each(function () {
-      $(this).prop('checked', true);
-    });
-  }else{
-    $(".locationslist input[type='checkbox']").each(function () {
-      $(this).prop('checked', false);
-    });
-  }
+// $("#locationsall").change(function () {
+//   if ($(this).prop('checked')) {
+//     $(".locationslist input[type='checkbox']").each(function () {
+//       $(this).prop('checked', true);
+//     });
+//   }else{
+//     $(".locationslist input[type='checkbox']").each(function () {
+//       $(this).prop('checked', false);
+//     });
+//   }
 });
 
 $("form[name='filter'] input[type='submit']").click(function (e) {
