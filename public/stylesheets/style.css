@@ -13616,19 +13616,19 @@ label.check {
 
 .history {
   display: none;
-  position: absolute;
+  position: fixed;
   color: #000;
   background-color: #fff;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0,0,0,0.4);
   width: 800px;
-  height: 600px;
+  height: 450px;
   overflow-y: scroll;
   padding: 10px;
   text-align: center;
   left: 50%;
   margin-left: -400px;
-  top: 100px;
+  top: 50px;
   z-index: 9999;
 }
 
@@ -13743,7 +13743,7 @@ form[name='filter'] {
   color: #fff;
 }
 
-.status-menu-dropdown .dropdown select.changed {
+/*.status-menu-dropdown .dropdown select.changed {
   background-color: #36C786;
   border-color: #36C786;
   color: #fff;
@@ -13752,7 +13752,7 @@ form[name='filter'] {
 .status-menu-dropdown .dropdown select.changed option {
   background-color: #fff;
   color: #444;
-}
+}*/
 
 .order-header .btn + .btn {
   margin-top: 5px;
