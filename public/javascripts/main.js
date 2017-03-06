@@ -290,112 +290,57 @@ $(".resetfiltr a").click(function (e) {
 	location.href = '/orders';
 });
 
+  function filterGreen() {
+    $("form[name='filter'] select").each(function () {
+      if ( ($(this).val() && $(this).val() !== '0' && $(this).val() !== '2') || ($(this).val() === '2' && $(this).attr("name") === 'processed') ) {
+        $(this).css("background-color","#36c786");
+        $(this).css("border-color","#36c786");
+        $(this).css("color","#fff");
+        $(this).find("option").css("background-color","#fff");
+        $(this).find("option").css("border-color","#fff");
+        $(this).find("option").css("color","#444");
+      }else{
+        $(this).css("background-color","#fff");
+        $(this).css("border-color","#fff");
+        $(this).css("color","#444");
+      }
+    });
+  }
+
   $("input[type='checkbox']#spicdate").change(function () {
     if ($(this).prop('checked') && $("form[name='filter'] select[name='processed']").val() != '2') {
       $("form[name='filter'] select[name='processed']").val('');
-      $("form[name='filter'] select[name='processed']").css('background-color', "#FFF");
-      $("form[name='filter'] select[name='processed']").css('border-color', "#FFF");
-      $("form[name='filter'] select[name='processed']").css('color', "#444");
+      filterGreen();
     }
   });
 
   if ($("input[type='checkbox']#spicdate").prop('checked')) {
     $("form[name='filter'] select[name='processed']").val('');
-    $("form[name='filter'] select[name='processed']").css('background-color', "#FFF");
-    $("form[name='filter'] select[name='processed']").css('border-color', "#FFF");
-    $("form[name='filter'] select[name='processed']").css('color', "#444");
+    filterGreen();
   }
 
   $("form[name='filter'] select[name='processed']").change(function () {
-    if ($(this).val() == 1 || $(this).val() == 0) {
+    if ($(this).val() == '1' || $(this).val() == '0') {
       $("input[type='checkbox']#spicdate").prop("checked", false);
+      filterGreen();
     }
   });
 
   $("form[name='filter'] select").change(function () {
-    if ($(this).val() != 0  || (($(this).attr('name') == 'postponed' && $(this).val() != 2) || ($(this).attr('name') == 'callstatus' && $(this).val() != 2))) {
-      $(this).css('background-color', "#36C786");
-      $(this).css('border-color', "#36C786");
-      $(this).css('color', "#FFF");
-      $(this).find('option').css('background-color', "#FFF");
-      $(this).find('option').css('border-color', "#FFF");
-      $(this).find('option').css('color', "#444");
-    }else{
-      $(this).css('background-color', "#FFF");
-      $(this).css('border-color', "#FFF");
-      $(this).css('color', "#444");
-    }
     if($(this).val()) {
       var prevSelect = $(this).closest(".dropdown").prevAll().find("select");
       var nextSelect = $(this).closest(".dropdown").nextAll().find("select");
       prevSelect.each(function () {
-        if ($(this).val() == 0  || ($(this).attr('name') == 'processed' && $(this).val() == 1) || ($(this).attr('name') == 'postponed' && $(this).val() == 2) || ($(this).attr('name') == 'callstatus' && $(this).val() == 2)) {
+        if ($(this).val() == '0'  || (($(this).attr('name') == 'processed' && $(this).val() == '1') || ($(this).attr('name') == 'postponed' && $(this).val() == '2') || ($(this).attr('name') == 'callstatus' && $(this).val() == '2'))) {
           $(this).val('');
-          $(this).css('background-color', "#FFF");
-          $(this).css('border-color', "#FFF");
-          $(this).css('color', "#444");
-        }else{
-          $(this).css('background-color', "#36C786");
-          $(this).css('border-color', "#36C786");
-          $(this).css('color', "#FFF");
-          $(this).find('option').css('background-color', "#FFF");
-          $(this).find('option').css('border-color', "#FFF");
-          $(this).find('option').css('color', "#444");
         }
       });
       nextSelect.each(function () {
         $(this).val('0');
-        $(this).css('background-color', "#FFF");
-        $(this).css('border-color', "#FFF");
-        $(this).css('color', "#444");
       });
     }
+    filterGreen();
   });
-
-// $("select[name='processed']").change(function () {
-// 	// if ($(this).val() == 1 || $(this).val() == 2) {
-// 		$("select[name='oredered']").val('0');
-// 		$("select[name='postponed']").val('0');
-// 		$("select[name='callstatus']").val('0');
-// 		$("select[name='issued']").val('0');
-// 	// }
-// });
-//
-// $("select[name='oredered']").change(function () {
-// 	// if ($(this).val() == 1 || $(this).val() == 2) {
-//     // $("select[name='processed']").val('');
-// 		$("select[name='postponed']").val('0');
-// 		$("select[name='callstatus']").val('0');
-// 		$("select[name='issued']").val('0');
-// 	// }
-// });
-//
-// $("select[name='postponed']").change(function () {
-// 	// if ($(this).val() == 1 || $(this).val() == 2) {
-//     // $("select[name='processed']").val('');
-//     // $("select[name='oredered']").val('');
-// 		$("select[name='callstatus']").val('0');
-// 		$("select[name='issued']").val('0');
-// 	// }
-// });
-//
-// $("select[name='callstatus']").change(function () {
-// 	// if ($(this).val() == 1 || $(this).val() == 2) {
-//     // $("select[name='processed']").val('');
-//     // $("select[name='oredered']").val('');
-//     // $("select[name='postponed']").val('');
-// 		$("select[name='issued']").val('0');
-// 	// }
-// });
-
-// $("select[name='issued']").change(function () {
-// 	// if ($(this).val() == 1 || $(this).val() == 2) {
-//     $("select[name='processed']").val('');
-//     $("select[name='oredered']").val('');
-//     $("select[name='postponed']").val('');
-// 		$("select[name='callstatus']").val('');
-// 	// }
-// });
 
 $(document).ready(function(){
 
@@ -455,15 +400,15 @@ $(document).ready(function(){
 		$(".status-menu-dropdown").toggleClass('show');
 	});
 
-	$('.status-menu-dropdown .dropdown select').change(function () {
-		// e.preventDefault();
-		$(this).val()
-		if ($(this).val()) {
-			$(this).addClass('changed');
-		}else{
-			$(this).removeClass('changed');
-		}
-	});
+	// $('.status-menu-dropdown .dropdown select').change(function () {
+	// 	// e.preventDefault();
+	// 	$(this).val()
+	// 	if ($(this).val()) {
+	// 		$(this).addClass('changed');
+	// 	}else{
+	// 		$(this).removeClass('changed');
+	// 	}
+	// });
 
 	var thisAction = $(".action");
 
