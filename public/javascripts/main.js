@@ -262,7 +262,8 @@ $("form[name='filter']").ready(function () {
           }
         }
       }
-			// console.log(key+": "+val);
+			console.log(key+": "+val);
+      console.log(getCookie('filterdata'));
 		  // $("#" + this).text("My id is " + this + ".");
 			//   return (this != "four"); // will stop running to skip "five"
 		});
@@ -279,7 +280,7 @@ $("form[name='filter']").ready(function () {
 //       $(this).prop('checked', false);
 //     });
 //   }
-});
+// });
 
 $("form[name='filter'] input[type='submit']").click(function (e) {
 	e.preventDefault();
