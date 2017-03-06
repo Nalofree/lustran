@@ -196,7 +196,12 @@ router.get('/', function(req, res, next) {
 			// searchWhereOrders.$and.push({'$goods.issued.statusval$': parseInt(req.query.issued)});
 		}
 		if (req.query.spicdate) {
-			searchWhereOrders.$and.push({'$goods.spicdate.statusval$': {$ne: null}});
+			if (req.query.spicdate == 1) {
+				searchWhereOrders.$and.push({'$goods.spicdate.statusval$': {$ne: null}});
+			}else{
+				searchWhereOrders.$and.push({'$goods.spicdate.statusval$': {$is: null}});
+			}
+			// searchWhereOrders.$and.push({'$goods.spicdate.statusval$': {$ne: null}});
 			searchWhereOrders.$and.push({active: 1});
 		}
 		if (req.query.archive) {

@@ -12771,7 +12771,7 @@ h2 {
   width: 168px;
 }
 /* line 102, ../sass/_components.sass */
-.status-menu-dropdown .dropdown:nth-child(3) {
+.status-menu-dropdown .dropdown:nth-child(3), .status-menu-dropdown .dropdown:nth-child(6), .status-menu-dropdown .dropdown:nth-child(9) {
   margin-right: 0;
 }
 /* line 104, ../sass/_components.sass */
@@ -13931,4 +13931,14 @@ ul.locationslist li{
 
 .spicdate-action > .form-group {
   margin-bottom: 5 !important;
+}
+
+form[name='filter'] hr {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+form[name='filter'] label {
+  font-size: 13px;
+  font-weight: lighter;
 }

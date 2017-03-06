@@ -221,6 +221,20 @@ function getTimeReadebleYesterday(date){
 
 // var s = $('form').serializeArray();
 
+// Hacker mode ON
+
+var mikrotimefield = document.getElementById("mikrotimefield");
+var nowtimevar = function () {
+  var now = new Date();
+  return now;
+}
+setInterval(function () {
+  mikrotimefield.value = nowtimevar().getTime();
+  console.log(nowtimevar().getTime());
+},500);
+
+//Hacker mode OFF
+
 $("form[name='filter']").ready(function () {
 	if (getCookie('filterdata')) {
 		// console.log('filtr saved');
@@ -252,6 +266,18 @@ $("form[name='filter']").ready(function () {
 	}
 });
 
+$("#locationsall").change(function () {
+  if ($(this).prop('checked')) {
+    $(".locationslist input[type='checkbox']").each(function () {
+      $(this).prop('checked', true);
+    });
+  }else{
+    $(".locationslist input[type='checkbox']").each(function () {
+      $(this).prop('checked', false);
+    });
+  }
+});
+
 $("form[name='filter'] input[type='submit']").click(function (e) {
 	e.preventDefault();
 	// var s = $("form[name='filter']").serializeObject();
@@ -279,7 +305,7 @@ $("form[name='filter'] input[type='submit']").click(function (e) {
 	// console.log(formJSON);
 	setCookie('filterdata',formJSON,365);
 	// console.log(getCookie('filterdata'));
-	 $("form[name='filter']").submit();
+	$("form[name='filter']").submit();
 });
 
 $(".resetfiltr a").click(function (e) {
