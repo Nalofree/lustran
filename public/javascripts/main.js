@@ -262,12 +262,13 @@ $("form[name='filter']").ready(function () {
           }
         }
       }
-			console.log(key+": "+val);
-      console.log(getCookie('filterdata'));
+			// console.log(key+": "+val);
+
 		  // $("#" + this).text("My id is " + this + ".");
 			//   return (this != "four"); // will stop running to skip "five"
 		});
 	}
+  console.log(getCookie('filterdata'));
 });
 
 // $("#locationsall").change(function () {
@@ -304,6 +305,7 @@ $("form[name='filter'] input[type='submit']").click(function (e) {
 	// console.log(s);
 	// console.log(formArray);
 	var formObj = $.extend({}, formArray);
+  console.log(formObj);
 	// console.log(formObj);
 	var formJSON = JSON.stringify(formObj);
 	// console.log(formJSON);
@@ -1027,6 +1029,7 @@ $(document).ready(function(){
 							$(".issued[data-title="+goodid+"]").closest('.order-list-item').addClass('end-good');
 							$(".ordersissued").text(data.pcount);
 							if (data.activeorder == 0) {
+                alert('Заказ перенесен в архив!');
 								$(".issued[data-title="+goodid+"]").closest('.order').fadeOut();
 							}
 						}else{
