@@ -68,7 +68,7 @@ block content
                             option(value='0') Не заказан
                       .dropdown
                         .form-group
-                          label(for='postponed') Фактическое посещение
+                          label(for='postponed') Фактическое поступление
                           select.form-control(name='postponed', id='postponed')
                             option(value='')
                             option(value='1') Отложен
@@ -88,7 +88,7 @@ block content
                           select.form-control(name='issued', id='issued')
                             option(value='')
                             option(value='1') Выдан
-                            option(value='0') Не выдан                      
+                            option(value='0') Не выдан
                       .dropdown
                         .archive-period
                           .form-group
@@ -120,7 +120,7 @@ block content
                             li.checkbox.locationslist-item
                               input(type='checkbox' id='locationslist-'+locations[i].id, name='locationslist', value=locations[i].id)
                               label(for='locationslist-'+locations[i].id)= locations[i].alias
-                              //- input(type='checkbox' id='locationslist-'+locations[i].id, name='locationslist', value=locations[i].id)                      
+                              //- input(type='checkbox' id='locationslist-'+locations[i].id, name='locationslist', value=locations[i].id)
                       .dropdown
                         .form-group
                           input.btn.btn-default(type="submit", value="Применить")
@@ -205,10 +205,10 @@ block content
                               span.order-name.short(title=orders[i].goods[j].name)= orders[i].goods[j].name
                             - else
                               span.order-name(title=orders[i].goods[j].name)= orders[i].goods[j].name
-                            
-                              
+
+
                             .btn.btn-success.btn-xs.gethistory( data-title=orders[i].goods[j].id) История
-                            
+
                             - var inddate = new Date(orders[i].goods[j].inddate)
                             - var spicdate = new Date(orders[i].goods[j].spicdate.statusval)
                             - var now = new Date()
@@ -221,7 +221,7 @@ block content
                               |  шт
                             span.order-name-copy.sep-dot(data-clipboard-text=orders[i].goods[j].name)
                               i.fa.fa-files-o(aria-hidden="true")
-                              span.copiedtooltip Скопировано            
+                              span.copiedtooltip Скопировано
                             a.remove-order-status(href='#', data-title=orders[i].goods[j].id)
                             br
                           .container-fluid
