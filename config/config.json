@@ -1,8 +1,8 @@
 {
   "development": {
     "username": "root",
-    "password": null,
-    "database": "database_development",
+    "password": "root",
+    "database": "lustran_db",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
@@ -14,10 +14,10 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "b816998663244e",
-    "password": "b23209db",
-    "database": "heroku_a5572bedbd1fbe3",
-    "host": "eu-cdbr-west-01.cleardb.com",
+    "username": "root",
+    "password": "root",
+    "database": "lustran_db",
+    "host": "127.0.0.1",
     "dialect": "mysql"
   }
 }

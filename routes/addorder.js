@@ -4,6 +4,11 @@ var models  = require('../models');
 var rubles = require('rubles').rubles;
 // console.log(rubles(12.10));
 
+// Залепить уведомление для юзеров о появлении заказа
+
+// Отчет по фнесенным суммам и выданым заказам
+// Сколько предоплаты и сколько оплечено
+
 router.get('/', function (req, res, next) {
   if (!req.session.isauth) {
 		res.redirect('/login');

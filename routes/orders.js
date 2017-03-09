@@ -747,23 +747,6 @@ router.post('/setprocessed', function (req, res, next) {
 });
 
 router.post('/setspicdate', function (req, res, next) {
-  // res.send('response');
-	// models.goods.findOne({
-	// 	include: [models.processed, models.spicdate, models.ordered, models.postponed, models.callstatus, models.issued],
-	// 	where: {
-	// 		id: req.body.goodid
-	// 	}
-	// }).then(function (good) {
-	// 	if (good.postponed.statusval != 1) {
-	//
-	// 	}else{
-	// 		res.send()
-	// 	}
-	//
-	// }).catch(function (err) {
-	// 	console.log(err);
-	// 	res.send({err: err});
-	// });
   models.users.findOne({
     where: {
       pin: req.body.yourpin
