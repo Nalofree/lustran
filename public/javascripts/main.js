@@ -181,6 +181,14 @@ function getDateSuperReadeble(date){
 			year;
 			return readebleTime;
 };
+
+var getReadebleDateIrkTime = function(date) {
+  date.setHours(date.getUTCHours() + 8);
+  var month = date.getMonth() + 1;
+  readebleDate = date.getDate() + '.' + month + '.' + date.getFullYear() +' '+ ('00' + date.getHours()).slice(-2) +':'+ ('00' + date.getMinutes()).slice(-2)
+  return readebleDate;
+}
+
 function getTimeReadebleYesterday(date){
 	var readebleTime;//1998-02-03 22:23:00
 			date.setDate(date.getDate()-1);

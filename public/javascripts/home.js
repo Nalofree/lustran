@@ -25,11 +25,11 @@ $(document).ready(function () {
               $('.checking-in-list p').remove();
               // var datetime = new Date(data.check.createdAt)
               // console.log(datetime.getFullYear());
-              var io = (data.check.io) ? "Ушёл" : "Пришёл";
+              var io = (data.check.io) ? "Ушёл" : "Пришёл"; getReadebleDateIrkTime
               if (data.check.late == 1) {
-                $(".checking-in-list li:first").before('<li class="checking-in-list-item lateness"><span class="checking-in-date">'+getTimeReadeble(new Date(data.check.createdAt))+'</span><span class="checking-in-location sep-dot">'+data.location.alias+'</span><span class="checking-in-person">'+data.user.name+'</span><span>'+io+'</span></li>');
+                $(".checking-in-list li:first").before('<li class="checking-in-list-item lateness"><span class="checking-in-date">'+getReadebleDateIrkTime(new Date(data.check.createdAt))+'</span><span class="checking-in-location sep-dot">'+data.location.alias+'</span><span class="checking-in-person">'+data.user.name+'</span><span>'+io+'</span></li>');
               }else{
-                $(".checking-in-list li:first").before('<li class="checking-in-list-item"><span class="checking-in-date">'+getTimeReadeble(new Date(data.check.createdAt))+'</span><span class="checking-in-location sep-dot">'+data.location.alias+'</span><span class="checking-in-person">'+data.user.name+'</span><span>'+io+'</span></li>');
+                $(".checking-in-list li:first").before('<li class="checking-in-list-item"><span class="checking-in-date">'+getReadebleDateIrkTime(new Date(data.check.createdAt))+'</span><span class="checking-in-location sep-dot">'+data.location.alias+'</span><span class="checking-in-person">'+data.user.name+'</span><span>'+io+'</span></li>');
               }
               if (data.check.io) {
                 $('.check-pin input[name=yourpin]').val('');

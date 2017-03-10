@@ -32,8 +32,8 @@ router.get('/', function(req, res) {
   var startDate = prenow.setMinutes(0);
   var endDate = now.setHours(23);
   var endDate = now.setMinutes(59);
-  console.log(startDate);
-  console.log(endDate);
+  // console.log(startDate);
+  // console.log(endDate);
   models.checks.findAll({
     include: [ models.users, models.locations ],
     where: {
@@ -106,10 +106,19 @@ router.post('/', function(req, res, next) {
               res.send({err: 'Отметка об уходе уже существует, снова отметиться можео завтра'});
             }
           }else{
-            openhours = location.opentime.split(':')[0].slice(-1);
+            openhours = location.opentime.split(':')[0];
+						openminutes = location.opentime.split(':')[1];
             // res.send(openhours);
+						// console.log(openhours);
+						var rightNowTime = new Date();
+						var neededTime = new Date();
+						neededTime = neededTime.setHours(openhours, openminutes, 0);
+						// neededTime = neededTime.setMinutes(openminutes);
+						console.log(new Date(neededTime));
+						rightNowTime = rightNowTime.getTime();
+						// console.log(now.getUTCHours+8);
             var late = 0;
-            if ((now.getUTCHours+8 > openhours) || (now.getUTCHours+8 == openhours && now.getUTCMinutes > 0)) { /* Тут нужно для каждого магазина нужно установть timezone и её пробавлять к УТЦшным временам, но мы же торопимся */
+            if (rightNowTime > neededTime) { /* Тут нужно для каждого магазина нужно установть timezone и её пробавлять к УТЦшным временам, но мы же торопимся */
               late = 1;
             }else{
               late = 0;
