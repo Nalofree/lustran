@@ -198,7 +198,7 @@ block content
                         li.order-list-item(class=danger, data-title=orders[i].goods[j].id)
                           // удаленный заказ staus-removed
                           header.order-list-item-header
-                            span.badge.badge-pur= j+1
+                            span.badge.badge-pur.badge-num= j+1
                             span.order-date.sep-dot= getReadebleDate(orders[i].goods[j].createdAt)
                             - if (orders[i].goods[j].refuse == 1)
                               span.refuse ОТКАЗ
