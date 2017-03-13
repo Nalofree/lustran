@@ -11,11 +11,12 @@ router.post('/', function(req, res, next) {
   // res.render('login', {title:'Войти в систему'});
   if (req.body.pass === 'Kz1tqeesMz') {
     req.session.isauth = '1';
+    req.cookies.isauth = '1';
     // res.redirect('/');
   }else{
     req.session.isauth = false;
   }
-  res.send({isauth: req.session.isauth});
+  res.send({isauth: req.cookies.isauth});
 });
 
 module.exports = router;
