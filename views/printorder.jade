@@ -13,7 +13,7 @@ link(rel='stylesheet', href='/stylesheets/printorder.css')
   .row
     .col-md-8.col-sm-8.col-lg-8.col-xs-8
       h3= "Заказ № " + order.number + " от " + getReadebleDate(order.createdAt)
-    .col-md-4.col-sm-4.col-lg-4.col-xs-4#barcode(data-title=order.number)
+    .col-md-4.col-sm-4.col-lg-4.col-xs-4#barcode(data-title=order.number+"0")
       //- img(src="http://placehold.it/200x50", alt="alt")
   hr
   p.small.left= "Исполнитель: ИП Бобров Александр Алексеевич, ИНН 030903342269, тел. 8(3952)94-08-40"
