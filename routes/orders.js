@@ -132,6 +132,7 @@ router.get('/', function(req, res, next) {
 	};
 	if (req.query.search) {
 		var searchstring = req.query.search;
+		searchstring = searchstring.replace(/^0000/, "");
 		console.log(searchstring);
 	  // searchstring = searchstring.replace(/[/.,!?;]*/g, '');
 	  // searchstring = searchstring.replace(/[\s]+/g," ");
