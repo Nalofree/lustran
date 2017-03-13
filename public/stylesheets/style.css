@@ -6523,11 +6523,11 @@ a.label:hover, a.label:focus {
 .badge {
   display: inline-block;
   min-width: 10px;
-  padding: 3px 7px;
+  /*padding: 3px 7px;*/
   font-size: 12px;
   font-weight: bold;
   color: #fff;
-  line-height: 1;
+  /*line-height: 1;*/
   vertical-align: middle;
   white-space: nowrap;
   text-align: center;
@@ -12893,6 +12893,7 @@ span.location {
   padding: 5px;
   border-radius: 5px;
   background-color: #fff;
+  /*width: 90%;*/
 }
 /* line 181, ../sass/_components.sass */
 .order-list-item.status-removed {
@@ -12906,6 +12907,8 @@ span.location {
 .order-list-item .order-list-item-header {
   position: relative;
   margin-bottom: 5px;
+  display: flex;
+  height: 35px;
 }
 /* line 187, ../sass/_components.sass */
 .order-list-item .order-list-item-header span {
@@ -12913,9 +12916,9 @@ span.location {
   font-weight: 700;
 }
 /* line 190, ../sass/_components.sass */
-.order-list-item .order-list-item-header span:first-child {
+/*.order-list-item .order-list-item-header span:first-child {
   margin: 0;
-}
+}*/
 /* line 192, ../sass/_components.sass */
 .order-list-item .order-list-item-header span:nth-child(2) {
   margin-left: 6px;
@@ -12925,6 +12928,7 @@ span.location {
 .order-list-item .order-list-item-header .order-count i {
   font-style: normal;
 }
+
 /* line 199, ../sass/_components.sass */
 .order-list-item .order-list-item-header .order-count::before {
   content: "Кол-во: ";
@@ -12958,15 +12962,19 @@ span.location {
 .sep-dot::after {
   content: "";
   position: absolute;
-  top: 6px;
+  top: 10px;
   right: -13px;
   font: normal normal normal 5px/1 FontAwesome;
 }
 
 /* line 226, ../sass/_components.sass */
 .badge-pur {
+  display: inline-block;
   background-color: #513b56;
   color: #fff;
+  height: 22px;
+  line-height: 22px;
+  min-width: 22px;
 }
 
 /* line 229, ../sass/_components.sass */
@@ -13831,8 +13839,12 @@ form[name='filter'] {
 }*/
 
 .gethistory {
-  float: right;
+  /*float: right;*/
   margin-right: 30px;
+  height: 22px;
+  line-height: 22px;
+  padding: 0 5px;
+  text-align: center;
 }
 
 .archive-period {
@@ -13844,10 +13856,14 @@ form[name='filter'] {
   font-weight: 300;
   background-color: #ccc;
   color: #fff;
-  padding: 3px 5px;
+  /*padding: 3px 5px;*/
+  width: 22px;
+  text-align: center;
   border-radius: 3px;
   cursor: pointer;
-  float: right;
+  height: 22px;
+  line-height: 22px;
+  /*float: right;*/
   /*width: 40px;*/
 }
 
@@ -13872,17 +13888,17 @@ form[name='filter'] {
 .refuse {
   color: #f00;
   width: 60px;
-  float: left;
+  /*float: left;*/
 }
 
 span.order-date {
   display: inline-block;
   width: 80px;
-  float: left;
+  /*float: left;*/
 }
 
 span.order-count {
-  float: right;
+  /*float: right;*/
   width: 150px;
 }
 
@@ -13894,23 +13910,33 @@ span.order-float-date {
   position: relative;
   display: inline-block;
   overflow: hidden;
-  width: 300px;
-  height: 20px;
-  float: right;
+  /*width: 300px;*/
+  /*height: 20px;*/
+  /*float: right;*/
   /*text-align: right;*/
   /*padding-top: 10px;*/
 }
 
 span.order-name {
-  display: inline-block;
-  max-width: 400px;
+  flex: 1;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  height: 30px;
+  max-width: 400px;
+  min-width: 0;
+  flex-grow: 1;
+  /*display: inline-block;
+  max-width: 400px;
+  /*max-width: 400px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-grow: 1;*/
+  /*height: 30px;*/
 }
 
 span.order-name.short {
-  max-width: 316px;
+  max-width: 240px;
 }
 
 ul.locationslist li{

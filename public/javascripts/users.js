@@ -59,9 +59,9 @@ $(document).ready(function () {
     $(".dellocpin").fadeOut();
     $(".banuserpin").fadeOut();
     // $('from.addorder').fadeOut();
-    $('from.addorder').fadeOut(100,function () {
-      $(".new-order input[name='name']:first").focus();
-    });
+    // $('from.addorder').fadeOut(100,function () {
+    //   $(".new-order input[name='name']:first").focus();
+    // });
     $('.getuserinfo').fadeOut();
     $('.userinfo').fadeOut();
     $('.action').fadeOut();

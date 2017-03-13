@@ -205,10 +205,12 @@ block content
                               span.order-name.short(title=orders[i].goods[j].name)= orders[i].goods[j].name
                             - else
                               span.order-name(title=orders[i].goods[j].name)= orders[i].goods[j].name
-
-
-                            .btn.btn-success.btn-xs.gethistory( data-title=orders[i].goods[j].id) История
-
+                            span.order-name-copy(data-clipboard-text=orders[i].goods[j].name)
+                              i.fa.fa-files-o(aria-hidden="true")
+                              span.copiedtooltip Скопировано
+                            span.order-count
+                              i= orders[i].goods[j].num
+                              |  шт
                             - var inddate = new Date(orders[i].goods[j].inddate)
                             - var spicdate = new Date(orders[i].goods[j].spicdate.statusval)
                             - var now = new Date()
@@ -216,12 +218,7 @@ block content
                               span.order-float-date.red-text= getDateReadeble(orders[i].goods[j].inddate)
                             - else
                               span.order-float-date= getDateReadeble(orders[i].goods[j].inddate)
-                            span.order-count
-                              i= orders[i].goods[j].num
-                              |  шт
-                            span.order-name-copy.sep-dot(data-clipboard-text=orders[i].goods[j].name)
-                              i.fa.fa-files-o(aria-hidden="true")
-                              span.copiedtooltip Скопировано
+                            .btn.btn-success.btn-xs.gethistory( data-title=orders[i].goods[j].id) История
                             a.remove-order-status(href='#', data-title=orders[i].goods[j].id)
                             br
                           .container-fluid

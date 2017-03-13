@@ -77,6 +77,14 @@ $(document).ready(function () {
     }
   });
 
+  $(".close-layout").click(function () {
+    $('from.addorder').fadeOut(100,function () {
+      $(".new-order input[name='name']:first").focus();
+      goods = [];
+      order = {};
+    });
+  })
+
   $(".addorder").submit(function (e) {
     e.preventDefault();
     // $(".addorder input[name=yourpin]").val('');
@@ -130,6 +138,8 @@ $(document).ready(function () {
           $(".close-all").fadeOut();
           $(".addorder input[name=yourpin]").val('');
           $(".new-order input[name='name']:first").focus();
+          goods = [];
+          order = {};
         }
       });
     }else{

@@ -128,7 +128,7 @@ router.get('/', function(req, res, next) {
 	var searchWhereOrders = {
 		$or: [],
 		active: 1,
-		locationId: req.cookies.location
+		// locationId: req.cookies.location
 	};
 	if (req.query.search) {
 		var searchstring = req.query.search;

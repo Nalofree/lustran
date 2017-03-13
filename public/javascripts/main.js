@@ -1136,7 +1136,7 @@ $(document).ready(function(){
 		e.preventDefault();
 		if ($(".addcomment input[name='yourpin']").val() && $(".addcomment textarea[name='comment']").val()) {
 			$(".close-all").fadeIn();
-			data = {
+			var data = {
 				yourpin: $(".addcomment input[name='yourpin']").val(),
 				comment: $(".addcomment textarea[name='comment']").val(),
 				goodid: $(".addcomment input[name='goodid']").val()
