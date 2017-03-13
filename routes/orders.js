@@ -331,7 +331,8 @@ router.post('/getgoodhistiry', function (req,res,next) {
     include: [models.users,models.locations],
     where: {
       goodId: req.body.goodid
-    }
+    },
+		order: 'createdAt ASC'
   };
 	models.actions.findAll(whereobj).then(function (actions) {
 		res.send({actions: actions});
@@ -1303,7 +1304,7 @@ router.post('/setpostponed', function (req, res, next) {
 	              console.log('postponed',err);
 	            });
 	          }else{
-	            res.send({err: 'Незаказыннй товар отложить нельзя!'});
+	            res.send({err: 'Незаказанный товар отложить нельзя!'});
 	          }
           }else if(req.body.statusval == 2){
             alias = 'Есть деффект';
