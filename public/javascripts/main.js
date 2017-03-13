@@ -1132,7 +1132,7 @@ $(document).ready(function(){
 		});
 	});
 
-	$(".history .addcomment-submit").click(function (e) {
+	$(".addcomment").submit(function (e) {
 		e.preventDefault();
 		if ($(".addcomment input[name='yourpin']").val() && $(".addcomment textarea[name='comment']").val()) {
 			$(".close-all").fadeIn();
@@ -1153,14 +1153,14 @@ $(document).ready(function(){
 					}else{
 						var comment = data.action.comment == null ? '' : data.action.comment
 						$('.history .table tbody').append('<tr><td>'+getTimeReadeble(new Date(data.action.createdAt)) +"</td><td>"+ data.action.user.name +"</td><td>"+ data.action.location.alias +'</td><td>'+ data.action.alias+'</td><td>'+ comment +'</td></tr>');
-						$(".addcomment input[name='yourpin']").val('');
-						$(".addcomment textarea[name='comment']").val('');
 
-						setTimeout(function() {
-							  $(".addcomment textarea[name='comment']").focus();
-							}, 0);
+
+						// setTimeout(function() {
+						// 	  $(".addcomment textarea[name='comment']").focus();
+						// 	}, 0);
 					}
 					$(".close-all").fadeOut();
+
 				},
 				error: function (data, status, error) {
 					console.log(data, status, error);
@@ -1171,50 +1171,15 @@ $(document).ready(function(){
 		}else{
 			alert("3аполните все поля");
 		}
+    $(".addcomment input[name='yourpin']").val('');
+    $(".addcomment textarea[name='comment']").val('');
 	});
 
-	$(".history").keyup(function (e) {
-		if ( e.which == 13 ) {
-	    e.preventDefault();
-			if ($(".addcomment input[name='yourpin']").val() && $(".addcomment textarea[name='comment']").val()) {
-				$(".close-all").fadeIn();
-				data = {
-					yourpin: $(".addcomment input[name='yourpin']").val(),
-					comment: $(".addcomment textarea[name='comment']").val(),
-					goodid: $(".addcomment input[name='goodid']").val()
-				}
-				$.ajax({
-					url: "/orders/addcomment",
-					type: "POST",
-					data: data,
-					success: function (data, status, error) {
-						console.log(data, status, error);
-						if (data.err) {
-							alert(data.err);
-							console.log(data.err);
-						}else{
-							var comment = data.action.comment == null ? '' : data.action.comment
-							$('.history .table tbody').append('<tr><td>'+getTimeReadeble(new Date(data.action.createdAt)) +"</td><td>"+ data.action.user.name +"</td><td>"+ data.action.location.alias +'</td><td>'+ data.action.alias+'</td><td>'+ comment +'</td></tr>');
-							$(".addcomment input[name='yourpin']").val('');
-							$(".addcomment textarea[name='comment']").val('');
-
-							setTimeout(function() {
-							  $(".addcomment textarea[name='comment']").focus();
-							}, 0);
-						}
-						$(".close-all").fadeOut();
-					},
-					error: function (data, status, error) {
-						console.log(data, status, error);
-						$(".close-all").fadeOut();
-					}
-				});
-
-			}else{
-				alert("3аполните все поля");
-			}
-	  }
-	});
+	// $(".history").keyup(function (e) {
+	// 	if ( e.which == 13 ) {
+	//      $(".addcomment").submit();
+	//   }
+	// });
 
 	//Search
 
