@@ -157,6 +157,12 @@ router.get('/', function(req, res, next) {
 		var searchstring = req.query.tel;
 		console.log(searchstring);
 		searchWhereOrders.customerphone = {$like: '%'+searchstring+'%'};
+	}else{
+		searchWhereGoods = {};
+		searchWhereOrders = {
+			locationId: req.cookies.location,
+			active: 1
+		};
 	}
 
 	var lastStatus = false;
