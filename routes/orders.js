@@ -432,7 +432,7 @@ router.post('/rejectgood', function (req, res, next) {
 					res.send({err: err});
 			    console.log(err);
 				});
-			}else if (user.status == 'saler') {
+			}else if (user.status == 'saler' || user.status == 'supplier') {
 				models.goods.findOne({
 					where: {
 						id: req.body.goodid
