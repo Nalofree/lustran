@@ -118,6 +118,7 @@ router.post('/', function(req, res, next) {
 						rightNowTime = rightNowTime.getTime();
 						neededTime = new Date(neededTime);
 						neededTime = neededTime.getTime();
+						console.log(rightNowTime+" "+neededTime);
 						// console.log(now.getUTCHours+8);
             var late = 0;
             if (rightNowTime > neededTime) { /* Тут нужно для каждого магазина нужно установть timezone и её пробавлять к УТЦшным временам, но мы же торопимся */
@@ -131,7 +132,7 @@ router.post('/', function(req, res, next) {
               late: late,
               io: 0
             }).then(function (check) {
-              res.send({check: check, err: false, user: user, location: location});
+              res.send({check: check, err: false, user: user, location: location, rightNowTime: rightNowTime, neededTime: neededTime});
             }).catch(function (err) {
               console.log(err);
               res.send({err: err});
