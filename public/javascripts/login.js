@@ -12,6 +12,7 @@ $(document).ready(function () {
         success: function (data, status, error) {
           console.log(data, status, error);
           if (data.isauth) {
+            setCookie('isauth', '1', 365)
             window.location = '/';
           }else{
             alert('Неверный пароль!');

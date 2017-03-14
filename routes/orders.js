@@ -148,7 +148,7 @@ router.get('/', function(req, res, next) {
 	}else{
 		searchWhereGoods = {};
 		searchWhereOrders = {
-			locationId: req.cookies.location,
+			// locationId: req.cookies.location,
 			active: 1
 		};
 	}
