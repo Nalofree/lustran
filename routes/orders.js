@@ -143,12 +143,14 @@ router.get('/', function(req, res, next) {
 		searchWhereOrders.$or.push({number: {$like: '%'+searchstring+'%'}});
 		// searchWhereOrders.$or.push({customerphone: {$like: '%'+searchstring+'%'}});
 		searchWhereOrders.$or.push({customername: {$like: '%'+searchstring+'%'}});
+		searchWhereOrders.$or.push({'$goods.active$': {$ne: null}});
 		// }
 		// console.log(searchWhereGoods.$or);
 	}else if (req.query.tel) {
 		var searchstring = req.query.tel;
 		console.log(searchstring);
 		searchWhereOrders.customerphone = {$like: '%'+searchstring+'%'};
+		searchWhereOrders.$or.push({'$goods.active$': {$ne: null}});
 	}else{
 		searchWhereGoods = {};
 		searchWhereOrders = {
