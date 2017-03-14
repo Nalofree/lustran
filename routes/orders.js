@@ -351,7 +351,7 @@ router.post('/rejectgood', function (req, res, next) {
 			pin: req.body.yourpin,
 			// status: $or'manager'
 			$or: {
-				status: ['manager', 'saler']
+				status: ['manager', 'saler', 'supplier']
 			}
 		}
 	}).then(function (user) {
@@ -431,7 +431,7 @@ router.post('/rejectgood', function (req, res, next) {
 					res.send({err: err});
 			    console.log(err);
 				});
-			}else if (user.status == 'saler' || user.status == 'suppler') {
+			}else if (user.status == 'saler' || user.status == 'supplier') {
 				models.goods.findOne({
 					where: {
 						id: req.body.goodid
