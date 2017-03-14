@@ -112,7 +112,7 @@ router.post('/', function(req, res, next) {
 						// console.log(openhours);
 						var rightNowTime = new Date();
 						var neededTime = new Date();
-						neededTime = neededTime.setHours(openhours, openminutes, 0);
+						neededTime = neededTime.setHours(openhours - 8, openminutes, 0);
 						// neededTime = neededTime.setMinutes(openminutes);
 						console.log(new Date(neededTime));
 						rightNowTime = rightNowTime.getTime();
