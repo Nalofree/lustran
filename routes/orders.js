@@ -145,15 +145,7 @@ router.get('/', function(req, res, next) {
 		searchWhereOrders.$or.push({customername: {$like: '%'+searchstring+'%'}});
 		// }
 		// console.log(searchWhereGoods.$or);
-	}else{
-		searchWhereGoods = {};
-		searchWhereOrders = {
-			// locationId: req.cookies.location,
-			active: 1
-		};
-	}
-
-	if (req.query.tel) {
+	}else if (req.query.tel) {
 		var searchstring = req.query.tel;
 		console.log(searchstring);
 		searchWhereOrders.customerphone = {$like: '%'+searchstring+'%'};
@@ -164,6 +156,8 @@ router.get('/', function(req, res, next) {
 			active: 1
 		};
 	}
+
+
 
 	var lastStatus = false;
 
