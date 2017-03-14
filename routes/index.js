@@ -23,7 +23,7 @@ router.get('/', function(req, res) {
 	if (!req.cookies.location) {
     res.redirect('/locations');
   }
-	if (!req.session.isauth) {
+	if (!req.cookies.isauth) {
 		res.redirect('/login');
 	}
   var now = new Date();

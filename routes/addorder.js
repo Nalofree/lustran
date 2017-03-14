@@ -10,7 +10,7 @@ var rubles = require('rubles').rubles;
 // Сколько предоплаты и сколько оплечено
 
 router.get('/', function (req, res, next) {
-  if (!req.session.isauth) {
+  if (!req.cookies.isauth) {
 		res.redirect('/login');
 	}
   if (!req.cookies.location) {

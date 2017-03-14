@@ -115,7 +115,7 @@ router.use(function (req, res, next) {
 
 /* GET orders listing. */
 router.get('/', function(req, res, next) {
-	if (!req.session.isauth) {
+	if (!req.cookies.isauth) {
 		res.redirect('/login');
 	}
   if (!req.cookies.location) {

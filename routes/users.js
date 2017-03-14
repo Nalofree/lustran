@@ -4,7 +4,7 @@ var models  = require('../models');
 // var Sequelize = require('sequelize');
 
 router.get('/', function (req,res,next) {
-  if (!req.session.isauth) {
+  if (!req.cookies.isauth) {
 		res.redirect('/login');
 	}
   models.users.findAll({
@@ -104,7 +104,7 @@ router.post('/updateuser', function(req, res, next) {
           if (req.body.changepin != 0) {
             // console.log(req.body.changepin);
             createObj.pin = randomUserPin;
-            userpin = createObj.pin;            
+            userpin = createObj.pin;
           }else{
             userpin = 0;
           }
