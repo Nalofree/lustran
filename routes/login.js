@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 
 router.post('/', function(req, res, next) {
   // res.render('login', {title:'Войти в систему'});
-  if (req.body.pass === 'Kz1tqeesMz') {
+  if (req.body.pass === 'RC7Fv2NdhW') {
     req.session.isauth = '1';
     req.cookies.isauth = '1';
     // res.redirect('/');
