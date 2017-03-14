@@ -129,6 +129,11 @@ $(document).ready(function () {
     $('.setlocpin').submit();
   });
 
+  $('.editlocpin-submit').click(function (e) {
+    e.preventDefault();
+    $('.editlocpin').submit();
+  });
+
   $( ".locations-table" ).on( "click", "div.edit-location", function() {
     // alert($(this).attr('data-title'));
     // $(".close-all").fadeIn();
