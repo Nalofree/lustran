@@ -125,15 +125,14 @@ router.get('/', function(req, res, next) {
 	var searchWhereGoods = {
 		$or: []
 	};
-	var searchWhereOrders = {
-		$or: [],
-		// active: 1,
-		// locationId: req.cookies.location
-	};
+	var searchWhereOrders = {};
 	if (req.query.search) {
 		var searchstring = req.query.search;
 		searchstring = searchstring.replace(/^000/, "");
 		console.log(searchstring);
+		searchWhereOrders = {
+			$or: []
+		};
 	  // searchstring = searchstring.replace(/[/.,!?;]*/g, '');
 	  // searchstring = searchstring.replace(/[\s]+/g," ");
 		// searchsarray = searchstring.split(' ');
