@@ -240,7 +240,7 @@ router.get('/', function(req, res, next) {
 	// 		active: 1
 	// 	};
 	// }
-	console.log({searchWhereOrders,order: 'createdAt DESC'});
+	console.log({searchWhereOrders,order: 'createdAt ASC'});
   var now = new Date();
   models.orders.findAll({
     include: [models.users, models.locations, /*models.goods,*/{
