@@ -170,7 +170,7 @@ router.get('/', function(req, res, next) {
 			$and: [],
 			// $or: [],
 			active: 1,
-			locationId: req.cookies.location
+			locationId: req.cookies.location,
 		};
 		if (req.query.processed) {
 			searchWhereOrders.$and.push({'$goods.processed.statusval$': parseInt(req.query.processed)});
@@ -240,7 +240,7 @@ router.get('/', function(req, res, next) {
 	// 		active: 1
 	// 	};
 	// }
-	console.log(searchWhereOrders);
+	console.log({searchWhereOrders,order: 'createdAt DESC'});
   var now = new Date();
   models.orders.findAll({
     include: [models.users, models.locations, /*models.goods,*/{
